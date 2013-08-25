@@ -1,0 +1,2772 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>RequireJS Tutorial - Atlanta JavaScript Meetup</title>
+		<meta name='viewport' content='width=device-width, initial-scale=1.0'>
+		<link href='lib/bootstrap/css/bootstrap.min.css' rel='stylesheet' media='screen' />
+		<link href='css/indexa.css' rel='stylesheet' media='screen' />
+		<script src='lib/jquery/jquery-1.10.2.min.js'></script>		
+		<script src='js/angular.min.js'></script>
+		<script src='js/angular-resource.min.js'></script>
+		<script src='lib/bootstrap/js/bootstrap.min.js'></script>
+	</head>
+	<body class='container center' ng-controller='slidesController'>
+		<div class="jumbotron" ng-hide='loaded'>
+		  <div class="container" style='text-align:center'>
+		    <h1>Build Tic Tac Toe with HTML, CSS, and JavaScipt</h1>
+		    <p>We'll be with you shortly.</p>
+			<div class='figure'>
+				<img src="http://photos4.meetupstatic.com/photos/event/2/1/2/c/global_234188492.jpeg" />
+			</div>
+		  </div>
+		</div>
+		<div class='panel' ng-show='loaded' ng-cloak>
+			<div class='panel-heading'>
+				<ul class="pagination pagination-sm">
+					<li id='page-prev' class='pageItem'><a href='#' ng-click='slide_prev()' ng-disabled='!slide_has_prev()'>&laquo;</a></li>
+					<li ng-repeat='slide in slides' id='page-{{$index+1}}' class='pageItem {{get_slide_active_class($index+1)}}'>
+						<a 
+							href='#' 
+							class='pagerLink'
+							ng-click='slide_load($index+1)'>{{$index+1}}</a>
+					</li>
+					<li id='page-next' class='pageItem'><a href='#' ng-click='slide_next()' ng-disabled='!slide_has_next()'>&raquo;</a></li>
+				</ul>
+			</div>
+			<div class='panel-body'>
+				<div class='row container' id='slide_content'>					
+					<h2 ng-bind-html-unsafe='slide_header'></h2>
+					<div ng-bind-html-unsafe='slide_content' ng-show="slide_content != ''"></div>
+					<div ng-show='questions.length > 0' class='well'>
+						<div>
+							<p>
+								<span class='label label-danger'>BETA feature</span>
+							</p>
+						</div>
+						<div class='panel'>
+							<div class='panel-heading'><strong>{{question.title}}</strong>&nbsp;<span class='label label-info'>{{(question_position + 1) + ' of ' + questions.length}}</div>
+							<div class='panel-body'>
+								<div ng-repeat='choice in question.choices'>
+									<label class='{{get_choice_class(question, choice)}}'>
+										<input type='checkbox' ng-model='choice.selected'
+											ng-disabled='question.scored'
+										 /> <span class='choice' ng-bind-html-unsafe='choice.text'></span>&nbsp;
+									</label>
+									<span ng-show='choice.answer_correct == true'
+										class='label label-success'>Correct!</span>
+									<span ng-show='choice.answer_correct == false && choice.selected'
+										class='label label-danger'>Wrong!</span>
+									<span ng-show='question.scored' style='font-weight: bold;font-size:85%'>
+										{{choice.description}}
+									</span>										
+								</div>
+							</div>
+							<span class='label label-default'>Score:&nbsp;
+							{{questions.correct_count}} / {{questions.length}} = {{get_correct_answers_percentage()}}
+							</span>
+						</div>
+						<a class='btn btn-success btn-sm'
+							ng-click='question_score()'
+							ng-disabled='question.scored'
+						>Submit answer</a>
+						<a class='btn btn-primary btn-sm'
+							ng-click='question_next()'
+							ng-disabled='!question.scored'
+							ng-hide='!question_has_next()'
+						>Continue</a>
+						<button type='button' class='btn btn-success btn-sm' 
+							ng-click='slide_next()'
+							ng-show='question.scored && !question_has_next()'
+							ng-disabled='!slide_has_next()'
+						>Next</button>
+					</div>					
+				</div>
+				<div ng-show="slide_content != ''">
+					<button type='button' class='btn btn-success btn-sm' ng-click='slide_prev()'
+						ng-disabled='!slide_has_prev()'>Previous</button>
+					<button type='button' class='btn btn-success btn-sm' ng-click='slide_next()'
+						ng-disabled='!slide_has_next()'>Next</button>
+				</div>
+			</div>			
+			<div class='panel-footer'>
+				<div ng-show="slide_resources != ''">
+					<button type="button" class="btn btn-primary btn-sm" id='resourcesShow' ng-hide='resources_visible' ng-click='resources_visible = true'>Show Resources</button>
+					<button type="button" class="btn btn-primary btn-sm" id='resourcesHide' ng-show='resources_visible' ng-click='resources_visible = false'>Hide Resources</button>
+					<div ng-bind-html-unsafe='slide_resources' ng-show='resources_visible'>h</div>
+				</div>
+			</div>
+		</div>
+		<div id='slides'>
+			<div class='section' data-title='Introduction'>
+				<div class='slide' data-title='Introduction to making your own games with HTML, CSS, and JavaScript'>
+					<div class='content'>
+            <h4>by <a href='http://www.github.com/JogoShugh'>Josh Gough</a></h4>
+            <img src="https://en.gravatar.com/userimage/1071881/9cdb8b35c71eb2abed475c984c046edd.jpg" />
+            
+            <p>
+            My name is Josh Gough. I work for <a target="_blank" href="http://www.versionone.com">VersionOne.com</a>. Some other places
+            I have worked inclulde the <a target="_blank" href="http://www.cdc.gov">US Centers for Disease Control and Prevention</a>, 
+            <a target="_blank" href="http://www.abelsolutions.com">Abel Solutions</a>, <a target="_blank" href="http://www.lockheed.com">Lockheed Martin</a>, etc.
+            </p>
+            
+            <p>
+            I've been building things with Hypertext Markup Language (HTML), Cascading Style Sheets (CSS), and the 
+            JavaScript programming language for about 17 years now.</p>
+            </p>
+            
+            <p>Learning these technologies well can be a lot of fun and can also be a 
+            great way to make a career for yourself.</p>
+            
+            <div class='aside'>
+              <h3>Unimportant, but true, story that you can skip</h3>
+              <p>One of the first books I bought on the subject of HTML is so old that it's older than most of you, and the only photo 
+                available of it was made with a flash camera:
+                <br />
+                <img src="http://ecx.images-amazon.com/images/I/51F7%2B46BoEL._SY300_.jpg" height="150" />
+              </p>
+              <p>That book <a href="http://www.amazon.com/HTML-Profit-included-Morris-Simpson/dp/B0042AUKHC/ref=sr_1_4?s=books&ie=UTF8&qid=1374891751&sr=1-4&keywords=HTML+for+fun+and+profit">sells for less than 3 dollars on Amazon.com</a>, and is way, way outdated by now. Don't buy it!
+              </p>
+              <p>
+                But, yes, I've definitely earned a lot more than 3 dollars by knowing these technologies.
+              </p>
+            </div>
+            <br /> 
+					</div>
+				</div>
+				<div class='slide' data-title='What are HTML, CSS, and JavaScript used for?'>
+					<div class='content'>
+            <p>I'm glad you asked!</p>
+            
+            <p>I'll give you a short answer in a second. But, try this for me first:</p>
+            
+            <ol>
+              <li>Open up your favorite web browser -- <em>or just pop open another tab in this browser since you're probably already in in a web browser reading this!</em></li>
+              <li>Go to <a href='http://www.coderdojo.com'>http://www.coderdojo.com</a></li>
+              <li>Once it loads, click somewhere in the page with your right mouse button</li>
+              <li>Look for a menu option like <strong>View page source</strong> or similar</li>
+              <li><strong>Click it!</strong> It should open a big long list of HTML tags, CSS styles, and <code>script</code> tags that point to JavaScript code files</li>
+              <li>You can repeat this process on <strong>every web site you visit</strong>. Try it again on this very page</li>
+            </ol>
+            
+            <p>You have just peered at the source code for CoderDojo.com and this page. So, the answer is:</p>
+            
+            <blockquote>HTML, CSS, and JavaScript are used to build all of the web sites you use everyday. And, many of the apps and games you use on phones and tablets are also built with HTML, CSS, and JavaScript.</blockquote>
+            
+            <p>
+            So, by learning how to use these technologies, you will be able to create your very own <em>web sites, apps, and games</em>.
+            </p>					
+					</div>
+				</div>
+				<div class='slide' data-title="Let's make a Tic Tac Toe game you can play with friends">
+					<div class='content'>
+            <p>How can you get started? If you're like me, you like games!</p>
+            
+            <p>In this tutorial, I'll show you how to create a simple and fun Tic Tac Toe game that will run right inside
+            your web browser. In the process, you will learn the fundamentals of HTML, CSS and JavaScript.</p>
+            
+            <p class='patience'>
+              <strong>Patience!</strong>
+              <br />
+              It may take several sessions for you to fully understand everything. But, that's ok. And, you can always refer to this tutorial for 
+              as long as you like.
+            </p>
+            
+            <h2>What you'll do and learn</h2>
+            <p>
+              In this tutorial, you will:
+              <ul>
+                <li>Create and understand the structure of a basic HTML document</li>
+                <li>Use and understand the following HTML tags:
+                  <ul>
+                    <li><code>html</code></li>
+                    <li><code>head</code></li>
+                    <li><code>title</code></li>
+                    <li><code>body</code></li>
+                    <li><code>h1, h2, h3, h4, h5, and h6</code></li>
+                    <li><code>p</code></li>
+                    <li><code>style</code></li>        
+                    <li><code>blockquote</code></li>
+                    <li><code>a</code></li>
+                    <li><code>img</code></li>
+                    <li><code>div</code></li>
+                    <li><code>span</code></li>
+                    <li><code>strong</code></li>
+                    <li><code>em</code></li>
+                    <li><code>table</code></li>
+                    <li><code>tr</code></li>
+                    <li><code>th</code></li>
+                    <li><code>td</code></li>
+                    <li><code>script</code></li>
+                  </ul>
+                </li>
+                <li>Use CSS to apply the following visual effects to HTML tags:
+                  <ul>
+                    <li>Change background colors</li>
+                    <li>Change text colors</li>
+                    <li>Change font families</li>
+                    <li>Set border sizes, styles, and colors</li>
+                    <li>Set paddings and margins</li>
+                    <li>Set display types and visibilities</li>
+                  </ul>
+                </li>
+                <li>Learn how to use the JavaScript language to:
+                  <ul>
+                    <li>React to mouse clicks</li>
+                    <li>Handle button presses</li>
+                    <li>Modify styles on HTML tags</li>
+                    <li>Read data from text boxes</li>
+                    <li>Score the game so that you can win!</li>
+                  </ul>
+                </li>    
+              </ul>
+            </p>
+            
+            <p>That sounds like a lot! But, it will start to make sense as we do it.</p>
+            
+            <div class='aside'>
+              <h3>Where to learn more about HTML tags and the web's past and future</h3>
+              <p>You can find a complete list of all HTML tags, including 
+              information about they do, on the <a href='http://www.w3.org/community/webed/wiki/HTML/Elements' 
+              target='_blank'>Web Education wiki page from the W3C</a>.
+              </p>
+              <p>The W3C stands for the World Wide Web Consortium. It's an organization that
+              helps create the standards and recommendations for how to improve the web and related technologies. 
+              It is led by the person who 
+              invented the web itself, HTML, and the first web browser in 1989, the British computer scientist 
+              <a href='http://www.w3.org/People/Berners-Lee/' target='_blank'>Sir Tim Berners-Lee</a>. This guy:</p>
+              <p>
+                <img src='http://images.ted.com/images/ted/77261_254x191.jpg' 
+                  alt='Tim Berners-Lee, inventor of the web and HTML' />
+              </p>
+              
+              <p>When you get a chance, I recommend you <a href='http://www.ted.com/speakers/tim_berners_lee.html' 
+              target='_blank'>follow this link</a> to watch his short recorded talks 
+              at TED, where he describes exciting and important ways the web is used today, like providing help after the Haiti earthquake several 
+              years ago, and new directions for the web in the years to come.</p>
+              
+              <p>
+                <a href=" http://www.webplatform.org/" 
+                  target='_blank'>Web Platform</a> is another great resource for learning.
+              </p>
+            </div>
+            <br />
+					</div>
+			</div>
+			<div class='slide' data-title="Step 1: Create the basic HTML document">
+				<div class='content'>
+            <p>Ready?</p>
+            
+            <p>I thought so. Star this way:</p>
+            
+            <ul>
+              <li>If you're using the Sublime Text 2 Editor, then just open a new file from the file menu</li>
+              <li>If you want to use Plnkr online, navigate a new tab to <a href="http://plnkr.co">http://plnkr.co</a> and click the giant "Launch the editor" button.</li>
+            </ul>
+            
+            <h3>Add Code</h3>
+            
+            <p>Type this code into your editor. You can, of course, just copy and paste it, but that defeats the purpose of typing it to learn what it feels like to create each tag. So, I encourage you to type the code.</p>
+            
+            <pre><xmp><html>
+            
+<head>
+  <title>Tic Tac Toe by CoderDojo Ponce Springs!</title>
+</head>
+
+<body>
+  Hello, world!
+</body>
+
+</html>
+            </xmp>
+            </pre>
+            
+            <h3>Explanation</h3>
+            
+            <p>Remember that big list of tags from the introduction? Well, you've already knocked down 3 of them in your 
+            first step!</p>
+            
+            <p>But, just what is an HTML tag in the first place?</p> Here's a simple definition:
+            
+            <blockquote>
+              <p>An HTML tag is a name, surrounded by a left angle bracket, 
+              <strong>&lt;</strong>, and a right angle bracket, <strong>&gt;</strong>, 
+              that tells your web browser to <strong>draw things on the screen and 
+              react to events like mouse clicks and button presses</strong>.</p>
+              <p>Many tags can 
+                also have attributes between the two angle brackets which provide more
+                information about what to draw or how to react.
+              </p>
+            </blockquote>
+            
+            <h4>HTML tag example: <code>img</code> draws images</h4>
+            
+            <p>
+              The tag <code>&lt;img src='http://goo.gl/Jf5Rry' /&gt;</code> tells 
+            your web browser to draw an image. The <code>src</code> part is an example <strong>attribute</strong>. 
+            It specifies the location of the image on the internet.
+            </p>
+            <p>
+              And here's what it does:
+            </p>
+            <p>
+              <img src='http://goo.gl/Jf5Rry' />
+            </p>
+            
+            <h4>Standalone tags and paired tags</h4>
+            
+            <p>As you might imagine, there are more things to know about tags, so let's 
+            understand the difference between <strong>standalone tags</strong> and 
+            <strong>paired tags</strong> before we continue.</p>
+            
+            <blockquote>
+              Some tags, like <code>img</code> that we just saw, are called 
+              <strong>standalone tags</strong>, and they require a <strong>/</strong> 
+              character between their name and the <strong>&gt;</strong>.
+            </blockquote>
+            
+            <p>Another <strong>standalone</strong> tag is <code>&lt;hr /&gt;</code>, which creates
+            a simple horizontal line across the screen. Here's what it does:</p>
+            
+            <hr />
+            
+            <p>You can try the <code>size</code> attribute with it to make the line taller: 
+              <code>&lt;hr size='10' /&gt;</code>. Here it is:  
+            </p>
+            
+            <hr size='10' />
+            
+            However, the majority of tags are called <strong>paired tags</strong>, and you need to use
+            two slightly different versions of them to get the job done:
+            
+            <blockquote>
+              Most tags require a <strong>starting tag</strong> and a 
+              <strong>closing tag</strong> that also has a <strong>/</strong> 
+              character before the tag name, indicating that it is a closing tag. 
+              Any other tags or text contained between these starting and closing tags is 
+              considered to be the <strong>content</strong> of that tag instance.
+            </blockquote>
+            
+            Let's look at the <code>title</code> tag from the first code snippet that you just
+            put in your editor above:
+            
+            <xmp><title>Tic Tac Toe by CoderDojo Ponce Springs!</title></xmp>
+            
+            The <strong>title</strong> tag is a paired tag, as you can see the starting and closing parts. 
+            The text between it is the content. This tag changes the browser's title bar or the tab's title. 
+            
+            <p class='question'>
+              <strong>Question:</strong> Which other tags in the first example are <strong>paired tags</strong>?
+            </p>
+            
+            <h4>Understanding the html, head, and body tags</h4>
+            
+            You just saw what <code>title</code> is for. So, what about the others?
+            
+            <h5>html</h5>
+            
+            This is the root tag of all HTML documents. It tells your browser that all 
+            tags and text that follow are part of a single HTML document. For full details,
+            see <a href="http://www.w3.org/community/webed/wiki/HTML/Elements/html" 
+            target="_blank">this reference</a>.
+            
+            <h5>head</h5>
+            
+            This tag acts as a container for other tags that specify document information or
+            load other files. As you saw above, in our example we only used the <code>title</code>
+            tag inside of it. There are more you can <a href="http://www.w3.org/community/webed/wiki/HTML/Elements#Document_metadata"
+            target="_blank">learn about here</a>.
+            
+            <h5>body</h5>
+            
+            <p>
+              This tag serves as the starting point for all the visible content of a page. It 
+              also has a number of attributes you can use. And, there
+              are many, many others tags that you can place between <code>&lt;body&gt;</code> 
+              and <code>&lt;/body&gt;</code>. We'll be using lots of them, but you can 
+              <a href="http://www.w3.org/community/webed/wiki/HTML/Elements" 
+              target="_blank"
+              >find a full list here.</a>
+            </p>
+            
+            <p>
+              Now, let's use the <code>img</code> and <code>hr</code> tags that we looked at
+              briefly to help build our Tic Tac Toe game.
+            </p>				
+				</div>
+			</div>
+				<div class='slide' data-title='Step 1: Test your knowledge'>
+          <div class='questions'>
+            <div class='question'>
+             <h1>How should the img tag be implemented?</h1>
+             <ul>
+              <li>&lt;img&gt;text.jpg&lt;/img&gt;</xmp></li>
+              <li>&lt;img='text.jpg' /&gt;</li>
+              <li data-correct>&lt;img src='text.jpg' /&gt;</li>
+              <li>&lt;img src='text.jpg'&gt;text&lt;/img&gt;</li>
+             </ul>
+            </div>
+            <div class='question'>
+              <h1>In the h1-h6 tags, what do the numbers represent?</h1>
+              <ul>
+                <li>As the numbers grow larger the text also grows larger</li>
+                <li data-correct>As the numbers grow small the text grow larger.</li>
+                <li>The numbers control the font type.</li>
+                <li>The numbers are there to allow for multiple headers</li>
+              </ul>
+            </div>
+            <div class="question">
+              <h1>What tag should an html page always start with?</h1>
+              <ul>
+                <li>A 'meta' tag</li>
+                <li>A 'header' tag</li>
+                <li data-correct>An 'html' tag</li>
+                <li>A 'title' tag</li>
+              </ul>
+            </div>          
+          </div>
+				</div>
+			</div>			
+			<div class='slide' data-title="Step 2: Use the <code>img</code> and <code>hr</code> standalone tags to add some credits (with help from the <code>a</code> paired tag!)">
+				<div class='content'>
+          You saw above that <code>img</code> and <code>hr</code> are <strong>standalone</strong> 
+          tags, meaning that they don't contain any other tags or text content. Let's add them
+          to the bottom of what we just did, right above the closing <code>&lt;/body&gt;</code> tag.
+          
+          <h3>Add new code</h3>
+          
+          <pre><xmp><hr size='5' />
+          
+<h3>
+  Brought to you by <a href="http://www.meetup.com/CoderDojoPonceSprings"
+    target="_blank">CoderDojo Ponce Springs</a>!
+</h3>
+
+<img src="http://goo.gl/Jf5Rry" 
+  alt="CoderDojo Ponce Springs" />
+
+<hr size='5' />
+</xmp>
+</pre>
+          
+          <h3>You should now have this</h3>
+          
+          If you added that to the correct place, just above the closing <code>body</code> tag, then your editor
+          should now have the following code. You can see what it looks like by 
+          <a href="http://embed.plnkr.co/lS3tRxPebgDUSBPFM1W5/preview" target="_blank">opening this link</a>.
+          
+          <pre><xmp><html>
+          
+<head>
+  <title>Tic Tac Toe by CoderDojo Ponce Springs!</title>
+</head>
+
+<body>
+  Hello, world!
+  
+<hr size='5' />
+
+<h3>
+  Brought to you by <a href="http://www.meetup.com/CoderDojoPonceSprings"
+    target="_blank">CoderDojo Ponce Springs</a>!
+</h3>
+
+<img src="http://goo.gl/Jf5Rry" 
+  alt="CoderDojo Ponce Springs" />
+
+<hr size='5' />  
+</body>
+
+</html>
+          </xmp>
+          </pre>
+          
+          <h3>Speaking of links</h3>
+          
+          <p>I'm sure you noticed the <code>a</code> tag in there too, right? This is a tag you'll use in almost every single HTML document 
+          that you author! It used to be known as an anchor tag, but it's formally now specified to represent a <strong>hyperlink</strong>, or 
+          simply <strong>link</strong> for short (we'll see later a technical difference between these terms, but it's not important 
+          at the moment). You can read all about the <code>a</code> tag at the 
+          <a href='http://www.w3.org/community/webed/wiki/HTML/Elements/a'>W3C reference page for it by clicking on this hyperlink</a>.
+          </p>
+          
+          <h4>The <code>a</code> tag is a paired tag</h4>
+          
+          <p>As you noticed, this tag is not stand-alone, but is a paired tag requiring a starting <code>&lt;a...&gt;</code> 
+            and ending <code>&lt;/a&gt;</code> tag, which surrounds the content that you want to appear underlined (by default) and blue 
+            to indicate to the reader that the text is a link that can be clicked on to navigate to a new destination. Note that you 
+            can change the default color and underlining behavior with styles that we'll examine in a future tutorial.
+          </p>
+          
+          <h4>Important attributes for <code>a</code> tags</h4>
+          <p>You have already used two of its most important attributes, <code>href</code> and <code>target</code>. Here's an explanation:</p>
+          
+          <h5>href</h5>
+          
+          <p>The text you place in the <code>href</code> attribute will be used by your browser as the destination for where you
+            want it to take the user when they click on the link. That's why we used <code>http://www.meetup.com/coderdojoponcesprings</code> 
+            in the code we just wrote, because we wanted to create a link to the main Coder Dojo Ponce Springs web site.
+          </p>
+          
+          <h5>target</h5>
+          
+          <p>
+            The <code>target</code> attribute is an interesting one. The W3C reference says it represents a "browsing context". Well, 
+            what the heck is a "browsing context"? In most cases this means that if you had two links on a page, both of which has 
+            <code>target='dojowindow'</code>, then when the user clicks the first link, it will open a new tab (or window) and navigate to the 
+            destination in the <code>href</code> attribute. And, when they click the second link, it will <em>replace</em> the contents 
+            of the tab or window it just opened. Let's go ahead and try it right now:
+          </p>
+          
+          <p>
+            <a href='http://www.coderdojo.com' target='dojowindow'>CoderDojo main site</a>
+            <hr />
+            <a href='http://www.coderdojonyc.com' target='dojowindow'>CoderDojo NYC</a>
+          </p>
+          
+          <h6>Code for the above example</h6>
+          
+          <p>Here's the code for what we just saw:</p>
+          
+<pre><xmp><a href='http://www.coderdojo.com' target='dojowindow'>CoderDojo main site</a>
+<hr />
+<a href='http://www.coderdojonyc.com' target='dojowindow'>CoderDojo NYC</a>
+</xmp></pre>          
+          
+          <h6>The special <code>target='_blank'</code> value</h6>
+          
+          <p>
+            Why did we make you use the value <code>_blank</code> in our CoderDojo Ponce Springs link? We did it because when you 
+            use <code>_blank</code>, the browser will <em>always create a brand new tab or window</em> whenever the user clicks that link.
+            <a href='http://stackoverflow.com/questions/4964130/target-blank-vs-target-new' target='_blank'>Try clicking this link a bunch of times. 
+            It should always create a new tab or window!</a>
+          </p>
+          
+          <p>There are only a handful of special targets: <code>_blank</code>, <code>_self</code>, <code>_parent</code>, and <code>_top</code>.</p>
+				</div>
+			</div>
+			<div class='slide' data-title='Step 2: Test your knowledge'>
+        <div class='questions'>
+          <div class='question'>
+            <h1>What will happen when a user clicks on this 
+            hyperlink two times in a row from the same HTML document: &lt;a href='http://www.coderdojo.com' target='_new'&gt;CoderDojo site!&lt;/a&gt;</h1>
+            <ul>
+            	<li>The browser will open a new tab or window after the first click, but nothing will happen 
+            	after the second click because the special <code>_new</code> target tells the browser to open a new tab or 
+            	window only one time.</li>
+            	<li>The browser will open a new tab or window after each click.</li>
+            	<li>The browser will open a new tab or window after the first click, and will warn the user after the 
+            	second click, informing them that it's rude to click the same link twice in a row so quickly.</li>
+            	<li data-correct>The browser will open a new tab or window after the first click, and will reload the link in that same newly opened tab or window after the second click.</li>
+            </ul>
+          </div>
+        </div>
+			</div>
+		  <div class='slide' data-title='Step 3: Use the <code>h1</code>, <code>h2</code>, <code>div</code>, 
+  <code>p</code>, <code>ul</code>, and <code>li</code> tags to add game rules'>
+        <div class='content'>
+<p>I'm sure almost all of you have played Tic Tac Toe on paper before. It looks like this:
+
+<div class='figure'>
+<img src='http://www.blogcdn.com/www.parentdish.com/media/2010/04/tic-tac-toe-425ds042010.jpg' alt='Tic Tac Toe on paper' />
+</div>
+
+<p>
+
+<p>If you've never played it, don't worry. It's a very simple game, and we're about to add the rules to our HTML page. Let's do it.
+</p>  
+
+<p></p>
+
+<h3>Add new code</h3>
+
+Replace the <code>Hello world!</code> text that is after the starting <code>body</code> tag
+with this new code:
+
+<pre><xmp><h1 id='game_title'>Tic Tac Toe</h1>
+
+<h2>Game rules</h2>
+
+<div id="game_rules">
+  <p>
+  The rules are simple:
+  </p>  
+  
+  <ul>
+    <li>The game board consists of 3 rows with 3 squares in each row</li>
+    <li>Players are named X and O</li>
+    <li>X plays first by clicking one of the squares</li>
+    <li>O goes next</li>
+    <li>Play alternates until one player fills
+      3 squares in a row down, across, or 
+      diagonally</li>
+  </ul>
+</div>
+</xmp></pre>
+
+<h3>You should now have this</h3>
+
+<p>If everything worked out, you should have the following full code in your editor. 
+You can see how it should display 
+<a href="http://embed.plnkr.co/L48wC3lLJU6A7Jcf4vA0/preview"
+  target="_blank">at this link.</a></p>
+
+<pre><xmp><html>
+
+<head>
+  <title>Tic Tac Toe by CoderDojo Ponce Springs!</title>
+</head>
+
+<body>
+
+<h1 id='game_title'>Tic Tac Toe</h1>
+
+<h2>Game rules</h2>
+
+<div id="game_rules">
+  <p>
+  The rules are simple:
+  </p>  
+  
+  <ul>
+    <li>The game board consists of 3 rows with 3 squares in each row</li>
+    <li>Players are named X and O</li>
+    <li>X plays first by clicking one of the squares</li>
+    <li>O goes next</li>
+    <li>Play alternates until one player fills
+      3 squares in a row down, across, or 
+      diagonally</li>
+  </ul>
+</div>
+
+<hr size='5' />
+
+<h3>
+  Brought to you by <a href="http://www.meetup.com/CoderDojoPonceSprings"
+    target="_blank">CoderDojo Ponce Springs</a>!
+</h3>
+
+<img src="http://goo.gl/Jf5Rry" 
+  alt="CoderDojo Ponce Springs" />
+
+<hr size='5' />  
+  
+</body>
+
+</html>
+</xmp></pre>
+
+<h3>Explanation</h3>
+
+<p>Let's understand a bit about the tags we just added:</p>
+
+<h4>h1, h2</h4>
+
+<p>
+The <code>h1</code> tag creates a heading, which the browser renders 
+with bold text and in a larger font size than the rest of the normal text. 
+It also places a margin above and below the content of the heading, and forces the 
+next content immediately after it to appear below it.
+</p>
+<p>
+The <code>h2</code> tag is similar to the <code>h1</code> tag. It does everything 
+the <code>h1</code> tag does, except it uses a slightly small font size. You can also use 
+<code>h3, h4, h5</code>, and <code>h6</code>. Each of them is slightly smaller than the previous one.
+The <code>h6</code> tag is quite tiny. See:
+<pre><xmp><h1>I'm an <code>h1</code></h1>
+<h2>I'm an <code>h2</code></h2>
+<h3>I'm an <code>h3</code></h3>
+<h4>I'm an <code>h4</code></h4>
+<h5>I'm an <code>h5</code></h5>
+<h6>I'm an <code>h6</code>, and I'm the smallest of them all. :(</h6></xmp></pre>
+<h5>Renders this way:</h5>
+<h1>I'm an <code>h1</code></h1>
+<h2>I'm an <code>h2</code></h2>
+<h3>I'm an <code>h3</code></h3>
+<h4>I'm an <code>h4</code></h4>
+<h5>I'm an <code>h5</code></h5>
+<h6>I'm an <code>h6</code>, and I'm the smallest of them all. :(</h6>
+</p>
+
+<h4>div</h4>
+<p>
+The <code>div</code> tag creates a division in the page used to group other tags. The <code>div</code> tag 
+does not render anything special by itself. Like the <code>h*</code> tags, 
+it forces any content after itself to be rendered below itself. That's because it's a 
+<strong>block-level</strong> element. This is something we'll discuss 
+more when we start talking about style sheets.
+</p>
+<p>Use the <code>p</code> tag to create a paragraph. Like a <code>div</code> tag, it is 
+a block-level element. But, unlike <code>div</code>, and more like the <code>h*</code> tags, it puts 
+a margin around the top and bottom of the text and other tags you enclose within its start 
+and end tags, as you can see here:
+<pre><xmp><p style='background:yellow'>Text with some margin</p>
+<p style='background:yellow'>More text with some margin</p>
+<div style='background:orange'>No margin between me and the next div</div>
+<div style='background:orange'>See, I touch the div before me!</div>
+<p style='background:yellow'>Another paragraph, with some margin above me, after the previous <code>div</code> tag</p></xmp></pre>
+</p>
+<h5>Renders this way:</h5>
+<p style='background:yellow'>Text with some margin</p>
+<p style='background:yellow'>More text with some margin</p>
+<div style='background:orange'>No margin between me and the next div</div>
+<div style='background:orange'>See, I touch the div before me!</div>
+<p style='background:yellow'>Another paragraph, with some margin above me, after the previous <code>div</code> tag</p>
+<h4>ul, li</h4>
+When you want to created a bullet list of items, use the <code>ul</code> paired tag to 
+start and close the list, and a series of <code>li</code> tags to specify each 
+individual list item. If you want numbers instead of bullets, use the <code>ol</code> tag 
+instead of <code>ul</code>, but still use <code>li</code> tags for each list item. 
+Check it out:
+<pre><xmp><p>
+  <ul>
+    <li>Bullet item 1</li>
+    <li>Bullet item 2</li>
+  </ul>
+</p>
+<p>And then:</p>
+<p>
+  <ol>
+    <li>I'm number one!</li>
+    <li>Second place isn't so bad.</li>
+  </ol>
+</p></xmp></pre>
+
+<h5>Renders this way:</h5>
+<p>
+  <ul>
+    <li>Bullet item 1</li>
+    <li>Bullet item 2</li>
+  </ul>
+</p>
+<p>And then:</p>
+<p>
+  <ol>
+    <li>I'm number one!</li>
+    <li>Second place isn't so bad.</li>
+  </ol>
+</p>
+        </div>
+		  </div>
+		  <div class='slide' data-title='Step 4: Add Cascasing Style Sheets to give some color, borders, and spacing'>
+		    <div class='content'>
+<p>So far, we have a basic HTML document that uses some of the simpler HTML tags. Not bad.
+  But, it also looks very bare. Let's change that with some Cascading Style Sheets (CSS). CSS 
+  is the technology in web browsers that lets you control colors, fonts, borders, padding, 
+  widths, heights, and a whole lot more!
+</p>
+
+<div class='aside'>
+  <h3>Where to learn more about Cascading Style Sheets (CSS) and their many uses</h3>
+  <p>The aforementioned Web Education wiki has extensive coverage of how to use CSS. 
+  The <a href='http://www.w3.org/community/webed/wiki/CSS_basics'
+    target='_blank'>CSS Basics page</a> is a good starting point. You can 
+  find more advanced information <a href='http://www.w3.org/community/webed/wiki/Main_Page#CSS' 
+  target='_blank'>linked from this page</a>.
+  </p>
+  <p>CSS was created in 1994 by Norwegian Hakon Wium Lie, who currently is the 
+    Chief Technology Officer (CTO) of the Opera Software company, which makes
+    a web browser called Opera that is popular, but not as widely used as 
+    Internet Explorer, Firefox, or Chrome. It has high standards-compliance and 
+    is very fast, too.
+  </p>
+  
+  <p>Here's a picture of Hakon. The big red O on his shirt is the logo for the 
+    Opera web browser. Clever.
+  </p>
+
+  <p>
+    <img src='data:image/jpeg;base64,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' />
+  </p>
+</div>
+
+<h3>Add new code</h3>
+
+<p>Change the <code>head</code> tag in your editor to have this code:</p>
+
+<pre><xmp><head>
+
+<title>Tic Tac Toe by CoderDojo Ponce Springs!</title>
+
+<style type='text/css'>
+body {
+  text-align: center;
+  margin: 0;
+}
+
+#game_title {
+  font-family: monospace;
+}
+
+#game_rules {
+  background: cornflowerblue;
+  padding: 5px;
+  text-align: left;
+  display: inline-block;
+}
+
+#footer {
+ margin: 0px;
+ padding: 0px;
+ background: lightgray;
+}
+
+.crazyHorizontalRule {
+  background: orange;
+  border: 1px dotted darkred;
+}
+</style>
+
+</head>
+</xmp></pre>
+
+<h3>You should now have this</h3>
+
+At this point, you should now the following full set of code. To see what it should 
+render like <a href="http://embed.plnkr.co/QaeJfd/preview" target="_blank">visit this link</a>.
+
+<pre><xmp><html>
+
+<head>
+
+<title>Tic Tac Toe by CoderDojo Ponce Springs!</title>
+
+<style type='text/css'>
+body {
+  text-align: center;
+  margin: 0;
+}
+
+#game_title {
+  font-family: monospace;
+}
+
+#game_rules {
+  background: cornflowerblue;
+  padding: 5px;
+  text-align: left;
+  display: inline-block;
+}
+
+#footer {
+ margin: 0px;
+ padding: 0px;
+ background: lightgray;
+}
+
+.crazyHorizontalRule {
+  background: orange;
+  border: 1px dotted darkred;
+}
+</style>
+
+</head>
+
+<body>
+
+<h1 id='game_title'>Tic Tac Toe</h1>
+
+<h2>Game rules</h2>
+
+<div id="game_rules">
+  <p>
+  The rules are simple:
+  </p>  
+  
+  <ul>
+    <li>The game board consists of 3 rows with 3 squares in each row</li>
+    <li>Players are named X and O</li>
+    <li>X plays first by clicking one of the squares</li>
+    <li>O goes next</li>
+    <li>Play alternates until one player fills
+      3 squares in a row down, across, or 
+      diagonally</li>
+  </ul>
+</div>
+
+<hr size='5' />
+
+<h3>
+  Brought to you by <a href="http://www.meetup.com/CoderDojoPonceSprings"
+    target="_blank">CoderDojo Ponce Springs</a>!
+</h3>
+
+<img src="http://goo.gl/Jf5Rry" 
+  alt="CoderDojo Ponce Springs" />
+
+<hr size='5' />  
+</body>
+
+</html>
+</xmp></pre>
+
+<h3>Explanation</h3>
+
+<p>To understand what we just did, you need to understand some of the basic concepts
+behind Cascading Style Sheets (CSS). CSS is the presentation language for the web 
+that lets you specify colors, fonts, dimensions, borders, margins, paddings, 
+animations, and a whole lot more to spice up your creations.</p>
+
+<p>Grasping the basics is not very difficult, even though it looks a lot different 
+from the HTML tags you've been using.</p>
+
+<p>But first, notice that we added a new tag, <code>style</code>, 
+inside of the <code>head</code> tag. As you might guess, this is the tag 
+that lets us add styling information in the form of CSS.
+</p>
+
+<p>You provide style information in the form of <strong>selectors</strong> and 
+properties.
+</p>
+
+<p>Definition:</p>
+
+<blockquote>
+A CSS selector lets you identify a tag or multiple tags by tag name, by id or class
+attribute value. You use properties to assign or override various appearance or 
+behavior-related features of the selected tags. You can read all about CSS selectors 
+and properties at the <a href='http://docs.webplatform.org/wiki/css' 
+ target='_blank'>Web Platform wiki page on CSS</a>.
+</blockquote>
+
+<p>That definition might sound a little abstract, so let's take an example from 
+  what we just did and explain it in detail.
+</p>
+
+<h4>Matching by tag name</h4>
+
+<p>Here's the first selector we added:</p>
+
+<xmp>
+body {
+  text-align: center;
+  margin: 0;
+}
+</xmp>
+
+<p>In this case, the <strong>selector</strong> part is just the tag name: <code>body</code>. It's 
+  followed by an opening left curly brace, <code>{</code>, and then by two <strong>properties</strong> 
+  with assigned values. Finally, the definition is closed by a right curly brace, <code>}</code>.
+</p>
+
+<p>The <strong>text-align</strong> property tells your browser how to align text 
+  within the tag or tags
+  that the selector matches. In this case, we want the text to be centered, so we 
+  give it the value <code>center</code>. This property can also be assigned <code>left</code> or <code>right</code>, 
+  or several other values that
+  you can read about on <a href="http://docs.webplatform.org/wiki/css/properties/text-align" 
+  target="_blank">this page from Web Platform's site</a>.
+</p>
+
+<p>The <strong>margin</strong> property tells the browser not to put any space between
+  the top, left, right, and bottom edges of the browser and the content of our page. You 
+  can also specify just one of these by using these properties:
+  <ul>
+    <li><code>margin-top</code></li>
+    <li><code>margin-left</code></li>
+    <li><code>margin-right</code></li>
+    <li><code>margin-bottom</code></li>
+  </ul>
+</p>
+
+<p>Here's an experiment with these two properties, plus the
+<code>background</code> property which lets us change the background color of an 
+  element, and the <code>color</code> property, which lets us change the text color.
+</p>
+
+<xmp><pre>
+<div style='text-align: right; margin-left: 50%; background: purple; color: yellow;'>
+  My text is on the right, and I always take up only half the page no matter how wide it is!
+</div>
+</pre></xmp>
+
+<h5>Renders this way:</h5>
+
+<div style='text-align: right; margin-left: 50%; background: purple; color: yellow;'>
+  My text is on the right, and I always take up only half the page no matter how wide it is!
+</div>
+
+<h4>Matching by <code>id</code> attribute</h4>
+
+<p>Now let's look at the next selector we added:</p>
+
+<xmp>
+#game_title {
+  font-family: monospace;
+}  
+</xmp>
+
+<p>This time, there is a hash mark before the curly brace. You 
+  do this when you want to select a tag by matching the value of 
+  its <code>id</code> attribute. Look back at the HTML and you'll see
+  this code:
+  <xmp><pre><h1 id='game_title'>Tic Tac Toe</h1></pre></xmp>
+  Notice the <code>id='game_title'</code> attribute within the <code>h1</code> tag? 
+  Since we used <code>#game_title</code> in our CSS selector, the browser will apply the 
+  <code>font-family</code> property value we assigned to this tag and this tag only!
+</p>
+<p>The <code>font-family</code> property changes
+  the name of the font for the browser to render the 
+  text in. In this case, <code>monospace</code> tells it 
+  to use a font that keeps all characters the same width. 
+  Here are some examples:
+</p>
+
+<pre><xmp><div style='font-family:monospace'>This is the same size as below.</div>
+<div style='font-family:monospace'>The same width as what's above.</div>
+</xmp></pre>
+
+<h5>Renders this way:</h5>
+
+<div style='font-family:monospace'>This is the same size as below.</div>
+<div style='font-family:monospace'>The same width as what's above.</div>
+
+<p>Now, if we change the <code>font-family</code> value to something like <code>sans-serif</code>,
+  then even though the sentences have the same number of characters, 31, they won't
+  get rendered as the same width, because the <code>sans-serif</code> font 
+  on most operating systems uses different widths for a lot of characters.
+</p>
+
+<pre><xmp><div style='font-family:sans-serif'>This is the same size as below.</div>
+<div style='font-family:sans-serif'>The same width as what's above.</div></xmp></pre>
+
+<h5>Renders this way:</h5>
+
+<div style='font-family:sans-serif'>This is the same size as below.</div>
+<div style='font-family:sans-serif'>The same width as what's above.</div>
+
+<h4>Matching by <code>class</code> attribute</h4>
+
+<p>While it's cool that you can apply styles to
+  an element whose HTML tag has an <code>id</code> attribute, 
+  but there's one big problem with this: every <code>id</code> 
+  attribute in an HTML document must be <strong>unique</strong>.
+  This means we cannot create a single selector and apply it 
+  to many different tags at once when using <code>id</code> 
+  attributes. But, we can do exactly that when we use 
+  the <code>class</code> attribute!
+</p>
+
+<p>Take a look at the last selector we created:</p>
+
+<xmp>.crazyHorizontalRule {
+  background: orange;
+  border: 1px dotted darkred;
+}</xmp>
+
+<p>The <code>.</code> in front of the name 
+  <code>crazyHorizontalRule</code> tells the browser to 
+  look for <strong>any and all</strong> tags that have 
+  a <code>class='crazyHorizontalRule'</code> attribute and
+  then applies the associated rules to all of them. We 
+  haven't yet added this class to the <code>hr</code> tags
+  that we added to the document, so let's go do it now so 
+  that these styles can spice up the document!
+</p>		      
+		    </div>
+		  </div>
+		  <div class='slide' data-title='Step 5: Apply the <code>.crazyHorizontalRule</code> class and <code>#footer</code> CSS selectors to our document to stylize the credits'>
+		    <div class='content'>
+<p>
+As we just mentioned, we don't yet have any tags with 
+<code>class='crazyHorizontalRule'</code>. We also don't have any tags 
+with <code>id='footer'</code>. Let's fix that now.
+</p>
+
+<h3>Add new code</h3>
+
+<p>Near the bottom of your HTML document, look for the first 
+<code>hr</code> tag that you just added and everything between it and the 
+second <code>hr</code> tag. Then, modify the code so
+so it looks like the code below. Make sure that you don't forget 
+to put the starting and ending <code>div</code> tags around the 
+entire section. It's important for the styles we already added to work!
+</p>
+
+<pre><xmp><div id='footer'>
+
+<hr size='5' class='crazyHorizontalRule' />
+
+<h3>
+  Brought to you by <a href="http://www.meetup.com/CoderDojoPonceSprings"
+    target="_blank">CoderDojo Ponce Springs</a>!
+</h3>
+
+<img src="http://goo.gl/Jf5Rry" 
+  alt="CoderDojo Ponce Springs" />
+
+<hr size='5' class='crazyHorizontalRule' />  
+
+</div>
+</xmp></pre>
+
+<h3>You should now have this</h3>
+
+<p>Your full documnent code should now lool like below. See it in action 
+<a href="http://embed.plnkr.co/CmdC3FL0arUvIoMgPh26/preview"
+ target="_blank">here</a>.
+</p>
+  
+<pre><xmp><html>
+
+<head>
+
+<title>Tic Tac Toe by CoderDojo Ponce Springs!</title>
+
+<style type='text/css'>
+body {
+  text-align: center;
+  margin: 0;
+}
+
+#game_title {
+  font-family: monospace;
+}
+
+#game_rules {
+  background: cornflowerblue;
+  padding: 5px;
+  text-align: left;
+  display: inline-block;
+}
+
+#footer {
+ margin: 0px;
+ padding: 0px;
+ background: lightgray;
+}
+
+.crazyHorizontalRule {
+  background: orange;
+  border: 1px dotted darkred;
+}
+</style>
+
+<body>
+
+<h1 id='game_title'>Tic Tac Toe</h1>
+
+<h2>Game rules</h2>
+
+<div id="game_rules">
+  <p>
+  The rules are simple:
+  </p>  
+  
+  <ul>
+    <li>The game board consists of 3 rows with 3 squares in each row</li>
+    <li>Players are named X and O</li>
+    <li>X plays first by clicking one of the squares</li>
+    <li>O goes next</li>
+    <li>Play alternates until one player fills
+      3 squares in a row down, across, or 
+      diagonally</li>
+  </ul>
+</div>
+
+<div id='footer'>
+
+<hr size='5' class='crazyHorizontalRule' />
+
+<h3>
+  Brought to you by <a href="http://www.meetup.com/CoderDojoPonceSprings"
+    target="_blank">CoderDojo Ponce Springs</a>!
+</h3>
+
+<img src="http://goo.gl/Jf5Rry" 
+  alt="CoderDojo Ponce Springs" />
+
+<hr size='5' class='crazyHorizontalRule' />  
+
+</div>
+
+</body>
+
+</html>
+</xmp></pre>
+
+</body>
+
+<h3>Explanation</h3>
+
+<p>As you read in the previous step, you can match
+  tags using the <code>id</code> attribute or the 
+  <code>class</code> attribute. We just added several 
+  the appropriate <code>id</code> and <code>class</code> 
+  attributes (and new tags) to match up with the style rules 
+  that we already created.
+</p>
+
+<p>Note that since we had two <code>hr</code> tags with
+  <code>class='crazyHorizontalRule'</code>, both of them
+  got selected and had the styles applied.
+</p>
+
+<p>Remember that you can read up on these and other CSS properties at 
+    the <a href='http://docs.webplatform.org/wiki/css/properties' 
+  target='_blank'>Web Platform web site</a>.
+</p>
+		    </div>
+		  </div>
+		  <div class='slide' data-title='Step 6: Use <code>table</code>, <code>tr</code>, <code>th</code>, and <code>td</code> to create the game board!'>
+		    <div class='content'>
+<p>Ok. You've made it to the best part: creating the game board! Let's jump right into this.</p>
+
+<h3>Understanding table tags</h3>
+
+<p>We will use the trusty <code>table</code> tag and its related tags to build this. Here's a summary of
+what the most common table-related tags do for you:</p>
+
+<table border='1'>
+  <tr>
+    <th>Tag</th>
+    <th>Purpose</th>
+  </tr>
+  <tr>
+    <td>table</td>
+    <td>Sets up the start of a table, a container for groups of rows and columns. The <code>table</code> tag can directly contain <code>tr</code> child tags.</td>
+  </tr>
+  <tr>
+    <td>tr</td>
+    <td>Creates a table row. Rows stack horizontally on top of each other. The <code>tr</code> tag directly contains child <code>td</code> tags.</td>
+  </tr>
+  <tr>
+    <td>td</td>
+    <td>This means "table detail", but you can think of it like a column. You can write multipe <code>td</code> tags next to each other, and they line up side-by-side, or vertically within the row.</td>
+  </tr>
+  <tr>
+    <td>th</td>
+    <td>This means "table header", and it has basically the same behavior as the <code>td</code> tag, but it automatically makes any text you put between its starting and closing tags <strong>bold</strong> and centered. You can change that if you want. You typically place
+    these tags in the very first <code>tr</code> tag so that they identify the meaning of the <code>td</code> tags in the rest of the rows.
+    </td>
+  </tr>  
+</table>
+
+<p>
+  You can do more with tables than this, but that's all we need for our Tic Tac Toe game board. But before we add that, you
+  might have guessed that the table of information above actually used the <code>table</code>,
+  <code>tr</code>, <code>th</code>, and <code>td</code> tags. It did. Here's what the code 
+  looks like:
+</p>
+
+<pre><xmp>
+<table border='1'>
+  <tr>
+    <th>Tag</th>
+    <th>Purpose</th>
+  </tr>
+  <tr>
+    <td>table</td>
+    <td>Sets up the start of a table, a container for groups of rows and columns. The <code>table</code> tag can directly contain <code>tr</code> child tags.</td>
+  </tr>
+  <tr>
+    <td>tr</td>
+    <td>Creates a table row. Rows stack horizontally on top of each other. The <code>tr</code> tag directly contains child <code>td</code> tags.</td>
+  </tr>
+  <tr>
+    <td>td</td>
+    <td>This means "table detail", but you can think of it like a column. You can write multipe <code>td</code> tags next to each other, and they line up side-by-side, or vertically within the row.</td>
+  </tr>
+  <tr>
+    <td>th</td>
+    <td>This means "table header", and it has basically the same behavior as the <code>td</code> tag, but it automatically makes any text you put between its starting and closing tags <strong>bold</strong> and centered. You can change that if you want. You typically place
+    these tags in the very first <code>tr</code> tag so that they identify the meaning of the <code>td</code> tags in the rest of the rows.
+    </td>
+  </tr>  
+</table>
+</xmp></pre>
+
+<h3>Add new code</h3>
+
+<p>
+  Now that you understand a bit about how table tags work, let's make our game board! 
+</p>
+
+<pre><xmp><table id='tic_tac_toe_table'>
+  <tr class='label_row'>
+    <th>row1_col1</th>
+    <th>row1_col2</th>
+    <th>row1_col3</th>
+  </tr>	
+  <tr id='row1'>
+    <td id='row1_col1' class='td_left td_top'>-</td>
+    <td id='row1_col2' class='td_top'>-</td>
+    <td id='row1_col3' class='td_right td_top'>-</td>
+  </tr>
+  <tr class='label_row'>
+    <th>row2_col1</th>
+    <th>row2_col2</th>
+    <th>row2_col3</th>
+  </tr>	
+  <tr id='row2'>
+    <td id='row2_col1' class='td_left'>-</td>
+    <td id='row2_col2'>-</td>
+    <td id='row2_col3' class='td_right'>-</td>
+  </tr>
+  <tr class='label_row'>
+    <th>row3_col1</th>
+    <th>row3_col2</th>
+    <th>row3_col3</th>
+  </tr>
+  <tr id='row3'>
+    <td id='row3_col1' class='td_left td_bottom'>-</td>
+    <td id='row3_col2' class='td_bottom'>-</td>
+    <td id='row3_col3' class='td_right td_bottom'>-</td>
+  </tr>
+</table></xmp></pre>
+
+<h3>Adding some style to the game board!</h3>
+
+<p>Now that we have the table we are going to want to add some style, 
+  or CSS, to the document.
+  This CSS will add some color and dimension to the table and will 
+  help color the X and O once we add the script!
+</p>
+
+<pre><xmp>#tic_tac_toe_table {
+  border-collapse: collapse;
+  margin: 0 auto;
+}
+
+#tic_tac_toe_table td {
+  border: 10px inset darkred;     
+  background: firebrick;
+  width: 110px;
+  height: 110px;
+  text-align: center;
+  font-size: 40px;
+  color: darkred;
+}
+
+#tic_tac_toe_table .td_left {
+  border-left: none;
+}
+
+#tic_tac_toe_table .td_top {
+  border-top: none;
+}
+
+#tic_tac_toe_table .td_right {
+  border-right: none;
+}
+
+#tic_tac_toe_table .td_bottom {
+  border-bottom: none;
+}
+
+#tic_tac_toe_table .label_row {
+  display: none;
+  font-family: sans-serif;
+}
+
+#tic_tac_toe_table tr.label_row td {
+  font-size: 12px;
+  border: none;
+  height: 15px;
+  background: white;
+}  
+
+.X {
+  color: cornflowerblue;
+}
+
+.O {
+  color: orange;
+}
+
+.move {
+  font-size: 80px;
+  font-weight: bold;
+  font-family: sans-serif;
+  text-shadow: 3px 3px black;
+}
+</xmp></pre>
+
+<h3>You should now have this</h3>
+
+<p>
+  Now that you have made the table, you are going to want to add it to your existing document.  Your table should go just below the rules that we added earler.
+</p>
+
+<pre><xmp><html>
+
+<head>
+
+<title>Tic Tac Toe by CoderDojo Ponce Springs!</title>
+
+<style type='text/css'>
+body {
+  text-align: center;
+  margin: 0;
+}
+
+#tic_tac_toe_table {
+  border-collapse: collapse;
+  margin: 0 auto;
+}
+
+#tic_tac_toe_table td {
+  border: 10px inset darkred;     
+  background: firebrick;
+  width: 110px;
+  height: 110px;
+  text-align: center;
+  font-size: 40px;
+  color: darkred;
+}
+
+#tic_tac_toe_table .td_left {
+  border-left: none;
+}
+
+#tic_tac_toe_table .td_top {
+  border-top: none;
+}
+
+#tic_tac_toe_table .td_right {
+  border-right: none;
+}
+
+#tic_tac_toe_table .td_bottom {
+  border-bottom: none;
+}
+
+#tic_tac_toe_table .label_row {
+  display: none;
+  font-family: sans-serif;
+}
+
+#tic_tac_toe_table tr.label_row td {
+  font-size: 12px;
+  border: none;
+  height: 15px;
+  background: white;
+}  
+
+.X {
+  color: cornflowerblue;
+}
+
+.O {
+  color: orange;
+}
+
+.move {
+  font-size: 80px;
+  font-weight: bold;
+  font-family: sans-serif;
+  text-shadow: 3px 3px black;
+}
+
+#game_title {
+  font-family: monospace;
+}
+
+#game_rules {
+  background: cornflowerblue;
+  padding: 5px;
+  text-align: left;
+  display: inline-block;
+}
+
+#footer {
+ margin: 0px;
+ padding: 0px;
+ background: lightgray;
+}
+
+.crazyHorizontalRule {
+  background: orange;
+  border: 1px dotted darkred;
+}
+</style>
+
+<body>
+
+<h1 id='game_title'>Tic Tac Toe</h1>
+
+<h2>Game rules</h2>
+
+<div id="game_rules">
+  <p>
+  The rules are simple:
+  </p>  
+  
+  <ul>
+    <li>The game board consists of 3 rows with 3 squares in each row</li>
+    <li>Players are named X and O</li>
+    <li>X plays first by clicking one of the squares</li>
+    <li>O goes next</li>
+    <li>Play alternates until one player fills
+      3 squares in a row down, across, or 
+      diagonally</li>
+  </ul>
+</div>
+
+<table id='tic_tac_toe_table'>
+  <tr class='label_row'>
+    <th>row1_col1</th>
+    <th>row1_col2</th>
+    <th>row1_col3</th>
+  </tr> 
+  <tr id='row1'>
+    <td id='row1_col1' class='td_left td_top'>-</td>
+    <td id='row1_col2' class='td_top'>-</td>
+    <td id='row1_col3' class='td_right td_top'>-</td>
+  </tr>
+  <tr class='label_row'>
+    <th>row2_col1</th>
+    <th>row2_col2</th>
+    <th>row2_col3</th>
+  </tr> 
+  <tr id='row2'>
+    <td id='row2_col1' class='td_left'>-</td>
+    <td id='row2_col2'>-</td>
+    <td id='row2_col3' class='td_right'>-</td>
+  </tr>
+  <tr class='label_row'>
+    <th>row3_col1</th>
+    <th>row3_col2</th>
+    <th>row3_col3</th>
+  </tr>
+  <tr id='row3'>
+    <td id='row3_col1' class='td_left td_bottom'>-</td>
+    <td id='row3_col2' class='td_bottom'>-</td>
+    <td id='row3_col3' class='td_right td_bottom'>-</td>
+  </tr>
+</table>
+
+<div id='footer'>
+
+<hr size='5' class='crazyHorizontalRule' />
+
+<h3>
+  Brought to you by <a href="http://www.meetup.com/CoderDojoPonceSprings"
+    target="_blank">CoderDojo Ponce Springs</a>!
+</h3>
+
+<img src="http://goo.gl/Jf5Rry" 
+  alt="CoderDojo Ponce Springs" />
+
+<hr size='5' class='crazyHorizontalRule' />  
+
+</div>
+
+</body>
+
+</html>
+</xmp></pre>
+		    </div>
+		  </div>
+		  <div class='slide' data-title='Step 7: Adding a message to tell whose turn it is'>
+		    <div class='content'>
+<p>Now that we have the basic layout of the tic-tac-toe game board, we might want to add a message to keep track of whose turn it is.</p>  
+
+<h3>Add new code</h3>
+
+The following code will create a message that reads whose turn it is.  You will want to add the following code just above the table that you just added in the previous step
+
+<pre><xmp><p>
+    <div id='message'></div>
+</p> 
+</xmp></pre>
+
+Next you will need to add some styling to the message. This is the same kind of styling that you added in Step 4.  Like in step 4, you will need to add this styling or CSS to the head of you code.
+
+<pre><xmp>#message {
+  color: white;
+  font-weight: bold;
+  font-size: 150%;
+  font-family: sans-serif;
+  border: 8px solid darkred;
+  display: none;
+  padding: 10px;
+  background: mediumblue;
+  margin: 5px;
+}
+</xmp></pre>		      
+		    </div>
+		  </div>
+		  <div class='slide' data-title='Step 8: Use the <code>button</code> tag to add a "Reset Game" button'>
+		    <div class='content'>
+<p>What if a player quits and we want to start the game over?  Let's add a "Reset Game" button to make the game start over from the beginning.</p>
+
+<h3>Understanding <code>button</code> tag</h3>
+
+<p>
+  The <code>button</code> tag allows us to add a button to perform some action. 
+  The button tag has an attribute called "onclick" that will cause some JavaScript code to be executed when the button is clicked.  We have a "reset_game" function defined in our JavaScript code, so we need to fire the "reset_game" function when the "Reset Button" is clicked.
+</p>
+
+
+	<table border='1'>
+		<tr>
+			<th>Tag</th>
+			<th>Purpose</th>
+		</tr>
+		<tr>
+			<td>button</td>
+			<td>Draw a button on the screen.  The contents of the button tag will be the name of the button.  The button tag has an attribute named "onclick" that can be used to execute JavaScript code.</td>
+		</tr>
+	</table>
+
+
+	<h3>Add new code</h3>
+
+	<p>
+		Let's add a button to reset the game! 
+	</p>
+
+	<pre><xmp><button onclick="reset_game()">Reset Game</button></xmp></pre>
+
+</body>
+
+</html>
+
+<h3>You should now have this</h3>
+
+<p>
+  Now that you have made the table, you are going to want to add it to your existing document.  Your table should go just below the rules that we added earler.
+</p>
+
+<pre><xmp><html>
+
+<head>
+
+<title>Tic Tac Toe by CoderDojo Ponce Springs!</title>
+
+<style type='text/css'>
+body {
+  text-align: center;
+  margin: 0;
+}
+
+#message {
+  color: white;
+  font-weight: bold;
+  font-size: 150%;
+  font-family: sans-serif;
+  border: 8px solid darkred;
+  display: none;
+  padding: 10px;
+  background: mediumblue;
+  margin: 5px;
+}
+
+#tic_tac_toe_table {
+     border-collapse: collapse;
+  margin: 0 auto;
+}
+
+#tic_tac_toe_table td {
+     border: 10px inset darkred;     
+     background: firebrick;
+     width: 110px;
+     height: 110px;
+  
+     text-align: center;
+     font-size: 40px;
+     color: darkred;
+}
+
+#tic_tac_toe_table .td_left {
+  border-left: none;
+}
+
+#tic_tac_toe_table .td_top {
+  border-top: none;
+}
+
+#tic_tac_toe_table .td_right {
+  border-right: none;
+}
+
+#tic_tac_toe_table .td_bottom {
+  border-bottom: none;
+}
+
+#tic_tac_toe_table .label_row {
+  display: none;
+  font-family: sans-serif;
+}
+
+#tic_tac_toe_table tr.label_row td {
+     font-size: 12px;
+     border: none;
+     height: 15px;
+     background: white;
+}
+
+.X {
+	color: cornflowerblue;
+}
+
+.O {
+	color: orange;
+}
+
+.move {
+	font-size: 80px;
+	font-weight: bold;
+  font-family: sans-serif;
+  text-shadow: 3px 3px black;  
+}
+
+#game_title {
+  font-family: monospace;
+}
+
+#game_rules {
+  background: cornflowerblue;
+  padding: 5px;
+  text-align: left;
+  display: inline-block;
+}
+
+#footer {
+ margin: 0px;
+ padding: 0px;
+ background: lightgray;
+}
+
+.crazyHorizontalRule {
+  background: orange;
+  border: 1px dotted darkred;
+}
+</style>
+
+<body>
+
+<h1 id='game_title'>Tic Tac Toe</h1>
+
+<h2>Game rules</h2>
+
+<div id="game_rules">
+  <p>
+  The rules are simple:
+  </p>  
+  
+  <ul>
+    <li>The game board consists of 3 rows with 3 squares in each row</li>
+    <li>Players are named X and O</li>
+    <li>X plays first by clicking one of the squares</li>
+    <li>O goes next</li>
+    <li>Play alternates until one player fills
+      3 squares in a row down, across, or 
+      diagonally</li>
+  </ul>
+</div>
+
+  <p>
+    <div id='message'></div>
+  </p> 
+  
+<table id='tic_tac_toe_table'>
+  <tr class='label_row'>
+    <th>row1_col1</th>
+    <th>row1_col2</th>
+    <th>row1_col3</th>
+  </tr> 
+  <tr id='row1'>
+    <td id='row1_col1' class='td_left td_top'>-</td>
+    <td id='row1_col2' class='td_top'>-</td>
+    <td id='row1_col3' class='td_right td_top'>-</td>
+  </tr>
+  <tr class='label_row'>
+    <th>row2_col1</th>
+    <th>row2_col2</th>
+    <th>row2_col3</th>
+  </tr> 
+  <tr id='row2'>
+    <td id='row2_col1' class='td_left'>-</td>
+    <td id='row2_col2'>-</td>
+    <td id='row2_col3' class='td_right'>-</td>
+  </tr>
+  <tr class='label_row'>
+    <th>row3_col1</th>
+    <th>row3_col2</th>
+    <th>row3_col3</th>
+  </tr>
+  <tr id='row3'>
+    <td id='row3_col1' class='td_left td_bottom'>-</td>
+    <td id='row3_col2' class='td_bottom'>-</td>
+    <td id='row3_col3' class='td_right td_bottom'>-</td>
+  </tr>
+</table>
+
+<button onclick="reset_game()">Reset Game</button>
+
+<div id='footer'>
+
+<hr size='5' class='crazyHorizontalRule' />
+
+<h3>
+  Brought to you by <a href="http://www.meetup.com/CoderDojoPonceSprings"
+    target="_blank">CoderDojo Ponce Springs</a>!
+</h3>
+
+<img src="http://goo.gl/Jf5Rry" 
+  alt="CoderDojo Ponce Springs" />
+
+<hr size='5' class='crazyHorizontalRule' />  
+
+</div>
+
+</body>
+
+</html>
+</xmp></pre>
+		    </div>
+		  </div>
+		  <div class='slide' data-title='Step 9: Adding the script'>
+		    <div class='content'>
+<p>
+  The final step is to add a part of code called the script to the rest of the document.
+  All browsers support a language called JavaScript. Some people, in recent years, have created
+  alternative languages that can be converted into JavaScript. But, for thhis tutorial, we will stick 
+  with the JavaScript language by itself, since it's the most popular still.  
+  You are going to want to add the following piece of code below the rest of the 
+  document you have so far, but before the closing <code>body</code> tag.
+</p>
+
+<h3>Adding new code</h3>
+
+<xmp>
+<script type='text/javascript' language='javascript'>
+var player_x = 'X';
+var player_o = 'O';
+
+var player_x_name = 'X';
+var player_o_name = 'O';
+
+var current_player = player_x;
+
+var player_names = {};
+player_names[player_x] = player_x_name;
+player_names[player_o] = player_o_name;
+
+var player_avatars = {};
+player_avatars[player_x] = '';
+player_avatars[player_o] = '';
+
+function get_player_move_html(player) {
+  if (player_avatars[player] != '') {
+    return get_player_avatar_html(player);
+  } 
+  return get_player_name_html(player);
+}
+
+function get_player_avatar_html(player) {  
+  return '<span class="' + player + ' move"><span style="display:none">' 
+    + player + '</span><img width="100" height="100" src="' 
+    + player_avatars[player] + '"></span>';
+}
+
+function get_player_name_html(player) {
+  return '<span class="' + player + ' move"><span>' + player + '</span></span>';  
+}
+
+var winner_name = 'No winner yet';
+
+show_message(player_names[current_player] + ", it's your turn!");
+    
+function set_names() {
+    var winner_name = get_winner_name();
+    if (winner_name == 'No winner yet') {
+      player_names[player_x] = document.getElementById('player_x_name').value;
+      player_names[player_o] = document.getElementById('player_o_name').value;
+      
+      player_avatars[player_x] = document.getElementById('player_x_avatar').value;
+      player_avatars[player_o] = document.getElementById('player_o_avatar').value;
+            
+      show_message(player_names[current_player] + ", it's your turn!");    
+    }
+}    
+    
+function make_move(table_detail_element) {
+  if (winner_name != 'No winner yet') {
+    return;
+  } 
+  
+     if (table_detail_element.innerHTML == '-') {
+          table_detail_element.innerHTML = get_player_move_html(current_player)
+          if (current_player == player_x) {
+               current_player = player_o;
+          }
+          else {
+               current_player = player_x;
+          }
+        show_message(player_names[current_player] + ", it's your turn!");    
+     }
+
+     winner_name = get_winner_name();
+  if (winner_name != 'No winner yet') {
+    console.log(winner_name);
+    if (winner_name == player_x) {
+        winner_name = player_names[player_x];
+    } else {
+        winner_name = player_names[player_o];
+    }
+    show_message(winner_name + ' wins!');
+  } else {
+    var game_over_without_a_winner = is_game_over_without_a_winner();
+    if (game_over_without_a_winner === true) {
+      show_message('Game over, but no winner!');
+    }
+  }
+}
+
+function reset_game() {
+  winner_name = 'No winner yet';
+  current_player = player_x;          
+  // Reset the contents of each table cell
+     document.getElementById('row1_col1').innerHTML = '-';
+     document.getElementById('row1_col2').innerHTML = '-';
+     document.getElementById('row1_col3').innerHTML = '-';
+     
+     document.getElementById('row2_col1').innerHTML = '-';
+     document.getElementById('row2_col2').innerHTML = '-';
+     document.getElementById('row2_col3').innerHTML = '-';
+     
+     document.getElementById('row3_col1').innerHTML = '-';
+     document.getElementById('row3_col2').innerHTML = '-';
+     document.getElementById('row3_col3').innerHTML = '-';
+  
+  // Set the background color back to firebrick for each table cell
+  document.getElementById('row1_col1').style.background = 'firebrick';
+     document.getElementById('row1_col2').style.background = 'firebrick';
+     document.getElementById('row1_col3').style.background = 'firebrick';
+     
+     document.getElementById('row2_col1').style.background = 'firebrick';
+     document.getElementById('row2_col2').style.background = 'firebrick';
+     document.getElementById('row2_col3').style.background = 'firebrick';
+     
+     document.getElementById('row3_col1').style.background = 'firebrick';
+     document.getElementById('row3_col2').style.background = 'firebrick';
+     document.getElementById('row3_col3').style.background = 'firebrick';
+
+  show_message(player_names[current_player] + ", it's your turn!");
+}
+
+function show_message(message) {
+  var messageElement = document.getElementById('message');
+  messageElement.innerHTML = message;
+  messageElement.style.display = 'inline-block';
+}
+
+function get_winner_name() {
+     var winner_name;
+
+     winner_name = check_rows_for_winner();
+     if (winner_name != 'No winner yet') {
+          return winner_name;
+     }
+
+     winner_name = check_columns_for_winner();
+     if (winner_name != 'No winner yet') {          
+          return winner_name;
+     }
+
+     winner_name = check_diagonals_for_winner();
+     if (winner_name != 'No winner yet') {
+    return winner_name;
+     }
+
+     return 'No winner yet';
+}
+
+function check_rows_for_winner(table_row) {
+     // Check to see whether all the table detail elements in row 1 have the same value
+     // That is, if all of them are 'X', then X is the winner. And, 
+     // if all of them are 'O', then O is the winner!
+     if (document.getElementById('row1_col1').textContent ==
+          document.getElementById('row1_col2').textContent
+          &&
+          document.getElementById('row1_col2').textContent ==
+          document.getElementById('row1_col3').textContent
+     ) {
+          var value = document.getElementById('row1_col1').textContent;
+          if (value != '-') {
+      document.getElementById('row1_col1').style.background = 'mediumblue';
+      document.getElementById('row1_col2').style.background = 'mediumblue';
+      document.getElementById('row1_col3').style.background = 'mediumblue';      
+               return value;
+          }
+     }
+
+     // Now check row 2
+     if (document.getElementById('row2_col1').textContent ==
+          document.getElementById('row2_col2').textContent
+          &&
+          document.getElementById('row2_col2').textContent ==
+          document.getElementById('row2_col3').textContent
+     ) {
+          var value = document.getElementById('row2_col1').textContent;
+          if (value != '-') {
+      document.getElementById('row2_col1').style.background = 'mediumblue';
+      document.getElementById('row2_col2').style.background = 'mediumblue';
+      document.getElementById('row2_col3').style.background = 'mediumblue';      
+               return value;
+          }
+     }     
+
+     // Lastly, check row 3
+     if (document.getElementById('row3_col1').textContent ==
+          document.getElementById('row3_col2').textContent
+          &&
+          document.getElementById('row3_col2').textContent ==
+          document.getElementById('row3_col3').textContent
+     ) {
+          var value = document.getElementById('row3_col1').textContent;
+          if (value != '-') {
+      document.getElementById('row3_col1').style.background = 'mediumblue';
+      document.getElementById('row3_col2').style.background = 'mediumblue';
+      document.getElementById('row3_col3').style.background = 'mediumblue';            
+               return value;
+          }
+     }     
+
+     // If the code gets all the way down here without returning 
+     // a winner name, then we don't have any winners across the
+     // rows!
+
+     return 'No winner yet';
+}
+
+function check_columns_for_winner(table_column_number) {
+     // Check to see whether all the table detail elements in column 1 have the same value
+     // That is, if all of them are 'X', then X is the winner. And, 
+     // if all of them are 'O', then O is the winner!
+     if (document.getElementById('row1_col1').textContent ==
+          document.getElementById('row2_col1').textContent
+          &&
+          document.getElementById('row2_col1').textContent ==
+          document.getElementById('row3_col1').textContent
+     ) {
+          var value = document.getElementById('row1_col1').textContent;
+          if (value != '-') {
+      document.getElementById('row1_col1').style.background = 'mediumblue';
+      document.getElementById('row2_col1').style.background = 'mediumblue';
+      document.getElementById('row3_col1').style.background = 'mediumblue';
+               return value;
+          }          
+     }
+
+     // Now check column 2
+     if (document.getElementById('row1_col2').textContent ==
+          document.getElementById('row2_col2').textContent
+          &&
+          document.getElementById('row2_col2').textContent ==
+          document.getElementById('row3_col2').textContent
+     ) {
+          var value = document.getElementById('row1_col2').textContent;
+          if (value != '-') {
+      document.getElementById('row1_col2').style.background = 'mediumblue';
+      document.getElementById('row2_col2').style.background = 'mediumblue';
+      document.getElementById('row3_col2').style.background = 'mediumblue';      
+               return value;
+          }          
+     }     
+
+     // Lastly, check column 3
+     if (document.getElementById('row1_col3').textContent ==
+          document.getElementById('row2_col3').textContent
+          &&
+          document.getElementById('row2_col3').textContent ==
+          document.getElementById('row3_col3').textContent
+     ) {
+          var value = document.getElementById('row1_col3').textContent;
+          if (value != '-') {
+      document.getElementById('row1_col3').style.background = 'mediumblue';
+      document.getElementById('row2_col3').style.background = 'mediumblue';
+      document.getElementById('row3_col3').style.background = 'mediumblue';      
+               return value;
+          }          
+     }     
+
+     // If the code gets all the way down here without returning 
+     // a winner name, then we don't have any winners across the
+     // columns!
+     
+     return 'No winner yet';
+}
+
+function check_diagonals_for_winner() {
+     // Check to see whether the table detail elements along the 
+     // diagonal from top left to the bottom right have all the same
+     // values. That is, if all of them are 'X', then X is the winner.
+     // And, if all of them are 'O', then O is the winner!
+     if (document.getElementById('row1_col1').textContent ==
+          document.getElementById('row2_col2').textContent
+          &&
+          document.getElementById('row2_col2').textContent ==
+          document.getElementById('row3_col3').textContent
+     ) {
+          var value = document.getElementById('row1_col1').textContent;
+          if (value != '-') {
+      document.getElementById('row1_col1').style.background = 'mediumblue';
+      document.getElementById('row2_col2').style.background = 'mediumblue';
+      document.getElementById('row3_col3').style.background = 'mediumblue';      
+               return value;
+          }          
+     }
+
+     // Now check from the diagonal from the bottom left
+     // up to the top right.
+     if (document.getElementById('row3_col1').textContent ==
+          document.getElementById('row2_col2').textContent
+          &&
+          document.getElementById('row2_col2').textContent ==
+          document.getElementById('row1_col3').textContent
+     ) {
+          var value = document.getElementById('row3_col1').textContent;
+          if (value != '-') {
+      document.getElementById('row3_col1').style.background = 'mediumblue';
+      document.getElementById('row2_col2').style.background = 'mediumblue';
+      document.getElementById('row1_col3').style.background = 'mediumblue';      
+               return value;
+          }
+     }
+
+     // If the code gets all the way down here without returning 
+     // a winner name, then we don't have any winners across the
+     // diagonals!
+     
+     return 'No winner yet';     
+}
+
+function is_game_over_without_a_winner() {
+     var are_all_table_details_filled = (
+               document.getElementById('row1_col1').textContent != '-' &&
+               document.getElementById('row1_col2').textContent != '-' &&
+               document.getElementById('row1_col3').textContent != '-' &&
+               
+               document.getElementById('row2_col1').textContent != '-' &&
+               document.getElementById('row2_col2').textContent != '-' &&
+               document.getElementById('row2_col3').textContent != '-' &&
+               
+               document.getElementById('row3_col1').textContent != '-' &&
+               document.getElementById('row3_col2').textContent != '-' &&
+               document.getElementById('row3_col3').textContent != '-');
+
+     if (are_all_table_details_filled == true) {
+          return true;
+     } else {
+          return false;
+     }
+}
+
+function show_headings() {
+  var show = document.getElementById('show_headings_cb');
+  var display_style = 'none';  
+  if (show.checked) {
+    display_style = 'table-row';
+  }
+  var label_rows = document.getElementsByClassName("label_row");
+  for(var index = 0; index < label_rows.length; index++) {
+    label_rows[index].style.display = display_style;
+  }
+}
+</script>
+</xmp></pre>
+
+<h3>Add one more bit of script code into the HTML itself, and then you're done!</h3>
+
+<p>We have just about everything we need to make the game functional, except for one last step.</p>
+
+<p>Do you remember the game board and all the <code>td</code> tags you made? We need to add an attribute to each of 
+  them that will call a function in the script we just added 
+  which tells the script to score a move. The name of the function
+  is <code>make_move</code>, and you can scan the script code to 
+  see what it does. We'll explain more about how the code works in the 
+  next tutorial. For now, let's just make it work!
+</p>
+
+<p>To each of the <code>td</code> tags, add this new attribute: <code>onclick='make_move(this)'</code></p>
+
+<p>For example, the first one will now look like this:
+  <xmp><td id='row1_col1' class='td_left td_top' onclick='make_move(this)'>-</td></xmp>
+</p>
+
+<h3>Now put all of the pieces together</h3>
+
+<p>And, you've done it! Your code should now look like the following
+code and when you click one of the game board cells, X should
+get scored in it, followed by O on the next click!</p>
+
+<p>Congratulations on building your first game with
+  HTML, CSS, and JavaScript!
+</p>
+
+<p>In the next tutorial, we'll explain how the JavaScript
+  works to power the game. This will also give you a gentle
+  introduction to the JavaScript programming language itself, 
+  which is arguably the most popular programming language
+  on the planet!
+</p>
+
+<p><a href="http://embed.plnkr.co/Lstz9X/" target="_blank">Visit this link</a> to see
+  what your finished product should look and play like!
+</p>
+
+<h4>Here is the final, entire page full of code</h4>
+
+<pre><xmp><html>
+
+<head>
+
+<title>Tic Tac Toe by CoderDojo Ponce Springs!</title>
+
+<style type='text/css'>
+body {
+  text-align: center;
+  margin: 0;
+}
+
+#message {
+  color: white;
+  font-weight: bold;
+  font-size: 150%;
+  font-family: sans-serif;
+  border: 8px solid darkred;
+  display: none;
+  padding: 10px;
+  background: mediumblue;
+  margin: 5px;
+}
+
+#tic_tac_toe_table {
+     border-collapse: collapse;
+  margin: 0 auto;
+}
+
+#tic_tac_toe_table td {
+     border: 10px inset darkred;     
+     background: firebrick;
+     width: 110px;
+     height: 110px;
+  
+     text-align: center;
+     font-size: 40px;
+     color: darkred;
+}
+
+#tic_tac_toe_table .td_left {
+  border-left: none;
+}
+
+#tic_tac_toe_table .td_top {
+  border-top: none;
+}
+
+#tic_tac_toe_table .td_right {
+  border-right: none;
+}
+
+#tic_tac_toe_table .td_bottom {
+  border-bottom: none;
+}
+
+#tic_tac_toe_table .label_row {
+  display: none;
+  font-family: sans-serif;
+}
+
+#tic_tac_toe_table tr.label_row td {
+     font-size: 12px;
+     border: none;
+     height: 15px;
+     background: white;
+}
+
+.X {
+	color: cornflowerblue;
+}
+
+.O {
+	color: orange;
+}
+
+.move {
+	font-size: 80px;
+	font-weight: bold;
+  font-family: sans-serif;
+  text-shadow: 3px 3px black;  
+}
+
+#game_title {
+  font-family: monospace;
+}
+
+#game_rules {
+  background: cornflowerblue;
+  padding: 5px;
+  text-align: left;
+  display: inline-block;
+}
+
+#footer {
+ margin: 0px;
+ padding: 0px;
+ background: lightgray;
+}
+
+.crazyHorizontalRule {
+  background: orange;
+  border: 1px dotted darkred;
+}
+</style>
+
+<body>
+
+<h1 id='game_title'>Tic Tac Toe</h1>
+
+<h2>Game rules</h2>
+
+<div id="game_rules">
+  <p>
+  The rules are simple:
+  </p>  
+  
+  <ul>
+    <li>The game board consists of 3 rows with 3 squares in each row</li>
+    <li>Players are named X and O</li>
+    <li>X plays first by clicking one of the squares</li>
+    <li>O goes next</li>
+    <li>Play alternates until one player fills
+      3 squares in a row down, across, or 
+      diagonally</li>
+  </ul>
+</div>
+
+  <p>
+    <div id='message'></div>
+  </p> 
+  
+<table id='tic_tac_toe_table'>
+  <tr class='label_row'>
+    <th>row1_col1</th>
+    <th>row1_col2</th>
+    <th>row1_col3</th>
+  </tr> 
+  <tr id='row1'>
+    <td id='row1_col1' class='td_left td_top' onclick='make_move(this)'>-</td>
+    <td id='row1_col2' class='td_top' onclick='make_move(this)'>-</td>
+    <td id='row1_col3' class='td_right td_top' onclick='make_move(this)'>-</td>
+  </tr>
+  <tr class='label_row'>
+    <th>row2_col1</th>
+    <th>row2_col2</th>
+    <th>row2_col3</th>
+  </tr> 
+  <tr id='row2'>
+    <td id='row2_col1' class='td_left' onclick='make_move(this)'>-</td>
+    <td id='row2_col2' onclick='make_move(this)'>-</td>
+    <td id='row2_col3' class='td_right' onclick='make_move(this)'>-</td>
+  </tr>
+  <tr class='label_row'>
+    <th>row3_col1</th>
+    <th>row3_col2</th>
+    <th>row3_col3</th>
+  </tr>
+  <tr id='row3'>
+    <td id='row3_col1' class='td_left td_bottom' onclick='make_move(this)'>-</td>
+    <td id='row3_col2' class='td_bottom' onclick='make_move(this)'>-</td>
+    <td id='row3_col3' class='td_right td_bottom' onclick='make_move(this)'>-</td>
+  </tr>
+</table>
+
+<button onclick="reset_game()">Reset Game</button>
+
+<div id='footer'>
+
+<hr size='5' class='crazyHorizontalRule' />
+
+<h3>
+  Brought to you by <a href="http://www.meetup.com/CoderDojoPonceSprings"
+    target="_blank">CoderDojo Ponce Springs</a>!
+</h3>
+
+<img src="http://goo.gl/Jf5Rry" 
+  alt="CoderDojo Ponce Springs" />
+
+<hr size='5' class='crazyHorizontalRule' />  
+
+</div>  
+</body>
+
+<script type='text/javascript' language='javascript'>
+var player_x = 'X';
+var player_o = 'O';
+
+var player_x_name = 'X';
+var player_o_name = 'O';
+
+var current_player = player_x;
+
+var player_names = {};
+player_names[player_x] = player_x_name;
+player_names[player_o] = player_o_name;
+
+var player_avatars = {};
+player_avatars[player_x] = '';
+player_avatars[player_o] = '';
+
+function get_player_move_html(player) {
+  if (player_avatars[player] != '') {
+    return get_player_avatar_html(player);
+  } 
+  return get_player_name_html(player);
+}
+
+function get_player_avatar_html(player) {  
+  return '<span class="' + player + ' move"><span style="display:none">' 
+    + player + '</span><img width="100" height="100" src="' 
+    + player_avatars[player] + '"></span>';
+}
+
+function get_player_name_html(player) {
+  return '<span class="' + player + ' move"><span>' + player + '</span></span>';  
+}
+
+var winner_name = 'No winner yet';
+
+show_message(player_names[current_player] + ", it's your turn!");
+    
+function set_names() {
+    var winner_name = get_winner_name();
+    if (winner_name == 'No winner yet') {
+      player_names[player_x] = document.getElementById('player_x_name').value;
+      player_names[player_o] = document.getElementById('player_o_name').value;
+      
+      player_avatars[player_x] = document.getElementById('player_x_avatar').value;
+      player_avatars[player_o] = document.getElementById('player_o_avatar').value;
+            
+      show_message(player_names[current_player] + ", it's your turn!");    
+    }
+}    
+    
+function make_move(table_detail_element) {
+  if (winner_name != 'No winner yet') {
+    return;
+  } 
+  
+     if (table_detail_element.innerHTML == '-') {
+          table_detail_element.innerHTML = get_player_move_html(current_player)
+          if (current_player == player_x) {
+               current_player = player_o;
+          }
+          else {
+               current_player = player_x;
+          }
+        show_message(player_names[current_player] + ", it's your turn!");    
+     }
+
+     winner_name = get_winner_name();
+  if (winner_name != 'No winner yet') {
+    console.log(winner_name);
+    if (winner_name == player_x) {
+        winner_name = player_names[player_x];
+    } else {
+        winner_name = player_names[player_o];
+    }
+    show_message(winner_name + ' wins!');
+  } else {
+    var game_over_without_a_winner = is_game_over_without_a_winner();
+    if (game_over_without_a_winner === true) {
+      show_message('Game over, but no winner!');
+    }
+  }
+}
+
+function reset_game() {
+  winner_name = 'No winner yet';
+  current_player = player_x;          
+  // Reset the contents of each table cell
+     document.getElementById('row1_col1').innerHTML = '-';
+     document.getElementById('row1_col2').innerHTML = '-';
+     document.getElementById('row1_col3').innerHTML = '-';
+     
+     document.getElementById('row2_col1').innerHTML = '-';
+     document.getElementById('row2_col2').innerHTML = '-';
+     document.getElementById('row2_col3').innerHTML = '-';
+     
+     document.getElementById('row3_col1').innerHTML = '-';
+     document.getElementById('row3_col2').innerHTML = '-';
+     document.getElementById('row3_col3').innerHTML = '-';
+  
+  // Set the background color back to firebrick for each table cell
+  document.getElementById('row1_col1').style.background = 'firebrick';
+     document.getElementById('row1_col2').style.background = 'firebrick';
+     document.getElementById('row1_col3').style.background = 'firebrick';
+     
+     document.getElementById('row2_col1').style.background = 'firebrick';
+     document.getElementById('row2_col2').style.background = 'firebrick';
+     document.getElementById('row2_col3').style.background = 'firebrick';
+     
+     document.getElementById('row3_col1').style.background = 'firebrick';
+     document.getElementById('row3_col2').style.background = 'firebrick';
+     document.getElementById('row3_col3').style.background = 'firebrick';
+
+  show_message(player_names[current_player] + ", it's your turn!");
+}
+
+function show_message(message) {
+  var messageElement = document.getElementById('message');
+  messageElement.innerHTML = message;
+  messageElement.style.display = 'inline-block';
+}
+
+function get_winner_name() {
+     var winner_name;
+
+     winner_name = check_rows_for_winner();
+     if (winner_name != 'No winner yet') {
+          return winner_name;
+     }
+
+     winner_name = check_columns_for_winner();
+     if (winner_name != 'No winner yet') {          
+          return winner_name;
+     }
+
+     winner_name = check_diagonals_for_winner();
+     if (winner_name != 'No winner yet') {
+    return winner_name;
+     }
+
+     return 'No winner yet';
+}
+
+function check_rows_for_winner(table_row) {
+     // Check to see whether all the table detail elements in row 1 have the same value
+     // That is, if all of them are 'X', then X is the winner. And, 
+     // if all of them are 'O', then O is the winner!
+     if (document.getElementById('row1_col1').textContent ==
+          document.getElementById('row1_col2').textContent
+          &&
+          document.getElementById('row1_col2').textContent ==
+          document.getElementById('row1_col3').textContent
+     ) {
+          var value = document.getElementById('row1_col1').textContent;
+          if (value != '-') {
+      document.getElementById('row1_col1').style.background = 'mediumblue';
+      document.getElementById('row1_col2').style.background = 'mediumblue';
+      document.getElementById('row1_col3').style.background = 'mediumblue';      
+               return value;
+          }
+     }
+
+     // Now check row 2
+     if (document.getElementById('row2_col1').textContent ==
+          document.getElementById('row2_col2').textContent
+          &&
+          document.getElementById('row2_col2').textContent ==
+          document.getElementById('row2_col3').textContent
+     ) {
+          var value = document.getElementById('row2_col1').textContent;
+          if (value != '-') {
+      document.getElementById('row2_col1').style.background = 'mediumblue';
+      document.getElementById('row2_col2').style.background = 'mediumblue';
+      document.getElementById('row2_col3').style.background = 'mediumblue';      
+               return value;
+          }
+     }     
+
+     // Lastly, check row 3
+     if (document.getElementById('row3_col1').textContent ==
+          document.getElementById('row3_col2').textContent
+          &&
+          document.getElementById('row3_col2').textContent ==
+          document.getElementById('row3_col3').textContent
+     ) {
+          var value = document.getElementById('row3_col1').textContent;
+          if (value != '-') {
+      document.getElementById('row3_col1').style.background = 'mediumblue';
+      document.getElementById('row3_col2').style.background = 'mediumblue';
+      document.getElementById('row3_col3').style.background = 'mediumblue';            
+               return value;
+          }
+     }     
+
+     // If the code gets all the way down here without returning 
+     // a winner name, then we don't have any winners across the
+     // rows!
+
+     return 'No winner yet';
+}
+
+function check_columns_for_winner(table_column_number) {
+     // Check to see whether all the table detail elements in column 1 have the same value
+     // That is, if all of them are 'X', then X is the winner. And, 
+     // if all of them are 'O', then O is the winner!
+     if (document.getElementById('row1_col1').textContent ==
+          document.getElementById('row2_col1').textContent
+          &&
+          document.getElementById('row2_col1').textContent ==
+          document.getElementById('row3_col1').textContent
+     ) {
+          var value = document.getElementById('row1_col1').textContent;
+          if (value != '-') {
+      document.getElementById('row1_col1').style.background = 'mediumblue';
+      document.getElementById('row2_col1').style.background = 'mediumblue';
+      document.getElementById('row3_col1').style.background = 'mediumblue';
+               return value;
+          }          
+     }
+
+     // Now check column 2
+     if (document.getElementById('row1_col2').textContent ==
+          document.getElementById('row2_col2').textContent
+          &&
+          document.getElementById('row2_col2').textContent ==
+          document.getElementById('row3_col2').textContent
+     ) {
+          var value = document.getElementById('row1_col2').textContent;
+          if (value != '-') {
+      document.getElementById('row1_col2').style.background = 'mediumblue';
+      document.getElementById('row2_col2').style.background = 'mediumblue';
+      document.getElementById('row3_col2').style.background = 'mediumblue';      
+               return value;
+          }          
+     }     
+
+     // Lastly, check column 3
+     if (document.getElementById('row1_col3').textContent ==
+          document.getElementById('row2_col3').textContent
+          &&
+          document.getElementById('row2_col3').textContent ==
+          document.getElementById('row3_col3').textContent
+     ) {
+          var value = document.getElementById('row1_col3').textContent;
+          if (value != '-') {
+      document.getElementById('row1_col3').style.background = 'mediumblue';
+      document.getElementById('row2_col3').style.background = 'mediumblue';
+      document.getElementById('row3_col3').style.background = 'mediumblue';      
+               return value;
+          }          
+     }     
+
+     // If the code gets all the way down here without returning 
+     // a winner name, then we don't have any winners across the
+     // columns!
+     
+     return 'No winner yet';
+}
+
+function check_diagonals_for_winner() {
+     // Check to see whether the table detail elements along the 
+     // diagonal from top left to the bottom right have all the same
+     // values. That is, if all of them are 'X', then X is the winner.
+     // And, if all of them are 'O', then O is the winner!
+     if (document.getElementById('row1_col1').textContent ==
+          document.getElementById('row2_col2').textContent
+          &&
+          document.getElementById('row2_col2').textContent ==
+          document.getElementById('row3_col3').textContent
+     ) {
+          var value = document.getElementById('row1_col1').textContent;
+          if (value != '-') {
+      document.getElementById('row1_col1').style.background = 'mediumblue';
+      document.getElementById('row2_col2').style.background = 'mediumblue';
+      document.getElementById('row3_col3').style.background = 'mediumblue';      
+               return value;
+          }          
+     }
+
+     // Now check from the diagonal from the bottom left
+     // up to the top right.
+     if (document.getElementById('row3_col1').textContent ==
+          document.getElementById('row2_col2').textContent
+          &&
+          document.getElementById('row2_col2').textContent ==
+          document.getElementById('row1_col3').textContent
+     ) {
+          var value = document.getElementById('row3_col1').textContent;
+          if (value != '-') {
+      document.getElementById('row3_col1').style.background = 'mediumblue';
+      document.getElementById('row2_col2').style.background = 'mediumblue';
+      document.getElementById('row1_col3').style.background = 'mediumblue';      
+               return value;
+          }
+     }
+
+     // If the code gets all the way down here without returning 
+     // a winner name, then we don't have any winners across the
+     // diagonals!
+     
+     return 'No winner yet';     
+}
+
+function is_game_over_without_a_winner() {
+     var are_all_table_details_filled = (
+               document.getElementById('row1_col1').textContent != '-' &&
+               document.getElementById('row1_col2').textContent != '-' &&
+               document.getElementById('row1_col3').textContent != '-' &&
+               
+               document.getElementById('row2_col1').textContent != '-' &&
+               document.getElementById('row2_col2').textContent != '-' &&
+               document.getElementById('row2_col3').textContent != '-' &&
+               
+               document.getElementById('row3_col1').textContent != '-' &&
+               document.getElementById('row3_col2').textContent != '-' &&
+               document.getElementById('row3_col3').textContent != '-');
+
+     if (are_all_table_details_filled == true) {
+          return true;
+     } else {
+          return false;
+     }
+}
+
+function show_headings() {
+  var show = document.getElementById('show_headings_cb');
+  var display_style = 'none';  
+  if (show.checked) {
+    display_style = 'table-row';
+  }
+  var label_rows = document.getElementsByClassName("label_row");
+  for(var index = 0; index < label_rows.length; index++) {
+    label_rows[index].style.display = display_style;
+  }
+}
+</script>  
+</html>
+</pre></xmp>
+		    </div>
+		  </div>
+		  <div>
+		    <div ng-repeat='answer in answers'>
+		      {{answer | json }}
+		    </div>
+		  </div>
+	</body>
+	<script type='text/coffeescript' src='js/tutorializr.coffee'></script>	
+	<script type="text/javascript" src="js/coffee-script.min.js"></script>
+  <div id="pubnub" pub-key="pub-c-f4a90e76-f06e-42b8-9594-3756a8bac175" sub-key="sub-c-daf9c6dc-e063-11e2-ab32-02ee2ddab7fe"></div>
+  <script src="http://cdn.pubnub.com/pubnub-3.1.min.js"></script>
+</html>
+
+<!--
+  '''
+  $scope.answers = []
+  channelName = 'answers'
+  subscriptionSetup =
+    channel : channelName,
+    callback: (newAnswer) ->
+      $scope.$apply ->
+        $scope.answers.unshift(newAnswer)
+  PUBNUB.subscribe(subscriptionSetup)
+
+  $scope.sendAnswer = (answer) ->
+    messageToPublish =
+      channel: channelName
+      message:
+        name: $scope.name.value
+        answer: $scope.messageInput.value
+        sentAtTime: new Date()
+    PUBNUB.publish(messageToPublish)
+  '''
+
+
+-->
