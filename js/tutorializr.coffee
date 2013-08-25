@@ -3,22 +3,13 @@ app = angular.module 'app', []
 app.directive 'gitem', ["$http", ($http) ->
 	restrict: 'E'
 	template: "<div ng-bind-html-unsafe='content'></div>"
+	replace: true
 	scope:
 		src: '@src'
 	link: (scope, element, attrs) ->
 		attrs.$observe 'src', (src) ->		
 			$http.get(scope.src).success (content) ->
 				scope.content = content
-]
-
-app.directive 'gistit', ["$http", ($http) ->
-	restrict: 'E'
-	template: "<div ng-bind-html-unsafe='content'></div>"
-	scope:
-		src: '@src'
-	link: (scope, element, attrs) ->
-		attrs.$observe 'src', (src) ->
-			scope.content = "<script src='http://gist-it.appspot.com/github/" + src + "'></script>"
 ]
 
 app.controller 'slidesController', ['$scope', ($scope) ->

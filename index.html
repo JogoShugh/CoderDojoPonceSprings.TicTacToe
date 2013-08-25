@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>RequireJS Tutorial - Atlanta JavaScript Meetup</title>
+		<title>CoderDojo Ponce Springs - Tic Tac Toe Tutorial</title>
 		<meta name='viewport' content='width=device-width, initial-scale=1.0'>
 		<link href='lib/bootstrap/css/bootstrap.min.css' rel='stylesheet' media='screen' />
 		<link href='css/indexa.css' rel='stylesheet' media='screen' />
@@ -551,8 +551,6 @@ You can see how it should display
 
 <script src='http://gist-it.appspot.com/github/JogoShugh/CoderDojoPonceSprings.TicTacToe/blob/step-03/app/index.html?footer=no'></script>
 
-<ddgistit src='JogoShugh/CoderDojoPonceSprings.TicTacToe/blob/step-03/app/index.html?footer=no' />
-
 <h3>Explanation</h3>
 
 <p>Let's understand a bit about the tags we just added:</p>
@@ -571,11 +569,13 @@ the <code>h1</code> tag does, except it uses a slightly small font size. You can
 <code>h3, h4, h5</code>, and <code>h6</code>. Each of them is slightly smaller than the previous one.
 The <code>h6</code> tag is quite tiny. See:
 
-<script src='http://gist-it.appspot.com/github/JogoShugh/CoderDojoPonceSprings.TicTacToe/blob/master/examples/step-03-h-tags.html'></script>
+<script src='http://gist-it.appspot.com/github/JogoShugh/CoderDojoPonceSprings.TicTacToe/blob/master/examples/step-03-h-tags.html?footer=0'></script>
 
 <h5>Renders this way:</h5>
 
-<gitem src='examples/step-03-h-tags.html' />
+<div class='well well-sm'>
+  <gitem src='examples/step-03-h-tags.html'></gitem>
+</div>
 
 <h4>div</h4>
 <p>
@@ -588,19 +588,16 @@ more when we start talking about style sheets.
 <p>Use the <code>p</code> tag to create a paragraph. Like a <code>div</code> tag, it is 
 a block-level element. But, unlike <code>div</code>, and more like the <code>h*</code> tags, it puts 
 a margin around the top and bottom of the text and other tags you enclose within its start 
-and end tags, as you can see here:
-<pre><xmp><p style='background:yellow'>Text with some margin</p>
-<p style='background:yellow'>More text with some margin</p>
-<div style='background:orange'>No margin between me and the next div</div>
-<div style='background:orange'>See, I touch the div before me!</div>
-<p style='background:yellow'>Another paragraph, with some margin above me, after the previous <code>div</code> tag</p></xmp></pre>
-</p>
+and end tags, as you can see here:</p>
+
+<script src='http://gist-it.appspot.com/github/JogoShugh/CoderDojoPonceSprings.TicTacToe/blob/master/examples/step-03-p-and-div-margins.html?footer=0'></script>
+
 <h5>Renders this way:</h5>
-<p style='background:yellow'>Text with some margin</p>
-<p style='background:yellow'>More text with some margin</p>
-<div style='background:orange'>No margin between me and the next div</div>
-<div style='background:orange'>See, I touch the div before me!</div>
-<p style='background:yellow'>Another paragraph, with some margin above me, after the previous <code>div</code> tag</p>
+
+<div class='well well-sm'>
+  <gitem src='examples/step-03-p-and-div-margins.html'></gitem>
+</div>
+
 <h4>ul, li</h4>
 When you want to created a bullet list of items, use the <code>ul</code> paired tag to 
 start and close the list, and a series of <code>li</code> tags to specify each 
