@@ -1,24 +1,27 @@
 app = angular.module 'app', []
 
-app.directive "gitem", [ "$rootScope", "$http", ($rootScope, $http) ->
+app.directive 'gitem', ["$http", ($http) ->
 	restrict: 'E'
-	replace: true
-	transclude: true
-	template: '<div ng-transclude></div>'
+	template: "<div ng-bind-html-unsafe='content'></div>"
 	scope:
-		src: '@'
+		src: '@src'
 	link: (scope, element, attrs) ->
-		console.log('src:')
-		console.log(scope.src)
-		$http.get('https://raw.github.com/JogoShugh/CoderDojoPonceSprings.TicTacToe/master/examples/step-02-a-targets.html').success (data) ->
-			console.log('here it is:')
-			console.log(data)
+		attrs.$observe 'src', (src) ->		
+			$http.get(scope.src).success (content) ->
+				scope.content = content
+]
+
+app.directive 'gistit', ["$http", ($http) ->
+	restrict: 'E'
+	template: "<div ng-bind-html-unsafe='content'></div>"
+	scope:
+		src: '@src'
+	link: (scope, element, attrs) ->
+		attrs.$observe 'src', (src) ->
+			scope.content = "<script src='http://gist-it.appspot.com/github/" + src + "'></script>"
 ]
 
 app.controller 'slidesController', ['$scope', ($scope) ->
-	$scope.content_embed
-
-
 	$scope.get_questions = (slide) ->
 		questions = []
 		slide.find('.questions').each ->
