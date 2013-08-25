@@ -1,6 +1,24 @@
 app = angular.module 'app', []
 
-app.controller 'slidesController', ['$scope', ($scope) ->	
+app.directive "gitem", [ "$rootScope", "$http", ($rootScope, $http) ->
+	restrict: 'E'
+	replace: true
+	transclude: true
+	template: '<div ng-transclude></div>'
+	scope:
+		src: '@'
+	link: (scope, element, attrs) ->
+		console.log('src:')
+		console.log(scope.src)
+		$http.get('https://raw.github.com/JogoShugh/CoderDojoPonceSprings.TicTacToe/master/examples/step-02-a-targets.html').success (data) ->
+			console.log('here it is:')
+			console.log(data)
+]
+
+app.controller 'slidesController', ['$scope', ($scope) ->
+	$scope.content_embed
+
+
 	$scope.get_questions = (slide) ->
 		questions = []
 		slide.find('.questions').each ->
