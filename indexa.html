@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>RequireJS Tutorial - Atlanta JavaScript Meetup</title>
+		<meta name='viewport' content='width=device-width, initial-scale=1.0'>
+		<link href='lib/bootstrap/css/bootstrap.min.css' rel='stylesheet' media='screen' />
+		<link href='css/indexa.css' rel='stylesheet' media='screen' />
+		<script src='lib/jquery/jquery-1.10.2.min.js'></script>		
+		<script src='js/angular.min.js'></script>
+		<script src='js/angular-resource.min.js'></script>
+		<script src='lib/bootstrap/js/bootstrap.min.js'></script>
+		<script src='lib/respond/respond.min.js'></script>	
+	</head>
+	<body class='container center' ng-controller='slidesController'>
+		<div class="jumbotron" ng-hide='loaded'>
+		  <div class="container" style='text-align:center'>
+		    <h1>RequireJS Tutorial</h1>
+		    <p>We'll be with you shortly.</p>
+			<div class='figure'>
+				<img src="https://docs.google.com/drawings/d/1i8SCjWygUokBj1ZV5A-4N8W9kspFosXld5b_pzqeSVA/pub?w=204&amp;h=212" />
+			</div>
+		  </div>
+		</div>
+		<div class='panel' ng-show='loaded' ng-cloak>
+			<div class='panel-heading'>
+				<ul class="pagination pagination-sm">
+					<li id='page-prev' class='pageItem'><a href='#' ng-click='slide_prev()' ng-disabled='!slide_has_prev()'>&laquo;</a></li>
+					<li ng-repeat='slide in slides' id='page-{{$index+1}}' class='pageItem {{get_slide_active_class($index+1)}}'>
+						<a 
+							href='#' 
+							class='pagerLink'
+							ng-click='slide_load($index+1)'>{{$index+1}}</a>
+					</li>
+					<li id='page-next' class='pageItem'><a href='#' ng-click='slide_next()' ng-disabled='!slide_has_next()'>&raquo;</a></li>
+				</ul>
+			</div>
+			<div class='panel-body'>
+				<div class='row container' id='slide_content'>					
+					<h2>{{slide_header}}</h2>
+					<div ng-bind-html-unsafe='slide_content' ng-show="slide_content != ''"></div>
+					<div ng-show='questions.length > 0' class='well'>
+						<div>
+							<p>
+								<span class='label label-danger'>BETA feature</span>
+							</p>
+						</div>
+						<div class='panel'>
+							<div class='panel-heading'><strong>{{question.title}}</strong>&nbsp;<span class='label label-info'>{{(question_position + 1) + ' of ' + questions.length}}</div>
+							<div class='panel-body'>
+								<div ng-repeat='choice in question.choices'>
+									<label class='{{get_choice_class(question, choice)}}'>
+										<input type='checkbox' ng-model='choice.selected'
+											ng-disabled='question.scored'
+										 /> {{choice.text}}&nbsp;				 
+									</label>
+									<span ng-show='choice.answer_correct == true'
+										class='label label-success'>Correct!</span>
+									<span ng-show='choice.answer_correct == false && choice.selected'
+										class='label label-danger'>Wrong!</span>
+									<span ng-show='question.scored' style='font-weight: bold;font-size:85%'>
+										{{choice.description}}
+									</span>										
+								</div>
+							</div>
+							<span class='label label-default'>Score:&nbsp;
+							{{questions.correct_count}} / {{questions.length}} = {{get_correct_answers_percentage()}}
+							</span>
+						</div>
+						<a class='btn btn-success btn-sm'
+							ng-click='question_score()'
+							ng-disabled='question.scored'
+						>Submit answer</a>
+						<a class='btn btn-primary btn-sm'
+							ng-click='question_next()'
+							ng-disabled='!question.scored'
+							ng-hide='!question_has_next()'
+						>Continue</a>
+						<button type='button' class='btn btn-success btn-sm' 
+							ng-click='slide_next()'
+							ng-show='question.scored && !question_has_next()'
+							ng-disabled='!slide_has_next()'
+						>Next</button>
+					</div>					
+				</div>
+				<div ng-show="slide_content != ''">
+					<button type='button' class='btn btn-success btn-sm' ng-click='slide_prev()'
+						ng-disabled='!slide_has_prev()'>Previous</button>
+					<button type='button' class='btn btn-success btn-sm' ng-click='slide_next()'
+						ng-disabled='!slide_has_next()'>Next</button>
+				</div>
+			</div>			
+			<div class='panel-footer'>
+				<div ng-show="slide_resources != ''">
+					<button type="button" class="btn btn-primary btn-sm" id='resourcesShow' ng-hide='resources_visible' ng-click='resources_visible = true'>Show Resources</button>
+					<button type="button" class="btn btn-primary btn-sm" id='resourcesHide' ng-show='resources_visible' ng-click='resources_visible = false'>Hide Resources</button>
+					<div ng-bind-html-unsafe='slide_resources' ng-show='resources_visible'>h</div>
+				</div>
+			</div>
+		</div>
+		<div id='slides'>
+			<div class='section' data-title='Introduction'>
+				<div class='slide' data-title='What is RequireJS?'>
+					<div class='content'>
+						<blockquote class='lead'>RequireJS is a JavaScript file and module loader. It is optimized for in-browser use, but it can be used in other JavaScript environments, like Rhino and Node. Using a modular script loader like RequireJS will improve the speed and quality of your code.
+						</blockquote>
+						<div class='figure'>
+							<img src="https://docs.google.com/drawings/d/1i8SCjWygUokBj1ZV5A-4N8W9kspFosXld5b_pzqeSVA/pub?w=204&amp;h=212" />
+						</div>
+					</div>
+					<div class='references'>
+						<div class="list-group">
+						  <a href="http://www.requirejs.org" class="list-group-item">
+						    <h4 class="list-group-item-heading">RequireJS web site</h4>
+						    <p class="list-group-item-text">Study the RequireJS technical documentation in greater detail.</p>
+						  </a>
+						  <a href="https://github.com/jrburke" class="list-group-item">
+						    <h4 class="list-group-item-heading">James Burke's GitHub profile</h4>
+						    <p class="list-group-item-text">Check out the RequireJS author's latest work on GitHub.</p>
+						  </a>
+						</div>
+					</div>
+				</div>
+				<div class='slide' data-title='RequireJS supports the Asynchronous Module Definition pattern (AMD)'>
+					<div class='content'>
+						<h3>AMD definition:</h3>
+						<blockquote class='lead'>The Asynchronous Module Definition API specifies a mechanism for defining modules such that the module and its dependencies can be asynchronously loaded. This is particularly well suited for the browser environment where synchronous loading of modules incurs performance, usability, debugging, and cross-domain access problems.						
+						</blockquote>
+						<div class='figure'>
+							<h4>Figure 1: AMD pattern</h4>
+							<p>
+								<img src="https://docs.google.com/drawings/d/1j2cv3YuU5f4mqzf3VQUMEegtPB5m4JEIkmsabert89o/pub?w=914&amp;h=638"
+								class='col-xs-12 col-md-12' />
+							</p>
+						</div>
+					</div>
+					<div class='references'>
+						<div class="list-group">
+						  <a href="https://github.com/amdjs/amdjs-api/wiki/AMD" class="list-group-item">
+						    <h4 class="list-group-item-heading">AMD wiki</h4>
+						    <p class="list-group-item-text">Read the full API spec for the AMD JS pattern.</p>
+						  </a>
+						  <a href="http://pluralsight.com/training/courses/TableOfContents?courseName=javascript-design-patterns" 	class="list-group-item">
+						    <h4 class="list-group-item-heading">JavaScript Design Patterns course</h4>
+						    <p class="list-group-item-text">Aaron Powell's Pluralsight course has a chapter on AMD.</p>
+						  </a>
+						</div>
+					</div>
+				</div>
+				<div class='slide' data-title='RequireJS as boomerang'>
+					<div class='content'>
+						<h3>RequireJS fetches libraries like a boomerang and brings them back to your code</h3>
+						<script src="http://gist-it.appspot.com/github/JogoShugh/RequireJSTutorial/blob/step-1/js/factorial.js?footer=0"></script>
+						<div class='figure'>
+							<h4>Figure 2: Library boomerang</h4>
+							<p>
+								<img class='col-xs-12 col-md-12' src="https://docs.google.com/drawings/d/1lkXsqziTqYC8YLvAXwygfa47hLKjWx_aLKKroP4djn4/pub?w=933&amp;h=401" />
+							</p>
+						</div>
+					</div>
+				</div>
+				<div class='slide' data-title='Introduction: Test your knowledge'>
+					<div class='questions'>
+						<div class='question'>
+							<h1>Who created RequireJS?</h1>
+							<ul>
+								<li title='In 1995, Brendan Eich created JavaScript while working at Netscape Communications Corporation'>Brendan Eich</li>
+								<li title='John Resig invented the jQuery library in 2005'>John Resig</li>
+								<li data-correct title='James Burke developed RequireJS in 2009'>James Burke</li>
+								<li title='Jeremy Ashkenas created CoffeeScript, Backbone, and Underscore'>Jeremy Ashkenas</li>
+							</ul>
+						</div>
+						<div class='question'>
+							<h1>What does AMD stand for?</h1>
+							<ul>
+								<li>American Micro Devices</li>
+								<li>Asynchronous Module Dependency</li>
+								<li>Asynchronous Message Dispatch</li>
+								<li data-correct>Asynchronous Module Definition</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class='slide' data-title="Let's build an app!">
+				<div class='content'>
+					<h3>We'll build an app without RequireJS, then refactor it</h3>
+					<h4>Three versions:</h4>
+					<ul>
+						<li>BBOM first pass</li>
+						<li>Modular, yet static</li>
+						<li>Asynchronously loaded</li>
+					</ul>
+					<div class='figure'>
+						<h4>Figure 3: Finished version of our application, incorporating all three</h4>
+						<p>
+							<img src="https://docs.google.com/drawings/d/1RzOM0DYl1qG5KvA4q8OdISWS-KkoOz-dI15gFEK7j64/pub?w=653&amp;h=647" class='col-xs-12' />
+						</p>
+					</div>
+				</div>
+			</div>
+			<div class='slide' data-title="Step 1: Start the Big Ball of Mud">
+				<div class='content'>
+					<h3>Big Ball of Mud:</h3>
+					<blockquote class='lead'>A Big Ball of Mud is a haphazardly structured, sprawling, sloppy, duct-tape-and-baling-wire, spaghetti-code jungle. These systems show unmistakable signs of unregulated growth, and repeated, expedient repair...</blockquote>
+					<h4>Start your ball of mud promptly!</h4>
+					<ul>
+						<li>Create a new <code>app</code> folder somewhere with the following subfolders:
+							<ul>
+								<li><code>js</code></li>
+								<li><code>css</code></li>
+								<li><code>lib</code></li>
+							</ul>
+						</li>
+						<li>Create <code>app/index.html</code>, and type or paste this code into it:
+							<p>
+								<script src="http://gist-it.appspot.com/github/JogoShugh/RequireJSTutorial/blob/step-1/app/index.html?footer=0"></script>
+							</p>
+						</li>
+						<li>Next, create <code>css/index.css</code> with this code:
+							<p>
+								<script src="http://gist-it.appspot.com/github/JogoShugh/RequireJSTutorial/blob/step-1/app/css/index.css?footer=0"></script>							
+							</p>
+						</li>
+						<li>Finally, you'll need to download the referenced library files, or start by downloading or cloning my <a href='https://github.com/JogoShugh/RequireJSTutorial' target='_blank'>finished repository from GitHub</a> and copying the files -- <strong>Note:</strong> if you download the libraries directly, make sure to use Bootstrap 3 or higher!</li>
+						<li>At this point, if you view the <code>index.html</code> page in a browser, you should see that it 
+							has the Bootstrap styles, but no functionality yet works. Let's move on to add some code!</li>
+					</ul>
+				</div>
+				<div class='references'>
+					<div class="list-group">
+					  <a href="http://en.wikipedia.org/wiki/Big_ball_of_mud" class="list-group-item">
+					    <h4 class="list-group-item-heading">Big Ball of Mud on Wikipedia</h4>
+					    <p class="list-group-item-text">A big ball of mud is a software system that lacks a perceivable architecture. Although undesirable from an engineering point of view, such systems are common in practice due to business pressures and developer turnover. They have therefore been declared a design anti-pattern.</p>
+					  </a>
+					</div>
+				</div>
+
+			</div>
+			<div class='slide' data-title="Step 2: Create the CalculatorBBOM object">
+				<div class='content'>
+					<h3>Our calculator has little functionality in v1. Therefore, we can just put all the code in
+						one file, right?</h3>
+					<ul>
+						<li>Create <code>app/js/calculator-bbom.js</code> with this code:
+							<p>
+								<script src="http://gist-it.appspot.com/github/JogoShugh/RequireJSTutorial/blob/step-2/app/js/calculator-bbom.js?footer=0"></script>
+							</p>
+						</li>
+						<li>Next, add the reference to the <code>app/index.html</code> file, right after the 
+							<code>bootstrap.min.js</code> reference:
+							<p>
+								<script src="http://gist-it.appspot.com/github/JogoShugh/RequireJSTutorial/blob/step-2/app/index.html?footer=0&slice=8:10"></script>
+							</p>
+						</li>
+						<li>Load the page now, and you can pull up the developer console and type in 
+							<code>CalculatorBBOM.execute('multiply', [2, 4])</code>. For factorial, note the hacky way you need to pass <code>CalculatorBBOM.execute('factorial', [0, <em>n</em>])</code>
+						</li>
+						<li>Now, let's throw a GUI on top of this!</li>
+					</ul>
+				</div>
+			</div>
+			<div class='slide' data-title="Step 3: Create the CalculatorUI constructor function">
+				<div class='content'>
+					<h3>Now we need a UI so we can click the pretty buttons</h3>
+					<ul>
+						<li>Create <code>app/js/calculator-ui-1.0.js</code> with this code:
+							<p>
+								<script src="http://gist-it.appspot.com/github/JogoShugh/RequireJSTutorial/blob/step-3/app/js/calculator-ui-1.0.js?footer=0"></script>
+							</p>
+						</li>
+						<li>Next, create <code>app/js/app.js</code> with the following code. This is where we'll handle UI events to coordinate using the <code>CalculatorBBOM</code> and <code>CalculatorUI</code> objects:
+							<p>
+								<script src="http://gist-it.appspot.com/github/JogoShugh/RequireJSTutorial/blob/step-3/app/js/app.js?footer=0"></script>
+							</p>
+						</li>						
+						<li>Now, add references to the <code>app/js/calculator-ui-1.0.js</code> and 
+							<code>app/js/app.js</code> files, right after the 
+							previous <code>calculator-bbom.js</code> reference:
+							<p>
+								<script src="http://gist-it.appspot.com/github/JogoShugh/RequireJSTutorial/blob/step-3/app/index.html?footer=0&slice=9:12"></script>
+							</p>
+						</li>
+						<li>We need to modify <code>app/index.html</code> so that clicking the <code>Add New BBOM Calculator</code> button creates and appends a new <code>CalculatorUI</code> element (configured with our trusty <code>CalculatorBBOM</code> object) into the DOM. Modify it like this:
+							<p>
+								<script src="http://gist-it.appspot.com/github/JogoShugh/RequireJSTutorial/blob/step-3/app/index.html?footer=0&slice=15:18"></script>
+							</p>							
+						</li>
+						<li>Load your page now, and:
+							<ul>
+								<li>Click the <code>Add New BBOM Calculator</code> button. It should append a rendered 
+							calculator UI into the page.</li>
+								<li>Type <code>5</code> into the input field, then click the <code>+</code> button. It should show <code>5</code> in the output area.</li>
+								<li>Click the button again to add another <code>5</code>.</li>
+								<li>Clicking the other commands causes those operations to be performed with the current <strong>output value</strong> as the first argument, and the <strong>input field value</strong> as the second.</li>
+								<li>The factorial one simply operates on the input value, however.</li>
+							</ul>
+							<span class='label label-warning'>Confession:</span> I know this calculator isn't super user-friendly, but it's not really a calculator tutorial!								
+						</li>
+						<li>
+							You can also <a class='btn btn-success btn-sm' href='http://jogoshugh.github.io/RequireJSTutorial/steps/step-3/app/index.html' target='_blank'>Run Step 3 on GitHub</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div class='slide' data-title="Review: Our Big Ball of Mud is alive!">
+				<div class='content'>
+					<h3>It's alive!</h3>
+					<div class='figure'>
+						<img src="https://docs.google.com/drawings/d/16tKnQaMCjk8JZMHfxNox7bIVNPOH3uJJztMOmvPbbEM/pub?w=717&amp;h=691" class='col-xs-12 col-md-12' />		
+					</div>
+					<h4>Let's review:</h4>
+					<ul>
+						<li>You've created a <a href='http://jogoshugh.github.io/RequireJSTutorial/steps/step-3/app/index.html' target='_blank'>functioning calculator</a>, and even a reusable UI object.</li>
+						<li>But, the math functionality is entirely contained in the <code>CalculatorBBOM</code> object,
+							which means that if we wanted to support dozens, or even hundreds or thousands, of math functions,
+							it would start to get very uncomfortable.</li>
+						<li>In Step 4, we'll start to modularize the calculator by using separate files to house each 
+							math function. This, however, will still be a half-hearted solution that doesn't solve the modularity question entirely.</li>
+					</ul>
+				</div>
+				<div class='references'>
+					<div class="list-group">
+					  <a href="Big Ball of Mud Design Pattern" class="list-group-item">
+					    <h4 class="list-group-item-heading">Big Ball of Mud Design Pattern post at Dodgy Coder</h4>
+					    <p class="list-group-item-text">The image above comes from Dody Coder's post on this design (anti-)pattern.</p>
+					  </a>
+					  <a href="http://www.codinghorror.com/blog/2007/11/the-big-ball-of-mud-and-other-architectural-disasters.html" class="list-group-item">
+					    <h4 class="list-group-item-heading">The Big Ball of Mud and Other Architectural Disasters</h4>
+					    <p class="list-group-item-text">Jeff Atwood has another great article about this pattern with a lot of other physical-world analogies.</p>
+					   </a>
+					</div>					
+				</div>				
+			</div>
+			<div class='slide' data-title="Step 4: Create the CalculatorModular files">
+				<div class='content'>
+					<h3>Let's break up the calculator into separate files to support better separation of concerns and evolvability</h3>
+					<h4>As I said in the last review step, this is not the complete solution, so let's just go through it 
+						quickly.</h4>
+					<ul>
+						<li>Create <code>app/js/calculator-modular.js</code>:
+							<p>
+								<script src="http://gist-it.appspot.com/github/JogoShugh/RequireJSTutorial/blob/step-4/app/js/calculator-modular.js?footer=0"></script>
+							</p>
+						</li>
+						<li>Create the individual operation files:
+							<ul>
+								<li>Add: <code>app/js/add-module.js</code>:
+									<p>
+										<script src="http://gist-it.appspot.com/github/JogoShugh/RequireJSTutorial/blob/step-4/app/js/add-module.js?footer=0"></script>
+									</p>
+								</li>
+								<li>Subtract: <code>app/js/subtract-module.js</code>:
+									<p>
+										<script src="http://gist-it.appspot.com/github/JogoShugh/RequireJSTutorial/blob/step-4/app/js/subtract-module.js?footer=0"></script>
+									</p>
+								</li>
+								<li>Multiply: <code>app/js/multiply-module.js</code>:
+									<p>
+										<script src="http://gist-it.appspot.com/github/JogoShugh/RequireJSTutorial/blob/step-4/app/js/multiply-module.js?footer=0"></script>
+									</p>
+								</li>
+								<li>Divide: <code>app/js/divide-module.js</code>:
+									<p>
+										<script src="http://gist-it.appspot.com/github/JogoShugh/RequireJSTutorial/blob/step-4/app/js/divide-module.js?footer=0"></script>
+									</p>
+								</li>
+								<li>Factorial: <code>app/js/factorial-module.js</code>:
+									<p>
+										<script src="http://gist-it.appspot.com/github/JogoShugh/RequireJSTutorial/blob/step-4/app/js/factorial-module.js?footer=0"></script>		
+									</p>
+								</li>
+							</ul>
+						</li>
+						<li>Now, add references and modify the body of the <code>app/index.html</code> file to incorporate our new, modularly-defined calculator. We also take the liberty to use Bootstrap's tabs support here,
+							so here's how the full file should now look:
+							<p>
+								<script src="http://gist-it.appspot.com/github/JogoShugh/RequireJSTutorial/blob/step-4/app/index.html?footer=0"></script>								
+							</p>
+						</li>
+						<li><p>
+							Try the <a href="http://jogoshugh.github.io/RequireJSTutorial/steps/step-4/app/index.html" 
+								class='btn btn-success btn-sm' target='_blank'>finished Step 4 on GitHub</a>
+							</p>
+						</li>							
+					</ul>
+				</div>
+			</div>
+			<div class='slide' data-title="Review: Modular structure achieved">
+				<div class='content'>
+					<h3>We've achieved modularity at the implementation level now, but there's a problem...</h3>
+					<div class='figure'>
+						<img src="https://docs.google.com/drawings/d/1TiCziiienpjaOlg2KxxynU52uyaxSIVbuZWWv5ZO928/pub?w=415&amp;h=684" class='col-xs-12 col-md-12' />
+					</div>
+					<h4>Pros:</h4>
+					<ul>
+						<li>Different files for each operation will make it easier to extend without check-in conflicts</li>
+						<li>The operations can be used in isolation, withou the <code>CalculatorModular</code> object</li>
+						<li>We could write independent unit tests for each operation that we could run under Node</li>
+					</ul>
+					<h4>Cons:</h4>
+					<ul>
+						<li>We still manually reference files in the <code>head</code> tag!</li>
+						<li>Each operation depends on the presence of the <code>CalculatorModular</code> object in order to
+							register itself with it upon load, a coupling we can avoid!</li>
+						<li>The crazy immediate-execute anonymous function looks complicated and error-prone</li>
+					</ul>
+					<h4>Let's add a truly modular alternative, with the help of RequireJS next</h4>
+				</div>
+				<div class='references'>
+					<div class="list-group">
+					  <a href="30 Impressive Creations Made from Lego Bricks at Naldz Graphics" class="list-group-item">
+					    <h4 class="list-group-item-heading">Nathan Saways lego creation</h4>
+					    <p class="list-group-item-text">The Lego sculpture above is from the Nathan Sawaya exhibit at the Flinn Gallery in Greenwich, Connecticut.</p>
+					  </a>
+					</div>				
+				</div>			
+			</div>
+			<div class='slide' data-title="Characteristics of modular software">
+				<div class='content'>
+					<h3>What makes a design modular?</h3>
+					<ul>
+						<li>Independent, interchangeable parts</li> 
+						<li>Each parts contains everything necessary to execute one capability</li>
+						<li>Parts are expected to implement one or more <em>interfaces</em> that correspond to capabilities</li>
+						<li>These implementation parts are detectable by one or more other modules that incorporate them into the main program</li>
+					</ul>
+					<h4>Our interface is pretty simple: <em>a function that takes two numeric parameters and returns a single numeric parameter, so let's implement this next</em></h4>
+
+				</div>
+				<div class='references'>
+					<div class="list-group">
+					  <a href="http://en.wikipedia.org/wiki/Modular_programming" class="list-group-item">
+					    <h4 class="list-group-item-heading">Modular programming on Wikipedia</h4>
+					    <p class="list-group-item-text">Modular programming is a software design technique that emphasizes separating the functionality of a program into independent, interchangeable modules, such that each contains everything necessary to execute only one aspect of the desired functionality. Conceptually, modules represent a separation of concerns, and improve maintainability by enforcing logical boundaries between components. Modules are typically incorporated into the program through interfaces. A module interface expresses the elements that are provided and required by the module. The elements defined in the interface are detectable by other modules. The implementation contains the working code that corresponds to the elements declared in the interface.</p>
+					  </a>
+					</div>				
+				</div>			
+			</div>
+			<div class='slide' data-title="Step 5: Create the asynchronous calculator files!">
+				<div class='content'>
+					<h3>Let's now make our app take advantage of RequireJS and its AMD support</h3>
+					<h4>These steps will make the app both structurally modular and run-time modular: 
+						quickly.</h4>
+					<ul>
+						<li>Create <code>app/js/calculator-async.js</code>:
+							<p>
+								<script src="http://gist-it.appspot.com/github/JogoShugh/RequireJSTutorial/blob/step-5/app/js/calculator-async.js?footer=0"></script>
+							</p>
+						</li>
+						<li>Create <code>app/js/calculator-async-loader.js</code>:
+							<p>
+								<script src="http://gist-it.appspot.com/github/JogoShugh/RequireJSTutorial/blob/step-5/app/js/calculator-async-loader.js?footer=0"></script>
+							</p>
+						</li>						
+						<li>Create the individual operation files:
+							<ul>
+								<li>Add: <code>app/js/add.js</code>:
+									<p>
+										<script src="http://gist-it.appspot.com/github/JogoShugh/RequireJSTutorial/blob/step-5/app/js/add.js?footer=0"></script>
+									</p>
+								</li>
+								<li>Subtract: <code>app/js/subtract.js</code>:
+									<p>
+										<script src="http://gist-it.appspot.com/github/JogoShugh/RequireJSTutorial/blob/step-5/app/js/subtract.js?footer=0"></script>
+									</p>
+								</li>
+								<li>Multiply: <code>app/js/multiply.js</code>:
+									<p>
+										<script src="http://gist-it.appspot.com/github/JogoShugh/RequireJSTutorial/blob/step-5/app/js/multiply.js?footer=0"></script>
+									</p>
+								</li>
+								<li>Divide: <code>app/js/divide.js</code>:
+									<p>
+										<script src="http://gist-it.appspot.com/github/JogoShugh/RequireJSTutorial/blob/step-5/app/js/divide.js?footer=0"></script>
+									</p>
+								</li>
+								<li>Factorial: <code>app/js/factorial.js</code>:
+									<p>
+										<script src="http://gist-it.appspot.com/github/JogoShugh/RequireJSTutorial/blob/step-5/app/js/factorial.js?footer=0"></script>		
+									</p>
+								</li>
+							</ul>
+						</li>
+						<li>Now, add script references (including to require.js itself!) and modify the body of the <code>app/index.html</code> file to incorporate our asynchronous calculator. Here's what the full file should look like:
+							<p>
+								<script src="http://gist-it.appspot.com/github/JogoShugh/RequireJSTutorial/blob/step-5/app/index.html?footer=0"></script>							
+							</p>
+						</li>
+						<li><p>
+							Try the finished asynchronous calculator <a href="http://jogoshugh.github.io/RequireJSTutorial/steps/step-5/app/index.html" 
+								class='btn btn-success btn-sm' target='_blank'>Step 5 on GitHub</a>
+							</p>
+						</li>							
+					</ul>
+				</div>
+			</div>
+			<div class='slide' data-title="Step 6: Remove the old and busted ways and load module list dynamically">
+				<div class='content'>
+					<h3>As an improvement, let's load the list of operations from the server too</h3>
+					<h4>You could do this by scanning file names and sending JSON to the client, but we'll just use a simple <code>.js</code> to illustrate this for now:</h4>
+					<ul>
+						<li>Create <code>app/js/modules.js</code>:
+							<p>
+								<script src="http://gist-it.appspot.com/github/JogoShugh/RequireJSTutorial/blob/step-6/app/js/modules.js?footer=0"></script>
+							</p>
+						</li>
+						<li>Modify <code>app/js/app.js</code>, adding the following code to the top of it:
+							<p>
+								<script src="http://gist-it.appspot.com/github/JogoShugh/RequireJSTutorial/blob/step-6/app/js/app.js?footer=0&slice=0:43"></script>
+							</p>
+						</li>
+						<li>Modify <code>app/index.html</code>, removing the hard-coded modules list:
+							<p>
+								<script src="http://gist-it.appspot.com/github/JogoShugh/RequireJSTutorial/blob/step-6/app/index.html?footer=0"></script>
+							</p>
+						</li>
+						<li>You can remove some of the other functions that aren't needed anymore too.</li>
+						<li>
+							<p>
+							Try the slimmed down asynchronous calculator <a href="http://jogoshugh.github.io/RequireJSTutorial/steps/step-6/app/index.html" 
+								class='btn btn-success btn-sm' target='_blank'>Step 6 on GitHub</a>
+							</p>
+						</li>						
+					</ul>
+				</div>
+			</div>			
+		</div>
+	</body>
+	<script type='text/coffeescript' src='js/tutorializr.coffee'></script>	
+	<script type="text/javascript" src="js/coffee-script.min.js"></script>
+</html>
