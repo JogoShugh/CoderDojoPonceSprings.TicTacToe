@@ -481,11 +481,9 @@
             of the tab or window it just opened. Let's go ahead and try it right now:
           </p>
           
-          <p>
-            <a href='http://www.coderdojo.com' target='dojowindow'>CoderDojo main site</a>
-            <hr />
-            <a href='http://www.coderdojonyc.com' target='dojowindow'>CoderDojo NYC</a>
-          </p>
+          <div class='well'>
+            <gitem src='examples/step-02-a-targets.html'></gitem>
+          </div>
           
           <h6>Code for the above example</h6>
           
@@ -700,12 +698,7 @@ and properties at the <a href='http://docs.webplatform.org/wiki/css'
 
 <p>Here's the first selector we added:</p>
 
-<xmp>
-body {
-  text-align: center;
-  margin: 0;
-}
-</xmp>
+<script src='http://gist-it.appspot.com/github/JogoShugh/CoderDojoPonceSprings.TicTacToe/blob/master/examples/step-04-body-selector.css?footer=0'></script>
 
 <p>In this case, the <strong>selector</strong> part is just the tag name: <code>body</code>. It's 
   followed by an opening left curly brace, <code>{</code>, and then by two <strong>properties</strong> 
@@ -737,37 +730,32 @@ body {
   element, and the <code>color</code> property, which lets us change the text color.
 </p>
 
-<xmp><pre>
-<div style='text-align: right; margin-left: 50%; background: purple; color: yellow;'>
-  My text is on the right, and I always take up only half the page no matter how wide it is!
-</div>
-</pre></xmp>
+<script src='http://gist-it.appspot.com/github/JogoShugh/CoderDojoPonceSprings.TicTacToe/blob/master/examples/step-04-margin-background.html?footer=0'></script>
 
 <h5>Renders this way:</h5>
 
-<div style='text-align: right; margin-left: 50%; background: purple; color: yellow;'>
-  My text is on the right, and I always take up only half the page no matter how wide it is!
+<div class='well well-sm'>
+  <gitem src='examples/step-04-margin-background.html'></gitem>
 </div>
 
 <h4>Matching by <code>id</code> attribute</h4>
 
 <p>Now let's look at the next selector we added:</p>
 
-<xmp>
-#game_title {
-  font-family: monospace;
-}  
-</xmp>
+<script src='http://gist-it.appspot.com/github/JogoShugh/CoderDojoPonceSprings.TicTacToe/blob/step-04/app/index.html?footer=0&slice=13:15'></script>
 
 <p>This time, there is a hash mark before the curly brace. You 
   do this when you want to select a tag by matching the value of 
   its <code>id</code> attribute. Look back at the HTML and you'll see
   this code:
-  <xmp><pre><h1 id='game_title'>Tic Tac Toe</h1></pre></xmp>
-  Notice the <code>id='game_title'</code> attribute within the <code>h1</code> tag? 
-  Since we used <code>#game_title</code> in our CSS selector, the browser will apply the 
-  <code>font-family</code> property value we assigned to this tag and this tag only!
+  
+<script src='http://gist-it.appspot.com/github/JogoShugh/CoderDojoPonceSprings.TicTacToe/blob/step-04/app/index.html?footer=0&slice=40'></script>
+
+Notice the <code>id='game_title'</code> attribute within the <code>h1</code> tag? 
+Since we used <code>#game_title</code> in our CSS selector, the browser will apply the 
+<code>font-family</code> property value we assigned to this tag and this tag only!
 </p>
+
 <p>The <code>font-family</code> property changes
   the name of the font for the browser to render the 
   text in. In this case, <code>monospace</code> tells it 
@@ -775,28 +763,27 @@ body {
   Here are some examples:
 </p>
 
-<pre><xmp><div style='font-family:monospace'>This is the same size as below.</div>
-<div style='font-family:monospace'>The same width as what's above.</div>
-</xmp></pre>
+<script src='http://gist-it.appspot.com/github/JogoShugh/CoderDojoPonceSprings.TicTacToe/blob/master/examples/step-04-monospace.html&footer=0'></script>
 
 <h5>Renders this way:</h5>
 
-<div style='font-family:monospace'>This is the same size as below.</div>
-<div style='font-family:monospace'>The same width as what's above.</div>
+<div class='well well-sm'>
+  <gitem src='examples/step-04-monospace.html'></gitem>
+</div>
 
 <p>Now, if we change the <code>font-family</code> value to something like <code>sans-serif</code>,
-  then even though the sentences have the same number of characters, 31, they won't
-  get rendered as the same width, because the <code>sans-serif</code> font 
+  then even though the sentences have the same number of characters, 35, they <strong>won't
+  get rendered as the same width</strong>, because the <code>sans-serif</code> font 
   on most operating systems uses different widths for a lot of characters.
 </p>
 
-<pre><xmp><div style='font-family:sans-serif'>This is the same size as below.</div>
-<div style='font-family:sans-serif'>The same width as what's above.</div></xmp></pre>
+<script src='http://gist-it.appspot.com/github/JogoShugh/CoderDojoPonceSprings.TicTacToe/blob/master/examples/step-04-sansserif.html&footer=0'></script>
 
 <h5>Renders this way:</h5>
 
-<div style='font-family:sans-serif'>This is the same size as below.</div>
-<div style='font-family:sans-serif'>The same width as what's above.</div>
+<div class='well well-sm'>
+  <gitem src='examples/step-04-sansserif.html'></gitem>
+</div>
 
 <h4>Matching by <code>class</code> attribute</h4>
 
@@ -812,10 +799,7 @@ body {
 
 <p>Take a look at the last selector we created:</p>
 
-<xmp>.crazyHorizontalRule {
-  background: orange;
-  border: 1px dotted darkred;
-}</xmp>
+<script src='http://gist-it.appspot.com/github/JogoShugh/CoderDojoPonceSprings.TicTacToe/blob/step-04/app/index.html?footer=0&slice=30:33'></script>
 
 <p>The <code>.</code> in front of the name 
   <code>crazyHorizontalRule</code> tells the browser to 
@@ -980,7 +964,7 @@ body {
 <p>We will use the trusty <code>table</code> tag and its related tags to build this. Here's a summary of
 what the most common table-related tags do for you:</p>
 
-<table border='1'>
+<table class='table table-striped table-bordered'>
   <tr>
     <th>Tag</th>
     <th>Purpose</th>
@@ -1004,40 +988,6 @@ what the most common table-related tags do for you:</p>
     </td>
   </tr>  
 </table>
-
-<p>
-  You can do more with tables than this, but that's all we need for our Tic Tac Toe game board. But before we add that, you
-  might have guessed that the table of information above actually used the <code>table</code>,
-  <code>tr</code>, <code>th</code>, and <code>td</code> tags. It did. Here's what the code 
-  looks like:
-</p>
-
-<pre><xmp>
-<table border='1'>
-  <tr>
-    <th>Tag</th>
-    <th>Purpose</th>
-  </tr>
-  <tr>
-    <td>table</td>
-    <td>Sets up the start of a table, a container for groups of rows and columns. The <code>table</code> tag can directly contain <code>tr</code> child tags.</td>
-  </tr>
-  <tr>
-    <td>tr</td>
-    <td>Creates a table row. Rows stack horizontally on top of each other. The <code>tr</code> tag directly contains child <code>td</code> tags.</td>
-  </tr>
-  <tr>
-    <td>td</td>
-    <td>This means "table detail", but you can think of it like a column. You can write multipe <code>td</code> tags next to each other, and they line up side-by-side, or vertically within the row.</td>
-  </tr>
-  <tr>
-    <td>th</td>
-    <td>This means "table header", and it has basically the same behavior as the <code>td</code> tag, but it automatically makes any text you put between its starting and closing tags <strong>bold</strong> and centered. You can change that if you want. You typically place
-    these tags in the very first <code>tr</code> tag so that they identify the meaning of the <code>td</code> tags in the rest of the rows.
-    </td>
-  </tr>  
-</table>
-</xmp></pre>
 
 <h3>Add new code</h3>
 
@@ -1319,6 +1269,18 @@ body {
 
 </html>
 </xmp></pre>
+
+
+<div class='aside'>
+<h3>Tables used to describe tables?</h3>
+<p>
+  You can do more with tables than this, but what we did above is all we need for our Tic Tac Toe game board. But before we add that, you
+  might have guessed that the table of information above actually used the <code>table</code>,
+  <code>tr</code>, <code>th</code>, and <code>td</code> tags. It did. Here's what the code 
+  looks like:
+</p>
+
+</div>
 		    </div>
 		  </div>
 		  <div class='slide' data-title='Step 7: Adding a message to tell whose turn it is'>
