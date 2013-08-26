@@ -824,113 +824,26 @@ with <code>id='footer'</code>. Let's fix that now.
 
 <p>Near the bottom of your HTML document, look for the first 
 <code>hr</code> tag that you just added and everything between it and the 
-second <code>hr</code> tag. Then, modify the code so
-so it looks like the code below. Make sure that you don't forget 
-to put the starting and ending <code>div</code> tags around the 
-entire section. It's important for the styles we already added to work!
+second <code>hr</code> tag. The code should currently look something like this:
+
+<script src='http://gist-it.appspot.com/github/JogoShugh/CoderDojoPonceSprings.TicTacToe/blob/step-04/app/index.html?footer=0&slice=60:70'></script>
 </p>
 
-<pre><xmp><div id='footer'>
+<p>Now, modify this code so that it looks like the code below. <strong>Make sure that you don't forget to put the starting and ending <code>div</code> tags around the 
+entire section</strong>. It's important for the styles we already added to work! That's because the <code>id='footer'</code> attribute gives the <code>div</code> an id value to 
+which the <code>#footer</code> style selector corresponds. 
+</p>
 
-<hr size='5' class='crazyHorizontalRule' />
-
-<h3>
-  Brought to you by <a href="http://www.meetup.com/CoderDojoPonceSprings"
-    target="_blank">CoderDojo Ponce Springs</a>!
-</h3>
-
-<img src="http://goo.gl/Jf5Rry" 
-  alt="CoderDojo Ponce Springs" />
-
-<hr size='5' class='crazyHorizontalRule' />  
-
-</div>
-</xmp></pre>
+<script src='http://gist-it.appspot.com/github/JogoShugh/CoderDojoPonceSprings.TicTacToe/blob/step-05/app/index.html?footer=0&slice=60:74'></script>
 
 <h3>You should now have this</h3>
 
-<p>Your full documnent code should now lool like below. See it in action 
+<p>Your full document's code should now lool like below. See it in action 
 <a href="http://embed.plnkr.co/CmdC3FL0arUvIoMgPh26/preview"
  target="_blank">here</a>.
 </p>
   
-<pre><xmp><html>
-
-<head>
-
-<title>Tic Tac Toe by CoderDojo Ponce Springs!</title>
-
-<style type='text/css'>
-body {
-  text-align: center;
-  margin: 0;
-}
-
-#game_title {
-  font-family: monospace;
-}
-
-#game_rules {
-  background: cornflowerblue;
-  padding: 5px;
-  text-align: left;
-  display: inline-block;
-}
-
-#footer {
- margin: 0px;
- padding: 0px;
- background: lightgray;
-}
-
-.crazyHorizontalRule {
-  background: orange;
-  border: 1px dotted darkred;
-}
-</style>
-
-<body>
-
-<h1 id='game_title'>Tic Tac Toe</h1>
-
-<h2>Game rules</h2>
-
-<div id="game_rules">
-  <p>
-  The rules are simple:
-  </p>  
-  
-  <ul>
-    <li>The game board consists of 3 rows with 3 squares in each row</li>
-    <li>Players are named X and O</li>
-    <li>X plays first by clicking one of the squares</li>
-    <li>O goes next</li>
-    <li>Play alternates until one player fills
-      3 squares in a row down, across, or 
-      diagonally</li>
-  </ul>
-</div>
-
-<div id='footer'>
-
-<hr size='5' class='crazyHorizontalRule' />
-
-<h3>
-  Brought to you by <a href="http://www.meetup.com/CoderDojoPonceSprings"
-    target="_blank">CoderDojo Ponce Springs</a>!
-</h3>
-
-<img src="http://goo.gl/Jf5Rry" 
-  alt="CoderDojo Ponce Springs" />
-
-<hr size='5' class='crazyHorizontalRule' />  
-
-</div>
-
-</body>
-
-</html>
-</xmp></pre>
+<script src='http://gist-it.appspot.com/github/JogoShugh/CoderDojoPonceSprings.TicTacToe/blob/step-05/app/index.html?footer=0'></script>
 
 </body>
 
@@ -953,6 +866,8 @@ body {
     the <a href='http://docs.webplatform.org/wiki/css/properties' 
   target='_blank'>Web Platform web site</a>.
 </p>
+
+<p>Ok, let's keep going!</p>
 		    </div>
 		  </div>
 		  <div class='slide' data-title='Step 6: Use <code>table</code>, <code>tr</code>, <code>th</code>, and <code>td</code> to create the game board!'>
