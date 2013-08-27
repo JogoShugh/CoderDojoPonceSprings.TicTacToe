@@ -968,7 +968,7 @@ what the most common table-related tags do for you:</p>
   <p>Yikes! This all might seem a little intimidating, I know. But, for now the most important things are understanding that:
 
     <ul>
-      <li>Each <code>td</code> tag has an <code>id=row1_col1</code>, or similar id, which will be <strong>very important</strong> for understanding how the JavaScript code works to power the game.</li>
+      <li>Each <code>td</code> tag has an <code>id=row1_col1</code> attribute (or similar), which will be <strong>very important</strong> for understanding how the JavaScript code works to power the game.</li>
       <li>The different <code>id</code> and <code>class</code> attribute values will be used in CSS selectors in our next step to stylize the gameboard.</li>
     </ul>
   </p>
@@ -985,15 +985,25 @@ what the most common table-related tags do for you:</p>
     with the <code>colspan</code> and <code>rowspan</code> attributes. Here's a code example, followed by how it renders:
   </p>
 
-  <div class='well well-sm'>
-    <gitem src='examples/step-06-spans.html'></gitem>
-  </div>
+  <script src='http://gist-it.appspot.com/github/JogoShugh/CoderDojoPonceSprings.TicTacToe/blob/master/examples/step-06-spans.html?footer=0'></script>
 
   <h4>Renders this way:</h4>
 
-  <script src='http://gist-it.appspot.com/github/JogoShugh/CoderDojoPonceSprings.TicTacToe/blob/master/examples/step-06-spans.html?footer=0'></script>
-</div>
+  <div class='well well-sm'>
+    <gitem src='examples/step-06-spans.html'></gitem>
+  </div>  
 
+  <p>I'll let you study this and play with it, but in summary:
+
+    <ul>
+      <li>Use a <code>colspan</code> attribute on a <code>th</code> or <code>td</code> tag 
+        to make it stretch a certain number of columns (horizontally).</li>.
+      <li>Use a <code>rowspan</code> attribute on a <code>th</code> or <code>td</code> tag 
+        to make it stretch a certain number of rows (vertincally).
+    </ul>
+  </p>
+</div>
+<!--
 <h3>Adding some style to the game board!</h3>
 
 <p>Now that we have the table we are going to want to add some style, 
@@ -1235,19 +1245,8 @@ body {
 
 </html>
 </xmp></pre>
-
-
-<div class='aside'>
-<h3>Wait, didn't we just see a table used to describe tables?</h3>
-<p>
-  You can do more with tables than this, but what we did above is all we need for our Tic Tac Toe game board. But before we add that, you
-  might have guessed that the table of information above actually used the <code>table</code>,
-  <code>tr</code>, <code>th</code>, and <code>td</code> tags. It did. <strong>You do not have to add this code into your document, but here's what the code that describes tables looks like:
-
-  <script src='http://gist-it.appspot.com/github/JogoShugh/CoderDojoPonceSprings.TicTacToe/blob/master/examples/step-06-tables.html?footer=no'></script>
-</p>
-
-</div>
+-->
+        <br />
 		    </div>
 		  </div>
 		  <div class='slide' data-title='Step 7: Adding a message to tell whose turn it is'>
