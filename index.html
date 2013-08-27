@@ -1010,245 +1010,56 @@ what the most common table-related tags do for you:</p>
         <div class='content'>
           <p>Now that you understand how the <code>table</code> and its associated <code>tr</code>, <code>th</code>, and <code>td</code> tags work, let's add some styles to the <code>style</code> tag to add color and dimension to the gameboard. You'll also add selectors that we'll use to color the X and O once, though we won't see it in action until we add the script later.</p>
 
-          <h3>Add new code</h3>
+          <h3>Find old code</h3>
 
-          <p>Type these CSS selectors right before the closing <code>&lt;/style&gt;</code> tag, which is near the top of your document, enclosed in the <code>head</code> tag:</p>
+          <p>First, find the <code>.crazyHorizontalRule</code>, which is just before the closing <code>&lt;/style&gt;</code> tag in your document. Remember this is up near the top of your document, enclosed in the <code>head</code> tag:</p>
 
-<pre><xmp>#tic_tac_toe_table {
-  border-collapse: collapse;
-  margin: 0 auto;
-}
+          <script src='http://gist-it.appspot.com/github/JogoShugh/CoderDojoPonceSprings.TicTacToe/blob/step-07/app/index.html?footer=0&slice=30:35'></script>
 
-#tic_tac_toe_table td {
-  border: 10px inset darkred;     
-  background: firebrick;
-  width: 110px;
-  height: 110px;
-  text-align: center;
-  font-size: 40px;
-  color: darkred;
-}
+          <h3>Some help before you add new code</h3>
+          <p>Before you start typing this new code, I want to give you another resource 
+            that will help you understand each of the new style properties you're going to 
+            encounter as you type. It's the <a href='http://docs.webplatform.org/wiki/css/properties' target='_blank'>Webplatform CSS Properties Reference</a>.In it, you'll find a complete reference about all the properties you'll type next. Let's explain one of the more fun ones first: <code>border</code>. 
+          </p>
+          <h4>The CSS border property</h4>
+          <p>Here is Webplatform's CSS <a href='http://docs.webplatform.org/wiki/css/properties/border' target='_blank'>border property reference</a>. The first thing you'll notice is that <code>border</code> actually combines three other property definitions into one convenient property. The three are:
+            <ul>
+              <li><a target='_blank' href='http://docs.webplatform.org/wiki/css/properties/border-width'>border-width</a> property</li>
+              <li><a href='http://docs.webplatform.org/wiki/css/properties/border-style'
+                target='_blank'>border-style</a> property</li>
+              <li><a href='http://docs.webplatform.org/wiki/css/properties/border-color'
+                target='_blank'>border-color</a> property</li>
+            </ul>
+          </p>         
+          
+          <p>You specify all three components by separating them with spaces on one line, like this: <code>border: width style color</code>, or to be specific: 
+            <code>border: 10px inset darkred</code>.
+          </p>
 
-#tic_tac_toe_table .td_left {
-  border-left: none;
-}
+          <p>I encourage you to read over the reference pages for the properties before you start typing in the new code below, especially the <a href='http://docs.webplatform.org/wiki/css/properties/border-style'
+                target='_blank'>border-style</a> page! You'll see that you can use different border styles like these:
 
-#tic_tac_toe_table .td_top {
-  border-top: none;
-}
+              <p style='border: 3px inset; padding: 3px;'>I have an <code>inset</code> border</p>
+              <p style='border: 3px dashed; padding: 3px;'>I have a <code>dashed</code> border</p>
+              <p style='border: 3px dotted; padding: 3px;'>I have a <code>dotted</code> border</p>
+              <p style='border: 3px double; padding: 3px;'>I have a <code>double</code> border</p>
+            </ul>
+          </p>
+          <p>Those are just a few of the <code>border-style</code> values! I encourage you to see what some others are, and feel free to experiment with different ones while you're typing in the new code. Also, check out the other properties in the reference guide and get experimental with those too. After all, yYou can always revert to what is shown below if something doesn't come out the way you'd like.</p>
 
-#tic_tac_toe_table .td_right {
-  border-right: none;
-}
+          <h3>Add new code</h3>          
+          
+          <p>Now, press <kbd>Enter</kbd> right after the last, closing curly brace, <code>}</code>, in the <code>.crazyHorizontalRule</code> selector. This should create a 
+            blank line just above the closing <code>&lt;/style&gt;</code> tag. Type in the following new selectors right there between those two parts:
+          </p>
 
-#tic_tac_toe_table .td_bottom {
-  border-bottom: none;
-}
+          <script src='http://gist-it.appspot.com/github/JogoShugh/CoderDojoPonceSprings.TicTacToe/blob/step-07/app/index.html?footer=0&slice=35:91'></script>
 
-#tic_tac_toe_table .label_row {
-  display: none;
-  font-family: sans-serif;
-}
+          <h3>You should now have this</h3>
 
-#tic_tac_toe_table tr.label_row td {
-  font-size: 12px;
-  border: none;
-  height: 15px;
-  background: white;
-}  
+          Your document should be something like this now:
 
-.X {
-  color: cornflowerblue;
-}
-
-.O {
-  color: orange;
-}
-
-.move {
-  font-size: 80px;
-  font-weight: bold;
-  font-family: sans-serif;
-  text-shadow: 3px 3px black;
-}
-</xmp></pre>
-
-<h3>You should now have this</h3>
-
-<p>
-  Now that you have made the table, you are going to want to add it to your existing document.  Your table should go just below the rules that we added earler.
-</p>
-
-<pre><xmp><html>
-
-<head>
-
-<title>Tic Tac Toe by CoderDojo Ponce Springs!</title>
-
-<style type='text/css'>
-body {
-  text-align: center;
-  margin: 0;
-}
-
-#tic_tac_toe_table {
-  border-collapse: collapse;
-  margin: 0 auto;
-}
-
-#tic_tac_toe_table td {
-  border: 10px inset darkred;     
-  background: firebrick;
-  width: 110px;
-  height: 110px;
-  text-align: center;
-  font-size: 40px;
-  color: darkred;
-}
-
-#tic_tac_toe_table .td_left {
-  border-left: none;
-}
-
-#tic_tac_toe_table .td_top {
-  border-top: none;
-}
-
-#tic_tac_toe_table .td_right {
-  border-right: none;
-}
-
-#tic_tac_toe_table .td_bottom {
-  border-bottom: none;
-}
-
-#tic_tac_toe_table .label_row {
-  display: none;
-  font-family: sans-serif;
-}
-
-#tic_tac_toe_table tr.label_row td {
-  font-size: 12px;
-  border: none;
-  height: 15px;
-  background: white;
-}  
-
-.X {
-  color: cornflowerblue;
-}
-
-.O {
-  color: orange;
-}
-
-.move {
-  font-size: 80px;
-  font-weight: bold;
-  font-family: sans-serif;
-  text-shadow: 3px 3px black;
-}
-
-#game_title {
-  font-family: monospace;
-}
-
-#game_rules {
-  background: cornflowerblue;
-  padding: 5px;
-  text-align: left;
-  display: inline-block;
-}
-
-#footer {
- margin: 0px;
- padding: 0px;
- background: lightgray;
-}
-
-.crazyHorizontalRule {
-  background: orange;
-  border: 1px dotted darkred;
-}
-</style>
-
-<body>
-
-<h1 id='game_title'>Tic Tac Toe</h1>
-
-<h2>Game rules</h2>
-
-<div id="game_rules">
-  <p>
-  The rules are simple:
-  </p>  
-  
-  <ul>
-    <li>The game board consists of 3 rows with 3 squares in each row</li>
-    <li>Players are named X and O</li>
-    <li>X plays first by clicking one of the squares</li>
-    <li>O goes next</li>
-    <li>Play alternates until one player fills
-      3 squares in a row down, across, or 
-      diagonally</li>
-  </ul>
-</div>
-
-<table id='tic_tac_toe_table'>
-  <tr class='label_row'>
-    <th>row1_col1</th>
-    <th>row1_col2</th>
-    <th>row1_col3</th>
-  </tr> 
-  <tr id='row1'>
-    <td id='row1_col1' class='td_left td_top'>-</td>
-    <td id='row1_col2' class='td_top'>-</td>
-    <td id='row1_col3' class='td_right td_top'>-</td>
-  </tr>
-  <tr class='label_row'>
-    <th>row2_col1</th>
-    <th>row2_col2</th>
-    <th>row2_col3</th>
-  </tr> 
-  <tr id='row2'>
-    <td id='row2_col1' class='td_left'>-</td>
-    <td id='row2_col2'>-</td>
-    <td id='row2_col3' class='td_right'>-</td>
-  </tr>
-  <tr class='label_row'>
-    <th>row3_col1</th>
-    <th>row3_col2</th>
-    <th>row3_col3</th>
-  </tr>
-  <tr id='row3'>
-    <td id='row3_col1' class='td_left td_bottom'>-</td>
-    <td id='row3_col2' class='td_bottom'>-</td>
-    <td id='row3_col3' class='td_right td_bottom'>-</td>
-  </tr>
-</table>
-
-<div id='footer'>
-
-<hr size='5' class='crazyHorizontalRule' />
-
-<h3>
-  Brought to you by <a href="http://www.meetup.com/CoderDojoPonceSprings"
-    target="_blank">CoderDojo Ponce Springs</a>!
-</h3>
-
-<img src="http://goo.gl/Jf5Rry" 
-  alt="CoderDojo Ponce Springs" />
-
-<hr size='5' class='crazyHorizontalRule' />  
-
-</div>
-
-</body>
-
-</html>
-</xmp></pre>
--->
-        <br />
+          <script src='http://gist-it.appspot.com/github/JogoShugh/CoderDojoPonceSprings.TicTacToe/blob/step-07/app/index.html?footer=0'></script>
 		    </div>
 		  </div>
 		  <div class='slide' data-title='Step 7: Adding a message to tell whose turn it is'>
