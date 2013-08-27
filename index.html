@@ -13,7 +13,7 @@
 	<body class='container center' ng-controller='slidesController'>
 		<div class="jumbotron" ng-hide='loaded'>
 		  <div class="container" style='text-align:center'>
-		    <h1>Build Tic Tac Toe with HTML, CSS, and JavaScipt</h1>
+		    <h1>Build Tic Tac Toe with HTML, CSS, and JavaScript</h1>
 		    <p>We'll be with you shortly.</p>
 			<div class='figure'>
 				<img src="http://photos4.meetupstatic.com/photos/event/2/1/2/c/global_234188492.jpeg" />
@@ -903,7 +903,96 @@ what the most common table-related tags do for you:</p>
 
 <h3>Explanation</h3>
 
-<p>You probably noticed that the game board looks a little bit disappointing. Well, that's because we have not yet added any CSS styles for it yet! We'll get to that in the next step, but first let's understand just a bit more about tables.</p>
+<p>You probably noticed that the game board looks a little bit disappointing. Well, that's because we have not yet added any CSS styles for it yet! We'll get to that in the next step, but first let's understand just a bit more about how we're using the table in this tutorial.</p>
+
+<h4>Tables should mostly be used for displaying data, not as tricks for creating a gameboard!</h4>
+
+<p>That's right. I am using tables in a way that is typically not recommended anymore. There's even a design philosophy called <a href='http://en.wikipedia.org/wiki/Tableless_web_design' target='_blank'>Tableless web design</a> that aims to educate 
+  HTML document authors on why tables should be used primarily for displaying data and other information <strong>instead of for page layout</strong>.</p>
+
+<p>Still, our usage of tables for 
+  a gameboard is not too bad, because it let's us think about the gameboard as a group of <strong>rows and columns</strong>. We know that a player can win a game by scoring an X or an O in all cells of a row or in all cells of a column. Of course, a player can also win by scoring an X or O 
+  diagonally.</p>
+
+  <h4>Understanding the table</h4>
+
+  <p>Let's break down the code to understand it better, starting with the <code>table</code> tag itself. Here it is in isolation:
+
+  <script src='http://gist-it.appspot.com/github/JogoShugh/CoderDojoPonceSprings.TicTacToe/blob/step-06/app/index.html?footer=0&slice=60'></script>
+
+  <h5>table</h5>
+
+  <p>As we summarized above, this tag begins the table itself, and we give it the <code>id='tic_tac_toe_table'</code> attribute. We will use this attribute in a style selector in the next step to change the colors and dimensions of the table.</p>
+
+  <h5>tr</h5>
+
+  <p>Since the <code>table</code> tag can directly contains one or more <code>tr</code> tags
+    as children, it makes sense that we next see this:
+
+  <script src='http://gist-it.appspot.com/github/JogoShugh/CoderDojoPonceSprings.TicTacToe/blob/step-06/app/index.html?footer=0&slice=61:65'></script>
+  </p>
+
+  <p>The <code>tr</code> tag represents a <strong>table row</strong>, or a horizontal section of the overall table. It groups together child elements of its own, which can either be 
+    <code>th</code> tags (table header) or <code>td</code> tags (table detail). The first <code>tr</code> tag contains 3 <code>th</code> tags. We use the <code>class='label_row'</code> attribute so that we can match a CSS selector to it in the next step. 
+  </p>
+  
+  <h5>th</h5>
+
+  <p>
+    The text inside of each of the <code>th</code> tags shows up <strong>bold</strong> and centered, because that is the default behavior of the web browser for content inside of a <code>th</code>. These headers serve to help you see the values we use for the <code>id</code> attributes that we use in each of the <code>td</code> tags that appear in the following <code>tr</code> tag, like this:
+
+  <script src='http://gist-it.appspot.com/github/JogoShugh/CoderDojoPonceSprings.TicTacToe/blob/step-06/app/index.html?footer=0&slice=66:70'></script>
+  </p>
+
+  <h5>td</h5>
+
+  <p>The second <code>tr</code> tag contains 3 <code>td</code> tags. <strong><em>Notice that each of these tags has an <code>id</code> attribute with a value corresponding to the value we placed inside of the <code>th</code> tag that appears inside the <code>th</code> tag that resides in the same order within the preceding <code>tr</code> tag, like this:</em></strong>
+
+  <script src='http://gist-it.appspot.com/github/JogoShugh/CoderDojoPonceSprings.TicTacToe/blob/step-06/app/index.html?footer=0&slice=66:70'></script>
+  
+  </p>
+
+  <h5>All together now!</h5>
+
+  <p>Ok, let's see all that again close up! Here is the starting <code>table</code> tag, and the first two <code>tr</code> tags and their children:
+
+  <script src='http://gist-it.appspot.com/github/JogoShugh/CoderDojoPonceSprings.TicTacToe/blob/step-06/app/index.html?footer=0&slice=60:70'></script>
+  </p>
+
+  <p>Now, we just repeat this process twice more to create the second and third rows, only varying the values inside the <code>th</code> tags and the <code>td</code> tags to rows 1, 2, 3, and columns 1, 2, 3 for each.</p>
+
+  <p>However, if you look closely though, you might notice that we use varying <code>class</code> attribute values on the <code>td</code> tags. As you might have guessed, we will use these in CSS selectors in our next step to help stylize the gameboard!</p>
+
+  <h4>Don't panic!</h4>
+
+  <p>Yikes! This all might seem a little intimidating, I know. But, for now the most important things are understanding that:
+
+    <ul>
+      <li>Each <code>td</code> tag has an <code>id=row1_col1</code>, or similar id, which will be <strong>very important</strong> for understanding how the JavaScript code works to power the game.</li>
+      <li>The different <code>id</code> and <code>class</code> attribute values will be used in CSS selectors in our next step to stylize the gameboard.</li>
+    </ul>
+  </p>
+
+  <h4>Finally, don't blink!</h4>
+
+  <p>When we add more CSS styles in the next step, the <code>tr</code> tags will suddenly
+    become invisible! They're visible now just so you can keep in mind the <code>id</code> attribute values for the corresponding <code>td</code> tags that sit beneath them. But, 
+    we'll also give you a way to show the headers again so that when we start learning how the JavaScript code works, you will be able to see the relationship easily.</p>
+
+<div class='aside'>
+  <h3>The <code>colspan</code> and <code>rowspan</code> attributes: a couple of other interesting tricks with tables</h3>
+  <p>While we have no use for these features in this tutorial, you might want to play around 
+    with the <code>colspan</code> and <code>rowspan</code> attributes. Here's a code example, followed by how it renders:
+  </p>
+
+  <div class='well well-sm'>
+    <gitem src='examples/step-06-spans.html'></gitem>
+  </div>
+
+  <h4>Renders this way:</h4>
+
+  <script src='http://gist-it.appspot.com/github/JogoShugh/CoderDojoPonceSprings.TicTacToe/blob/master/examples/step-06-spans.html?footer=0'></script>
+</div>
 
 <h3>Adding some style to the game board!</h3>
 
