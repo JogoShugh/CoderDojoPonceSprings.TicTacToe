@@ -185,6 +185,343 @@ body {
 
 </div>
 
+<script type='text/javascript' language='javascript'>
+var player_x = 'X';
+var player_o = 'O';
+
+var player_x_name = 'X';
+var player_o_name = 'O';
+
+var current_player = player_x;
+
+var player_names = {};
+player_names[player_x] = player_x_name;
+player_names[player_o] = player_o_name;
+
+var player_avatars = {};
+player_avatars[player_x] = '';
+player_avatars[player_o] = '';
+
+function get_player_move_html(player) {
+  if (player_avatars[player] != '') {
+    return get_player_avatar_html(player);
+  } 
+  return get_player_name_html(player);
+}
+
+function get_player_avatar_html(player) {  
+  return '<span class="' + player + ' move"><span style="display:none">' 
+    + player + '</span><img width="100" height="100" src="' 
+    + player_avatars[player] + '"></span>';
+}
+
+function get_player_name_html(player) {
+  return '<span class="' + player + ' move"><span>' + player + '</span></span>';  
+}
+
+var winner_name = 'No winner yet';
+
+show_message(player_names[current_player] + ", it's your turn!");
+    
+function set_names() {
+    var winner_name = get_winner_name();
+    if (winner_name == 'No winner yet') {
+      player_names[player_x] = document.getElementById('player_x_name').value;
+      player_names[player_o] = document.getElementById('player_o_name').value;
+      
+      player_avatars[player_x] = document.getElementById('player_x_avatar').value;
+      player_avatars[player_o] = document.getElementById('player_o_avatar').value;
+            
+      show_message(player_names[current_player] + ", it's your turn!");    
+    }
+}    
+    
+function make_move(table_detail_element) {
+  if (winner_name != 'No winner yet') {
+    return;
+  } 
+  
+     if (table_detail_element.innerHTML == '-') {
+          table_detail_element.innerHTML = get_player_move_html(current_player)
+          if (current_player == player_x) {
+               current_player = player_o;
+          }
+          else {
+               current_player = player_x;
+          }
+        show_message(player_names[current_player] + ", it's your turn!");    
+     }
+
+     winner_name = get_winner_name();
+  if (winner_name != 'No winner yet') {
+    console.log(winner_name);
+    if (winner_name == player_x) {
+        winner_name = player_names[player_x];
+    } else {
+        winner_name = player_names[player_o];
+    }
+    show_message(winner_name + ' wins!');
+  } else {
+    var game_over_without_a_winner = is_game_over_without_a_winner();
+    if (game_over_without_a_winner === true) {
+      show_message('Game over, but no winner!');
+    }
+  }
+}
+
+function reset_game() {
+  winner_name = 'No winner yet';
+  current_player = player_x;          
+  // Reset the contents of each table cell
+  document.getElementById('row1_col1').innerHTML = '-';
+  document.getElementById('row1_col2').innerHTML = '-';
+  document.getElementById('row1_col3').innerHTML = '-';
+
+  document.getElementById('row2_col1').innerHTML = '-';
+  document.getElementById('row2_col2').innerHTML = '-';
+  document.getElementById('row2_col3').innerHTML = '-';
+
+  document.getElementById('row3_col1').innerHTML = '-';
+  document.getElementById('row3_col2').innerHTML = '-';
+  document.getElementById('row3_col3').innerHTML = '-';
+  
+  // Set the background color back to firebrick for each table cell
+  document.getElementById('row1_col1').style.background = 'firebrick';
+  document.getElementById('row1_col2').style.background = 'firebrick';
+  document.getElementById('row1_col3').style.background = 'firebrick';
+     
+  document.getElementById('row2_col1').style.background = 'firebrick';
+  document.getElementById('row2_col2').style.background = 'firebrick';
+  document.getElementById('row2_col3').style.background = 'firebrick';
+     
+  document.getElementById('row3_col1').style.background = 'firebrick';
+  document.getElementById('row3_col2').style.background = 'firebrick';
+  document.getElementById('row3_col3').style.background = 'firebrick';
+
+  show_message(player_names[current_player] + ", it's your turn!");
+}
+
+function show_message(message) {
+  var messageElement = document.getElementById('message');
+  messageElement.innerHTML = message;
+  messageElement.style.display = 'inline-block';
+}
+
+function get_winner_name() {
+  var winner_name;
+
+  winner_name = check_rows_for_winner();
+  if (winner_name != 'No winner yet') {
+      return winner_name;
+  }
+
+  winner_name = check_columns_for_winner();
+  if (winner_name != 'No winner yet') {          
+      return winner_name;
+  }
+
+  winner_name = check_diagonals_for_winner();
+  if (winner_name != 'No winner yet') {
+    return winner_name;
+  }
+
+  return 'No winner yet';
+}
+
+function check_rows_for_winner(table_row) {
+     // Check to see whether all the table detail elements in row 1 have the same value
+     // That is, if all of them are 'X', then X is the winner. And, 
+     // if all of them are 'O', then O is the winner!
+     if (document.getElementById('row1_col1').textContent ==
+          document.getElementById('row1_col2').textContent
+          &&
+          document.getElementById('row1_col2').textContent ==
+          document.getElementById('row1_col3').textContent
+     ) {
+          var value = document.getElementById('row1_col1').textContent;
+          if (value != '-') {
+            document.getElementById('row1_col1').style.background = 'mediumblue';
+            document.getElementById('row1_col2').style.background = 'mediumblue';
+            document.getElementById('row1_col3').style.background = 'mediumblue';
+            return value;
+          }
+     }
+
+     // Now check row 2
+     if (document.getElementById('row2_col1').textContent ==
+          document.getElementById('row2_col2').textContent
+          &&
+          document.getElementById('row2_col2').textContent ==
+          document.getElementById('row2_col3').textContent
+     ) {
+          var value = document.getElementById('row2_col1').textContent;
+          if (value != '-') {
+            document.getElementById('row2_col1').style.background = 'mediumblue';
+            document.getElementById('row2_col2').style.background = 'mediumblue';
+            document.getElementById('row2_col3').style.background = 'mediumblue';
+            return value;
+          }
+     }     
+
+     // Lastly, check row 3
+     if (document.getElementById('row3_col1').textContent ==
+          document.getElementById('row3_col2').textContent
+          &&
+          document.getElementById('row3_col2').textContent ==
+          document.getElementById('row3_col3').textContent
+     ) {
+          var value = document.getElementById('row3_col1').textContent;
+          if (value != '-') {
+            document.getElementById('row3_col1').style.background = 'mediumblue';
+            document.getElementById('row3_col2').style.background = 'mediumblue';
+            document.getElementById('row3_col3').style.background = 'mediumblue';
+            return value;
+          }
+     }     
+
+     // If the code gets all the way down here without returning 
+     // a winner name, then we don't have any winners across the
+     // rows!
+
+     return 'No winner yet';
+}
+
+function check_columns_for_winner(table_column_number) {
+     // Check to see whether all the table detail elements in column 1 have the same value
+     // That is, if all of them are 'X', then X is the winner. And, 
+     // if all of them are 'O', then O is the winner!
+     if (document.getElementById('row1_col1').textContent ==
+          document.getElementById('row2_col1').textContent
+          &&
+          document.getElementById('row2_col1').textContent ==
+          document.getElementById('row3_col1').textContent
+     ) {
+          var value = document.getElementById('row1_col1').textContent;
+          if (value != '-') {
+            document.getElementById('row1_col1').style.background = 'mediumblue';
+            document.getElementById('row2_col1').style.background = 'mediumblue';
+            document.getElementById('row3_col1').style.background = 'mediumblue';
+            return value;
+          }          
+     }
+
+     // Now check column 2
+     if (document.getElementById('row1_col2').textContent ==
+          document.getElementById('row2_col2').textContent
+          &&
+          document.getElementById('row2_col2').textContent ==
+          document.getElementById('row3_col2').textContent
+     ) {
+          var value = document.getElementById('row1_col2').textContent;
+          if (value != '-') {
+            document.getElementById('row1_col2').style.background = 'mediumblue';
+            document.getElementById('row2_col2').style.background = 'mediumblue';
+            document.getElementById('row3_col2').style.background = 'mediumblue';
+            return value;
+          }          
+     }     
+
+     // Lastly, check column 3
+     if (document.getElementById('row1_col3').textContent ==
+          document.getElementById('row2_col3').textContent
+          &&
+          document.getElementById('row2_col3').textContent ==
+          document.getElementById('row3_col3').textContent
+     ) {
+          var value = document.getElementById('row1_col3').textContent;
+          if (value != '-') {
+            document.getElementById('row1_col3').style.background = 'mediumblue';
+            document.getElementById('row2_col3').style.background = 'mediumblue';
+            document.getElementById('row3_col3').style.background = 'mediumblue';
+            return value;
+          }          
+     }     
+
+     // If the code gets all the way down here without returning 
+     // a winner name, then we don't have any winners across the
+     // columns!
+     
+     return 'No winner yet';
+}
+
+function check_diagonals_for_winner() {
+     // Check to see whether the table detail elements along the 
+     // diagonal from top left to the bottom right have all the same
+     // values. That is, if all of them are 'X', then X is the winner.
+     // And, if all of them are 'O', then O is the winner!
+     if (document.getElementById('row1_col1').textContent ==
+          document.getElementById('row2_col2').textContent
+          &&
+          document.getElementById('row2_col2').textContent ==
+          document.getElementById('row3_col3').textContent
+     ) {
+          var value = document.getElementById('row1_col1').textContent;
+          if (value != '-') {
+            document.getElementById('row1_col1').style.background = 'mediumblue';
+            document.getElementById('row2_col2').style.background = 'mediumblue';
+            document.getElementById('row3_col3').style.background = 'mediumblue';
+            return value;
+          }          
+     }
+
+     // Now check from the diagonal from the bottom left
+     // up to the top right.
+     if (document.getElementById('row3_col1').textContent ==
+          document.getElementById('row2_col2').textContent
+          &&
+          document.getElementById('row2_col2').textContent ==
+          document.getElementById('row1_col3').textContent
+     ) {
+          var value = document.getElementById('row3_col1').textContent;
+          if (value != '-') {
+            document.getElementById('row3_col1').style.background = 'mediumblue';
+            document.getElementById('row2_col2').style.background = 'mediumblue';
+            document.getElementById('row1_col3').style.background = 'mediumblue';
+            return value;
+          }
+     }
+
+     // If the code gets all the way down here without returning 
+     // a winner name, then we don't have any winners across the
+     // diagonals!
+     
+     return 'No winner yet';     
+}
+
+function is_game_over_without_a_winner() {
+   var are_all_table_details_filled = (
+    document.getElementById('row1_col1').textContent != '-' &&
+    document.getElementById('row1_col2').textContent != '-' &&
+    document.getElementById('row1_col3').textContent != '-' &&
+
+    document.getElementById('row2_col1').textContent != '-' &&
+    document.getElementById('row2_col2').textContent != '-' &&
+    document.getElementById('row2_col3').textContent != '-' &&
+
+    document.getElementById('row3_col1').textContent != '-' &&
+    document.getElementById('row3_col2').textContent != '-' &&
+    document.getElementById('row3_col3').textContent != '-');
+
+   if (are_all_table_details_filled == true) {
+        return true;
+   } else {
+        return false;
+   }
+}
+
+function show_headings() {
+  var show = document.getElementById('show_headings_cb');
+  var display_style = 'none';  
+  if (show.checked) {
+    display_style = 'table-row';
+  }
+  var label_rows = document.getElementsByClassName("label_row");
+  for(var index = 0; index < label_rows.length; index++) {
+    label_rows[index].style.display = display_style;
+  }
+}
+</script> 
+
 </body>
 
 </html>
