@@ -845,8 +845,6 @@ which the <code>#footer</code> style selector corresponds.
   
 <script src='http://gist-it.appspot.com/github/JogoShugh/CoderDojoPonceSprings.TicTacToe/blob/step-05/app/index.html?footer=0'></script>
 
-</body>
-
 <h3>Explanation</h3>
 
 <p>As you read in the previous step, you can match
@@ -1069,235 +1067,39 @@ what the most common table-related tags do for you:</p>
           </p>
 		    </div>
 		  </div>
-		  <div class='slide' data-title='Step 8: Use the <code>button</code> tag to add a "Reset Game" button'>
+		  <div class='slide' data-title='Step 8: Use the <code>button</code> tag to add a <kbd>Reset Game</kbd> button'>
 		    <div class='content'>
-<p>What if a player quits and we want to start the game over?  Let's add a "Reset Game" button to make the game start over from the beginning.</p>
+<p>What if a player quits and we want to start the game over?  Let's add a <kbd>Reset Game</kbd> button to make the game start over from the beginning.</p>
 
 <h3>Understanding <code>button</code> tag</h3>
 
-<p>
-  The <code>button</code> tag allows us to add a button to perform some action. 
-  The button tag has an attribute called "onclick" that will cause some JavaScript code to be executed when the button is clicked.  We have a "reset_game" function defined in our JavaScript code, so we need to fire the "reset_game" function when the "Reset Button" is clicked.
-</p>
-
-
-	<table class='table'>
-		<tr>
-			<th>Tag</th>
-			<th>Purpose</th>
-		</tr>
-		<tr>
-			<td>button</td>
-			<td>Draw a button on the screen.  The contents of the button tag will be the name of the button.  The button tag has an attribute named "onclick" that can be used to execute JavaScript code.</td>
-		</tr>
-	</table>
-
+  <p>
+    The <code>button</code> tag allows us to add a button to perform some action. 
+    The button tag has an attribute called <code>onclick</code> that will cause some JavaScript code to be executed when the button is clicked.
+  </p>
 
 	<h3>Add new code</h3>
 
 	<p>
-		Let's add a button to reset the game! 
+		Let's add a button to reset the game! Add the following code right after the closing 
+    <code>&lt;/table&gt;</code> tag in your document.
 	</p>
 
-	<pre><xmp><button onclick="reset_game()">Reset Game</button></xmp></pre>
+  <script src='http://gist-it.appspot.com/github/JogoShugh/CoderDojoPonceSprings.TicTacToe/blob/step-08/app/index.html?footer=0&slice=167:169'></script>
 
-</body>
+  <h3>You should now have this</h3>
 
-</html>
+  <p>This was a pretty short step. Aren't you glad? Don't worry, the next step is huge. Before moving on, make sure your document looks pretty much like this:
+  </p>
 
-<h3>You should now have this</h3>
+  <script src='http://gist-it.appspot.com/github/JogoShugh/CoderDojoPonceSprings.TicTacToe/blob/step-08/app/index.html?footer=0'></script>
 
-<p>
-  Now that you have made the table, you are going to want to add it to your existing document.  Your table should go just below the rules that we added earler.
-</p>
+  <h3>Explanation</h3>
 
-<pre><xmp><html>
+  <p>We have a <code>reset_game</code> function defined in our JavaScript code, so we used the <code>onclick="reset_game()"</code> attribute in the <code>button</code> tag to fire the <code>reset_game</code> function when the <kbd>Reset Button</kbd> is clicked. You can read more about the <code>button</code> tag on the 
+    <a href='http://docs.webplatform.org/wiki/html/elements/button' target='_blank'>Webplatform HTML elements reference</a>.
+  </p>
 
-<head>
-
-<title>Tic Tac Toe by CoderDojo Ponce Springs!</title>
-
-<style type='text/css'>
-body {
-  text-align: center;
-  margin: 0;
-}
-
-#message {
-  color: white;
-  font-weight: bold;
-  font-size: 150%;
-  font-family: sans-serif;
-  border: 8px solid darkred;
-  display: none;
-  padding: 10px;
-  background: mediumblue;
-  margin: 5px;
-}
-
-#tic_tac_toe_table {
-     border-collapse: collapse;
-  margin: 0 auto;
-}
-
-#tic_tac_toe_table td {
-     border: 10px inset darkred;     
-     background: firebrick;
-     width: 110px;
-     height: 110px;
-  
-     text-align: center;
-     font-size: 40px;
-     color: darkred;
-}
-
-#tic_tac_toe_table .td_left {
-  border-left: none;
-}
-
-#tic_tac_toe_table .td_top {
-  border-top: none;
-}
-
-#tic_tac_toe_table .td_right {
-  border-right: none;
-}
-
-#tic_tac_toe_table .td_bottom {
-  border-bottom: none;
-}
-
-#tic_tac_toe_table .label_row {
-  display: none;
-  font-family: sans-serif;
-}
-
-#tic_tac_toe_table tr.label_row td {
-     font-size: 12px;
-     border: none;
-     height: 15px;
-     background: white;
-}
-
-.X {
-	color: cornflowerblue;
-}
-
-.O {
-	color: orange;
-}
-
-.move {
-	font-size: 80px;
-	font-weight: bold;
-  font-family: sans-serif;
-  text-shadow: 3px 3px black;  
-}
-
-#game_title {
-  font-family: monospace;
-}
-
-#game_rules {
-  background: cornflowerblue;
-  padding: 5px;
-  text-align: left;
-  display: inline-block;
-}
-
-#footer {
- margin: 0px;
- padding: 0px;
- background: lightgray;
-}
-
-.crazyHorizontalRule {
-  background: orange;
-  border: 1px dotted darkred;
-}
-</style>
-
-<body>
-
-<h1 id='game_title'>Tic Tac Toe</h1>
-
-<h2>Game rules</h2>
-
-<div id="game_rules">
-  <p>
-  The rules are simple:
-  </p>  
-  
-  <ul>
-    <li>The game board consists of 3 rows with 3 squares in each row</li>
-    <li>Players are named X and O</li>
-    <li>X plays first by clicking one of the squares</li>
-    <li>O goes next</li>
-    <li>Play alternates until one player fills
-      3 squares in a row down, across, or 
-      diagonally</li>
-  </ul>
-</div>
-
-  <p>
-    <div id='message'></div>
-  </p> 
-  
-<table id='tic_tac_toe_table'>
-  <tr class='label_row'>
-    <th>row1_col1</th>
-    <th>row1_col2</th>
-    <th>row1_col3</th>
-  </tr> 
-  <tr id='row1'>
-    <td id='row1_col1' class='td_left td_top'>-</td>
-    <td id='row1_col2' class='td_top'>-</td>
-    <td id='row1_col3' class='td_right td_top'>-</td>
-  </tr>
-  <tr class='label_row'>
-    <th>row2_col1</th>
-    <th>row2_col2</th>
-    <th>row2_col3</th>
-  </tr> 
-  <tr id='row2'>
-    <td id='row2_col1' class='td_left'>-</td>
-    <td id='row2_col2'>-</td>
-    <td id='row2_col3' class='td_right'>-</td>
-  </tr>
-  <tr class='label_row'>
-    <th>row3_col1</th>
-    <th>row3_col2</th>
-    <th>row3_col3</th>
-  </tr>
-  <tr id='row3'>
-    <td id='row3_col1' class='td_left td_bottom'>-</td>
-    <td id='row3_col2' class='td_bottom'>-</td>
-    <td id='row3_col3' class='td_right td_bottom'>-</td>
-  </tr>
-</table>
-
-<button onclick="reset_game()">Reset Game</button>
-
-<div id='footer'>
-
-<hr size='5' class='crazyHorizontalRule' />
-
-<h3>
-  Brought to you by <a href="http://www.meetup.com/CoderDojoPonceSprings"
-    target="_blank">CoderDojo Ponce Springs</a>!
-</h3>
-
-<img src="http://goo.gl/Jf5Rry" 
-  alt="CoderDojo Ponce Springs" />
-
-<hr size='5' class='crazyHorizontalRule' />  
-
-</div>
-
-</body>
-
-</html>
-</xmp></pre>
 		    </div>
 		  </div>
 		  <div class='slide' data-title='Step 9: Adding the script'>
@@ -1875,7 +1677,6 @@ body {
 <hr size='5' class='crazyHorizontalRule' />  
 
 </div>  
-</body>
 
 <script type='text/javascript' language='javascript'>
 var player_x = 'X';
@@ -2213,7 +2014,7 @@ function show_headings() {
   }
 }
 </script>  
-</html>
+
 </pre></xmp>
 		    </div>
 		  </div>
