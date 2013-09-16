@@ -15,10 +15,12 @@
       var subscription_setup = {
         channel: lobby_channel_name,
         callback: function(message) {
-          var handler_function_name = 'on' + message.message_type;
-          if ($scope[handler_function_name]) {
-            $scope[handler_function_name](message);
-          }
+          $scope.$apply(function() {
+            var handler_function_name = 'on' + message.message_type;
+            if ($scope[handler_function_name]) {
+              $scope[handler_function_name](message);
+            }
+          });
         }
       };
       PUBNUB.subscribe(subscription_setup);
@@ -42,10 +44,12 @@
       var subscriptionSetup = {
           channel: gameName,
           callback: function(message) {
-            var handlerFunctionName = 'on' + message.message_type;
-            if (game[handlerFunctionName]) {
-              game[handlerFunctionName](message.data);
-            }
+            $scope.$apply(function() {
+              var handlerFunctionName = 'on' + message.message_type;
+              if (game[handlerFunctionName]) {
+                game[handlerFunctionName](message.data);
+              }
+            });
           }
       };
       PUBNUB.subscribe(subscriptionSetup);
