@@ -1,0 +1,8 @@
+{
+	"name": "Tic-Chat-Toe",
+	"version": "0.0.1",
+	"dependencies": {
+		"mocha": "*",
+		"should": "*",
+	}
+}

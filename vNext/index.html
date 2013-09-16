@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="style.css" />
+    <link rel='stylesheet' href='lib/angular-bootstrap/css/bootstrap-combined.min.css' />    
+  </head>
+  <body ng-app="tic-chat-toe" ng-controller='lobbyCtrl'>
+    <h1>Tic-Chat-Toe</h1>    
+    <hr />
+    <div ng-controller='gameCtrl'>
+      <p>
+        Board size: <input type='number' ng-model='boardSize' /><br />
+        Streak size to win: <input type='number' ng-model='streakSize' /><br /><br />
+        <a class='btn btn-primary' ng-click='gameStart()'>Start game!</a>
+      </p>
+      <div ng-show='gameStarted'>
+        <div ng-show='game.gameOver()'><strong>Game over!</strong></div>
+        <div ng-repeat="row in board">
+          <span 
+            ng-repeat="col in row" class="cell {{getWinnerStatus(col)}}" ng-click='move(col)'>
+            {{col.player}}</span>
+        </div>
+      </div>
+    </div>
+    <script src="underscore.min.js"></script>
+    <script src="angular.js"></script>
+    <script src="tic-chat-toe.js"></script>
+    <script src="ng-tic-chat-toe.js"></script>
+    <script src='lib/angular-bootstrap/js/ui-bootstrap-tpls-0.5.0.js'></script>
+    <div id="pubnub" pub-key="pub-c-f4a90e76-f06e-42b8-9594-3756a8bac175" 
+    sub-key="sub-c-daf9c6dc-e063-11e2-ab32-02ee2ddab7fe">
+    </div>
+    <script src="http://cdn.pubnub.com/pubnub-3.1.min.js"></script>    
+  </body>
+</html>

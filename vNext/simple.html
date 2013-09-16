@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html ng-app='tictactoe'>
+<head>
+    <link href="bootstrap-combined.min.css" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
+</head>
+<body>
+	<h1>Tic Tac Toe</h1>
+	<div ng-controller='game' class='game'>   
+        <div class='row'>
+            <div class='cell' data-coordinates="0,0">{{board[0][0]}} </div>
+            <div class='cell' data-coordinates="0,1">{{board[0][1]}} </div>
+            <div class='cell' data-coordinates="0,2">{{board[0][2]}} </div>
+        </div> 
+        <div class='row'>
+            <div class='cell' data-coordinates="1,0" ng-click='move(1,0)'> </div>
+            <div class='cell' data-coordinates="1,1"> </div>
+            <div class='cell' data-coordinates="1,2"> </div>
+        </div>         
+        <div class='row'>
+            <div class='cell' data-coordinates="2,0"> </div>
+            <div class='cell' data-coordinates="2,1"> </div>
+            <div class='cell' data-coordinates="2,2"> </div>
+        </div>        
+        <!-- <div ng-repeat='(row_index, row) in board'>
+            <div 
+                ng-repeat='(col_index, col) in row'
+                class='cell'>
+                {{col}}
+            </div>
+        </div> -->
+	</div>
+    <script src="underscore.min.js"></script>
+    <script src="angular.js"></script>
+    <script src="ui-bootstrap-tpls-0.5.0.js"></script>
+    <script src='simple.js'></script>    
+</body>
+</html>

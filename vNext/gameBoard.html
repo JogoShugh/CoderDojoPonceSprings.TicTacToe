@@ -1,0 +1,22 @@
+<div ng-controller='game' class='game'>
+	<strong>{{name}}</strong>
+	<br />
+	<div ng-repeat='(row_index, row) in board'>
+		<div ng-repeat='(col_index, col) in row'
+			class="cell" 
+			ng-click='move(row_index, col_index)'>{{col}}</div>
+	</div>
+	<br />
+	<div class="input-append">
+  		<input type="text" ng-model='gameName' class='input input-small'>
+		<div class="btn-group">
+		<button class="btn dropdown-toggle" data-toggle="dropdown" ng-disabled='!gameName'>
+		  Action
+		  <span class="caret"></span>
+		</button>
+		<ul class="dropdown-menu">
+			<li><a href="#" ng-click='create(gameName)'>Create game</a></li>
+			<li><a href="#" ng-click='join(gameName)'>Join game</a></li>
+		</ul>
+    </div>
+</div>
