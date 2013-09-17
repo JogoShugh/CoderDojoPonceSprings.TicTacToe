@@ -7,18 +7,28 @@
   <body ng-app="tic-chat-toe" ng-controller='lobbyCtrl'>
     <h1>Tic-Chat-Toe</h1>    
     <hr />
-    <div ng-controller='gameCtrl'>
+    <div>
       <p>
         Board size: <input type='number' ng-model='boardSize' /><br />
         Streak size to win: <input type='number' ng-model='streakSize' /><br /><br />
-        <a class='btn btn-primary' ng-click='gameStart()'>Start game!</a>
+
+        <a class='btn btn-primary' ng-click='gameCreate()'>Create new game!</a>
+
+        <hr />        
       </p>
-      <div ng-show='gameStarted'>
-        <div ng-show='game.gameOver()'><strong>Game over!</strong></div>
-        <div ng-repeat="row in board">
-          <span 
-            ng-repeat="col in row" class="cell {{getWinnerStatus(col)}}" ng-click='move(col)'>
-            {{col.player}}</span>
+
+      <div 
+        ng-repeat='gameChannelName in games' 
+        ng-controller='gameCtrl'
+        ng-init='gameName = gameChannelName'>
+        <a class='btn btn-primary' ng-click='gameStart()'>Start game!</a>        
+        <div ng-show='gameStarted'>
+          <div ng-show='game.gameOver()'><strong>Game over!</strong></div>
+          <div ng-repeat="row in board">
+            <span 
+              ng-repeat="col in row" class="cell {{getWinnerStatus(col)}}" ng-click='move(col)'>
+              {{col.player}}</span>
+          </div>
         </div>
       </div>
     </div>
