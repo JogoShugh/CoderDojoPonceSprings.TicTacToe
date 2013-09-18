@@ -8,7 +8,7 @@ var O = 'O';
 var s = ' ';
 
 function runTest(spec) {
-  var game = new tct(spec.boardSize, spec.requiredStreakLen);
+  var game = new tct(spec.boardSize, spec.streakLen);
   for(var i = 0; i < spec.movesOrder.length; i++) {
     var moveCoordinates = spec.movesOrder[i];
     var movePlayer = spec.moves[moveCoordinates[0]][moveCoordinates[1]];
@@ -27,7 +27,7 @@ describe('3 by 3', function() {
   it('is won by O for top row', function(done) {
     runTest({
       boardSize: 3,
-      requiredStreakLen: 3,
+      streakLen: 3,
       moves: [
         [O, O, O],
         [X, X, s],
@@ -51,7 +51,7 @@ describe('3 by 3', function() {
   it('is won by X for diagonal top left to bottom right', function(done) {
     runTest({
       boardSize: 3,
-      requiredStreakLen: 3,
+      streakLen: 3,
       moves: [
         [X, O, O],
         [s, X, s],

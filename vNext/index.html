@@ -7,31 +7,38 @@
   <body ng-app="tic-chat-toe" ng-controller='lobbyCtrl'>
     <h1>Tic-Chat-Toe</h1>    
     <hr />
-    <div>
-      <p>
-        Board size: <input type='number' ng-model='boardSize' /><br />
-        Streak size to win: <input type='number' ng-model='streakSize' /><br /><br />
-
-        <a class='btn btn-primary' ng-click='gameCreate()'>Create new game!</a>
-
-        <hr />        
-      </p>
-
-      <div 
-        ng-repeat='gameChannelName in games' 
-        ng-controller='gameCtrl'
-        ng-init='gameName = gameChannelName'>
-        <a class='btn btn-primary' ng-click='gameStart()'>Start game!</a>        
-        <div ng-show='gameStarted'>
-          <div ng-show='game.gameOver()'><strong>Game over!</strong></div>
-          <div ng-repeat="row in board">
-            <span 
-              ng-repeat="col in row" class="cell {{getWinnerStatus(col)}}" ng-click='move(col)'>
-              {{col.player}}</span>
+    <tabset>
+      <tab heading="Join Game">
+        <div ng-repeat='game in gamesOpen'>
+          {{game.name}} <small class='label label-info'>board: {{game.boardSize}}, win: {{game.streakLen}}</small> <a class='btn btn-primary btn-small' ng-click='gameJoin(game)'>Join</a>
+        </div>
+      </tab>
+      <tab heading="Create Game">
+        <p ng-repeat="element in gameCreateForm | orderBy:'order'">
+          <label>{{element.label}}:</label>
+          <input type="{{element.type}}" required="{{element.required}}" ng-model="element.value" />
+        </p>
+        <a class='btn btn-primary' ng-click='gameCreate()'>Create new game!</a>        
+      </tab>
+      <tab
+        ng-repeat='game in gamesActive'
+        heading='{{game.name}}'
+      >
+        <div
+          ng-controller='gameCtrl'
+          ng-init='gameInit(game)'
+        >
+          <div ng-show='gameStarted'>
+            <div ng-show='game.gameOver()'><strong>Game over!</strong></div>
+            <div ng-repeat="row in board">
+              <span 
+                ng-repeat="col in row" class="cell {{getWinnerStatus(col)}}" ng-click='move(col)'>
+                {{col.player}}</span>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
+      </div>      
+    </tabset>
     <script src="underscore.min.js"></script>
     <script src="angular.js"></script>
     <script src="tic-chat-toe.js"></script>

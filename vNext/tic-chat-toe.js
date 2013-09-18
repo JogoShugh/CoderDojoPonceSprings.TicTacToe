@@ -9,11 +9,16 @@
   playerNextMap[X] = O;
   playerNextMap[O] = X;
   
-  function TicChatToe(boardSize, requiredStreakLen) {
+  function TicChatToe(boardSize, streakLen, name, player) {
     this.boardSize = boardSize || 3;
-    this.requiredStreakLen = requiredStreakLen || 3;
+    this.streakLen = streakLen || 3;
+    this.name = name || 'Tic-Chat-Toe';
+    this.player = player || X;
     this.initializeNewGame();
   }
+
+  TicChatToe.PlayerO = O;
+  TicChatToe.PlayerX = X;
 
   TicChatToe.move = function(row, col, player) {
     return {
@@ -28,7 +33,7 @@
     this.moves = [];
     this.winningMoves = [];
     this.catsGame = false;
-    this.playerCurrent = X;
+    this.playerCurrent = this.player;
     
     for (var row_index = 0; row_index < this.boardSize; row_index++) {
       var row = [];
@@ -53,6 +58,8 @@
   };
 
   TicChatToe.prototype.onmove = function(move) {
+    console.log("Game is:");
+    console.log(this.player);
     if (this.gameOver()) {
       console.error('Game over already!');
       return;
@@ -61,17 +68,19 @@
       console.error('This cell has already been played in');
       return;
     }
+    /* TODO: not sure whether should resurface in a different way:
     if (move.player != this.playerCurrent) {
       console.error('Do not play out of turn');
       return;
     }
+    */
     console.log('On move passed all checks:' + move);
     this.moves.push(move);
     this.board[move.row][move.col].player = move.player;
     
-    var winningMoves = TicChatToe.findWinner(this.moves, this.requiredStreakLen);
+    var winningMoves = TicChatToe.findWinner(this.moves, this.streakLen);
    
-    if (winningMoves.length == this.requiredStreakLen) {
+    if (winningMoves.length == this.streakLen) {
       this.winningMoves = winningMoves;
     } 
     else if (this.moves.length == this.getMaxMovesCount()) {
@@ -100,15 +109,15 @@
     }
   }
 
-  TicChatToe.findWinner = function(moves, requiredStreakLen) {
-    if (moves.length < requiredStreakLen) return []; 
+  TicChatToe.findWinner = function(moves, streakLen) {
+    if (moves.length < streakLen) return []; 
     
     var winningWays = [findWinnerByRow, findWinnerByCol, findWinnerByDiag];
     
     for (var i = 0; i < moves.length; i++) {
       for (var f = 0; f < winningWays.length; f++) {
-        var winningMoves = winningWays[f](moves, moves[i], requiredStreakLen);
-        if (winningMoves.length == requiredStreakLen) return winningMoves;
+        var winningMoves = winningWays[f](moves, moves[i], streakLen);
+        if (winningMoves.length == streakLen) return winningMoves;
       }
     }
     return [];

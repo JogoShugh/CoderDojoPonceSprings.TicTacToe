@@ -6,7 +6,7 @@
       var phase = scope.$root.$$phase;
       if(phase == '$apply' || phase == '$digest') {
         handler.apply(obj, args);
-      } 
+      }
       else {
         scope.$apply(function() {
           handler.apply(obj, args);
@@ -23,40 +23,35 @@
       return _.findWhere(channels, {name: name});
     }
 
-    function Bus() {
-      // We don't really need the scope here...
-    }
-
-    Bus.prototype.subscribe = function(channel, callback) {
-      var subscription = {
-        channel: channel,
-        callback: callback
-      };
-      var channel = channelFind(subscription.channel);
-      if (!channel) {
-        channel = { name: subscription.channel, subscribers:[] }
-        channels.push(channel);
-      }
-      channel.subscribers.push(subscription.callback);
-    };
-
-    Bus.prototype.publish = function(channel, messageType, data) {
-      var message = {
-        channel: channel,
-        message: {
-          message_type: messageType,
-          message: data
+    return {
+      subscribe: function(channel, callback) {
+        var subscription = {
+          channel: channel,
+          callback: callback
+        };
+        var channel = channelFind(subscription.channel);
+        if (!channel) {
+          channel = { name: subscription.channel, subscribers:[] }
+          channels.push(channel);
         }
-      };        
-      var channel = channelFind(message.channel);
-      if (channel) {
-        _.each(channel.subscribers, function(subscriber) {
-          subscriber(message.message);
-        });
+        channel.subscribers.push(subscription.callback);
+      },
+      publish: function(channel, messageType, data) {
+        var message = {
+          channel: channel,
+          message: {
+            message_type: messageType,
+            message: data
+          }
+        };        
+        var channel = channelFind(message.channel);
+        if (channel) {
+          _.each(channel.subscribers, function(subscriber) {
+            subscriber(message.message);
+          });
+        }
       }
     };
-    
-    return new Bus();
   });
 
   app.service('Bus', function() {
@@ -83,9 +78,35 @@
 
   app.controller('lobbyCtrl', function($scope, $rootScope, Bus) {
     //var Bus = BusInMemory;
-    var lobbyChannel = 'The_Lobby';
-    $scope.boardSize = 3;
-    $scope.streakSize = 3;    
+    var lobbyChannel = 'The_Lobby';    
+
+    var gameName = {
+          label: 'Game name',
+          type: 'text',
+          required: 'true',
+          value: '',
+          order: 0
+        },
+        boardSize = {
+          label: 'How many rows and columns',
+          type: 'number',
+          required: 'true',
+          value: 3,
+          order: 1
+        },
+        streakLen = {
+          label: 'Winning streak length',
+          type: 'number',
+          required: 'true',
+          value: 3,
+          order: 2
+        };
+    $scope.gameName = gameName;
+    $scope.gameCreateForm = [
+      gameName,
+      boardSize,
+      streakLen
+    ];
 
     function subscribeToTheLobby() {
       Bus.subscribe(lobbyChannel, function(message) {
@@ -97,27 +118,48 @@
       Bus.publish(lobbyChannel, messageType, data);
     }
 
-    var games = [];
-    $scope.games = games;
-
-    var gameName = 'Josh';
-    var gameIndex = 0;
+    var gamesOpen = [];
+    $scope.gamesOpen = gamesOpen;
+    var gamesJoined = [];
+    
+    var gamesActive = [];
+    $scope.gamesActive = gamesActive;
 
     $scope.gameCreate = function() {
-      var gameChannel = gameName + gameIndex++;
-      games.push(gameChannel);
-    }
+      var game = new TicChatToe(boardSize.value, streakLen.value, gameName.value);
+      gamesActive.push(game);
+      gamesJoined.push(gameName.value);
+      $rootScope.gameCreateChannel(gameName.value, game);
+      publishToLobby('game_created', {
+        name: gameName.value,
+        boardSize: boardSize.value,
+        streakLen: streakLen.value
+      });
+    };
 
-    $rootScope.createGameChannel = function(gameName, game) {
+    $scope.gameJoin = function(game) {
+      var game = new TicChatToe(game.boardSize, game.streakLen, game.name, TicChatToe.PlayerO);
+      gamesActive.push(game);
+      gamesJoined.push(game.name);
+      $rootScope.gameCreateChannel(game.name, game);
+    };
+
+    $rootScope.gameCreateChannel = function(gameName, game) {
       Bus.subscribe(gameName, function(message) {
         invoke($scope, game, 'on' + message.message_type, [message.message]);
-      });    
-      publishToLobby('game_created', gameName);
+      });
     };    
 
     $rootScope.sendLobbyMessage = publishToLobby;
 
     subscribeToTheLobby();
+
+    // Handlers:
+    $scope.ongame_created = function(message) {
+      if (!_.findWhere(gamesJoined, {name:message.message.name})) {
+        gamesOpen.push(message.message);
+      }
+    };
   });
 
   app.controller('gameCtrl', function($scope, $rootScope, $timeout, Bus) {
@@ -125,21 +167,23 @@
     $scope.gameStarted = false;
     $scope.moveAttempted = false;
 
-    $scope.gameStart = function() {
-      var game = new TicChatToe($scope.boardSize, $scope.streakSize);
+    $scope.gameInit = function(game) {
       $scope.board = game.getBoard();
       $scope.game = game;
       $scope.gameStarted = true;
-      console.log($scope.gameName);
-      $rootScope.createGameChannel($scope.gameName, game);
     };
 
     function sendGameMessage(message_type, data) {
-      Bus.publish($scope.gameName, message_type, data)
+      Bus.publish($scope.game.name, message_type, data)
     }
 
     $scope.move = function(cell) {
-      var moveAttempt = TicChatToe.move(cell.row, cell.col, $scope.game.playerCurrent);
+      console.log($scope.game.player);
+      console.log($scope.game.playerCurrent);
+      if ($scope.game.player != $scope.game.playerCurrent) {
+        return;
+      }
+      var moveAttempt = TicChatToe.move(cell.row, cell.col, $scope.game.player);
       $scope.moveAttempted = true;
       sendGameMessage('move', moveAttempt);
      };    
