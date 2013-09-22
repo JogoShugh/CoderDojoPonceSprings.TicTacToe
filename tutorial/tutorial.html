@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>CoderDojo Ponce Springs - Tic Tac Toe Tutorial</title>
+		<meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <link rel='stylesheet' href='lib/bootstrap3/css/bootstrap.min.css' />
+    <link rel='stylesheet' href='lib/angular-bootstrap/css/bootstrap-combined.min.css' />    
+    <link href='css/indexa.css' rel='stylesheet' media='screen' />
+    <style>
+iframe {
+  background: white;
+  height: 300px;
+}
+
+.editor {
+  border: 2px double darkgray;
+}
+
+.ace_wrapper {  
+  height: 150px;
+}
+
+.ace_editor {
+  height: inherit;
+}
+
+.html {
+  background: yellow;
+}
+
+.css {
+  background: orange;
+}
+
+.js {
+  background: dodgerblue;
+}
+
+.modal {
+  display: block;
+  height: 0;
+  overflow: visible;
+}
+
+.hide {
+    display: none;
+}
+    </style>
+		<script src='lib/jquery/jquery-1.10.2.min.js'></script>		
+		<script src='lib/angular/angular.min.js'></script>
+		<script src='lib/angular/angular-resource.min.js'></script>
+    <script src='lib/angular-bootstrap/js/ui-bootstrap-tpls-0.5.0.js'></script>
+    <script src='lib/bootstrap3/js/bootstrap.min.js'></script>
+    <script src="lib/ace/ace.js"></script>
+    <script src="lib/ui-ace/ui-ace.js"></script>
+	</head>
+	<body class='container center' ng-cloak>
+	    <p ng-controller='identityController'>
+	      <span class='label label-success' ng-show='userLoggedIn'>Welcome, {{userName}}</span>
+	      <button class='btn btn-primary' ng-click='showIdentifyUserDialog()' ng-show='!userLoggedIn'>Log In or Register</button>
+	    </p>     
+
+	    <tabset ng-controller='tutorialController' ng-cloak>
+	      <tab heading="Code Editor">
+	        <div ng-repeat='stepCode in stepsCode'>
+	          <div ng-init='code=stepCode'>
+	            <div ng-include="'learnLocityEditor.html'" ng-controller='editorController'></div>
+	          </div>
+	        </div>      	
+	      </tab>
+	      <tab heading="Peers' Code">
+	        <div ng-repeat='code in peersCode | filter:notMine(code)'>
+	          {{code.name}} 
+	            <a class='btn btn-primary btn-small' ng-click='peerCodeSpy(code)'>Spy</a>
+	        </div>
+	        <div ng-repeat='peerCode in peers'>
+	          <div ng-init='code=peerCode'>
+	            <div ng-include="'learnLocityEditor.html'" ng-controller='editorController'></div>
+	          </div>
+	        </div>
+	      </tab>
+	    </tabset>
+	</body>
+	<script>
+var learnlocity = angular.module('learnlocity',['learnlocity.identity', 'learnlocity.editor', 'ui.bootstrap']);
+
+learnlocity.controller('tutorialController', function($rootScope, $scope, $http) {
+	$rootScope.notMine = function(code) {
+		return function(item) {
+			return item.id != "*YOURS*";
+		};
+	};	
+
+	$rootScope.peersCode = [];
+  	$rootScope.stepsCode = [];
+
+  	function createCodeFromXml(data) {
+		var xml = new DOMParser().parseFromString(data, "application/xml");
+		var name = xml.getElementsByTagName('name')[0].textContent;
+		var id = xml.getElementsByTagName('id')[0].textContent;
+		var html = xml.getElementsByTagName('html')[0].textContent;
+		var js = xml.getElementsByTagName('js')[0].textContent;
+		var css = xml.getElementsByTagName('css')[0].textContent;
+
+		var item = {
+			name: name,
+			id: id,
+			code: {
+				html: html,
+				js: js,
+				css: css
+			}
+		};
+
+		$rootScope.peersCode.push(item);  	
+		if (id == '*YOURS*') {
+			$rootScope.stepsCode.push(item);
+		}
+	}
+
+	$http.get('steps/step-01.xml').success(createCodeFromXml);
+	$http.get('steps/step-01-josh.xml').success(createCodeFromXml);
+
+	$rootScope.peers = [];
+	$rootScope.peerCodeSpy = function(code) {
+		$rootScope.peers = [];
+		$rootScope.peers.push(code);
+	};
+});
+  </script>
+  <script type='text/coffeescript' src='lib/tutorializr/tutorializr.coffee'></script>
+  <script type='text/coffeescript' src='lib/learnlocity/learnlocity.identity.coffee'></script>
+  <script type='text/coffeescript' src='lib/learnlocity/learnlocity.editor.coffee'></script>
+  <script src='lib/mongolab/mongoLabResourceFactory.js'></script>  
+  <script type='text/coffeescript' src='lib/learnlocity/learnlocity.api.coffee'></script>  
+	<script type="text/javascript" src="lib/coffee/coffee-script.min.js"></script>
+  <script type="text/coffeescript">
+$ ->
+  angular.bootstrap document, ['learnlocity', 'ui.bootstrap']
+  </script>
+</html>

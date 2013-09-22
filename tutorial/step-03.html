@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Tic-Tac-Toe</title>
+  <style type="text/css">
+body {
+  margin: 0 auto;
+  text-align: center;
+}
+
+table {
+  display: inline-table;
+}
+
+caption {
+  font-size: 40px;
+}
+
+td {
+  background: yellow;
+  height: 100px;
+  width: 100px;
+  text-align: center;
+  font-size: 50px;
+  font-family: impact;
+  font-weight: bold;
+}  
+  </style>
+</head>
+<body>
+  <h1>Tic-Tac-Toe</h1>
+  <h2>The world's quickest, smallest, and possibly ugliest Tic-Tac-Toe!</h2>
+  <br />
+  <p>
+    <table border="1" ng-click="game.move($event)">
+      <caption>Tic tac toe is fun!</caption> 
+      <tr>
+        <td>-</td> <td>-</td> <td>-</td>
+      </tr>
+      <tr>
+        <td>-</td> <td>-</td> <td>-</td>      
+      </tr>
+      <tr>
+        <td>-</td> <td>-</td> <td>-</td>
+      </tr>
+    </table>
+  </p>
+</body>
+</html>
+

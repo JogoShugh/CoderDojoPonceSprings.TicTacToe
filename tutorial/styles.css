@@ -1,0 +1,24 @@
+body {
+	padding: 8px;
+}
+
+.game {
+	margin: 5px;
+}
+
+.cell {
+	border: 1px solid gold;
+	background: yellow;
+	height: 75px;
+	width: 75px;
+	display: table-cell;
+	text-align: center;
+	vertical-align: middle;
+	font-size: 48px;
+	font-family: impact;
+	text-shadow: 1px 1px goldenrod;
+}
+
+.winner {
+	background: gold;
+}

@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html ng-app='tutorial'>
+<head>
+  <title>Tic-Tac-Toe</title>
+  <link rel='stylesheet' href='css/bootstrap-combined.min.css' />
+  <script src="http://codeorigin.jquery.com/jquery-2.0.3.min.js"></script>
+  <script src="angular.js"></script>
+  <script src="ace/ace.js"></script>
+  <script src="ui-ace.js"></script>
+  <script src='ui-bootstrap-tpls-0.5.0.js'></script>  
+  <script src="app.js"></script>
+  <style>
+.proTip:before {
+  content: "Pro tip!";
+  display: block;
+  font-weight: bold;
+  background: gold;
+  padding: 3px;  
+}
+
+.proTip {
+  background: dodgerblue;
+}
+
+.editor {
+  border: 2px double darkgray;
+}
+
+.html {
+  background: yellow;
+}
+
+.css {
+  background: orange;
+}
+
+.js {
+  background: dodgerblue;
+}
+
+.ace_wrapper {  
+  height: 175px;
+}
+
+.ace_editor {
+  /*height: 175px;*/
+  height: inherit;
+}
+
+xmp {
+  margin: none;
+}
+  </style>  
+  <script>
+var jsEditor = null;
+var htmlEditor = null;
+var cssEditor = null;
+function tutorialController($scope) {
+  $scope.jsLoaded = function(ace) {
+    jsEditor = ace;
+  };
+
+  $scope.htmlLoaded = function(ace) {
+    console.log(ace);
+    htmlEditor = ace;
+  }; 
+
+  $scope.cssLoaded = function(ace) {
+    cssEditor = ace;
+  };
+
+  $scope.runIt = function() {
+    var script   = document.createElement("script");
+    script.type  = "text/javascript";
+    script.text  = jsEditor.getSession().getValue();
+
+    var head = $('<head></head>');
+    head.append('<title>CoderDojo Ponce Springs</title>');
+    head.append($(script));
+
+    var style = $("<style type='text/css'></style>");
+    style.append(cssEditor.getSession().getValue());
+    head.append(style);
+
+    var body = $('<body></body>');
+    body.append(htmlEditor.getSession().getValue());
+    
+    var html = $('<html></html>');
+    html.append(head);
+    html.append(body);
+
+    var iframe = document.getElementById('myFrame');
+    var doc = iframe.contentWindow.document;
+    doc.open();
+    doc.write("<html>" + html.html() + "</html>");
+    doc.close();    
+  }
+}
+  </script>
+</head>
+<body ng-controller='tutorialController'>
+	<h1>Build Tic-Tac-Toe with HTML, CSS, and JavaScript</h1>
+  
+  <p>
+    Today you will create a complete Tic-Tac-Toe game that runs in your web browser. In doing so, you'll learn about HTML (Hypertext Markup Language), CSS (Cascading Style Sheets), and the JavaScript programming languages. These technologies are the <strong>source code</strong> used in all of the <a href="http://www.internetworldstats.com/stats.htm" target="statsWindow">many billions of web pages</a> used by <a href="http://www.worldwidewebsize.com/">more than 2 billion people</a> in the world.
+  </p>
+
+  <p class='proTip'>    
+    You can always <em>spy on the <strong>source code</strong></em> of web pages in your browser by clicking in a web page with your <strong>right mouse button</strong> and then selecting the <strong>View page source</strong>, or similar, command. <strong>Try it right now on this page!</strong>
+  </p>
+
+  <h2>Your first challenge!</h2>
+  <p>
+    Before we build the game, I'd like you to try a quick exercise and then share it with us.
+  </p>
+  <ul>
+
+  </ul>
+  <div ng-init='displays = {html:true, css:false, js:false, preview:true}' class='well well-small'>
+    <div style='background: beige; padding: 3px;'>
+      <h4 style='display: inline-block'>Show:</h4>
+      <div class="btn-group">
+          <button type="button" class="btn btn-primary" ng-model="displays.html" btn-checkbox>HTML</button>
+          <button type="button" class="btn btn-primary" ng-model="displays.css" btn-checkbox>CSS</button>
+          <button type="button" class="btn btn-primary" ng-model="displays.js" btn-checkbox>JS</button>
+          <button type="button" class="btn btn-inverse" btn-checkbox ng-click='runIt()' ng-model='displays.preview'>Preview <i class='icon-eye-open icon-white'></i></button>
+      </div>
+    </div>
+    <div class='editor' ng-show='displays.html'>
+      <div style='padding: 3px'><strong>HTML</strong> <i class='icon-pencil'></i></div>
+      <div class='ace_wrapper'>
+        <xmp ui-ace="{
+          theme: 'dawn',
+          useWrapMode: true,
+          showGutter: true,
+          mode: 'html',
+          onLoad: htmlLoaded
+        }"><h2>HTML buddies</h2> Look it's HTML for you <button onclick='handleClick()'>Click me!</button></xmp>
+      </div>
+    </div>
+    <div class='editor' ng-show='displays.css'>
+      <div style='padding: 3px'><strong>CSS</strong> <i class='icon-pencil'></i></div>    
+      <div class='ace_wrapper'>
+        <div ui-ace="{
+          theme: 'dawn',
+          useWrapMode: true,
+          showGutter: true,
+          mode: 'css',
+          onLoad: cssLoaded
+        }">button {
+    background: yellow;  
+  }</div>
+      </div>
+      <div style='background: gray'>
+        <button class='btn btn-mini' ng-click='shorter'>shorter <i class='icon-arrow-up'></i> </button><button class='btn btn-mini'>taller <i class='icon-arrow-down'></i></button> 
+      </div>
+    </div>
+  <div class='editor' ng-show='displays.js'>
+    <div style='padding: 3px'><strong>JS</strong> <i class='icon-pencil'></i></div>
+    <div class='ace_wrapper'>    
+      <div ui-ace="{
+        theme: 'dawn',
+        useWrapMode: true,
+        showGutter: true,
+        mode: 'javascript',
+        onLoad: jsLoaded
+      }">function handleClick() { alert('hello'); }</div>
+  </div>
+</div>
+<div class='editor' ng-show='displays.preview'>
+  <div style='padding: 3px'><strong>Preview</strong> <i class='icon-eye-open'></i></div>  
+  <iframe style='width: 99.65%; height: 400;border: 2px double darkgray' id='myFrame'
+  ></iframe>
+</div>
+  <table border="1" style="background: gold;">
+    <tr>
+      <td>First Name:</td> <td> Replace this text with your first name. </td>
+    </tr>
+    <tr>
+      <td>Grade:</td> <td> Replace this text with your current grade in school.</td>
+    </tr>
+    <tr>
+      <td>Favorite Game:</td> <td> Replace this text with your favorite game name. </td>
+    </tr>
+  </table>
+  <h2>The world's quickest, smallest, and possibly ugliest Tic-Tac-Toe!</h2>
+  <br />
+  <p>
+    XOX
+    OXO
+    XOX
+  </p>
+</body>
+</html>

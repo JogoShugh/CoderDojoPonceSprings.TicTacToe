@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Tic-Tac-Toe</title>
+  <style>
+body {
+  text-align: center;
+  background: dodgerblue;
+} 
+
+h1 {
+  color: midnightblue;
+  font-family: monospace;
+  font-size: 100px;
+}
+
+h2 {
+  font-family: sans-serif;
+}
+
+table {
+  display: inline-table;
+  background: yellow;
+  font-family: impact;
+}
+
+td {
+  width: 100px;
+  height: 100px;
+  font-size: 50px
+}  
+  </style>
+  <script src="http://code.angularjs.org/1.2.0-rc.2/angular.js"></script>
+  <script>  
+var playerCurrent = 'X';
+var nextPlayers = {'X' : 'O', 'O': 'X'};
+function move(event) {
+  console.dir(event);
+  if (event.target.textContent != '-') {
+    return
+  } 
+  else {
+    event.target.textContent = playerCurrent;
+    playerCurrent = nextPlayers[playerCurrent];
+  }
+}
+/*
+function gameController() {
+  var playerCurrent = 'X';
+  var nextPlayers = {'X' : 'O', 'O': 'X'};
+  this.move = function(srcElement) {
+    if (srcElement.innerHTML != '-') {
+      return
+    } 
+    else {
+      srcElement.innerHTML = playerCurrent;
+      playerCurrent = nextPlayers[playerCurrent];
+    }
+  }
+} 
+*/ 
+  </script>
+</head>
+<body ng-app ng-controller='gameController as game'>
+  <h1>Tic-Tac-Toe</h1>
+  <h2>The world's quickest, smallest, and possibly ugliest Tic-Tac-Toe!</h2>
+  <br />
+  <p>
+    <table border="1" onclick='move(event)' nnng-click="game.move($event.srcElement)">
+      <caption>Tic tac toe is fun!</caption> 
+      <tr>
+        <td>-</td> <td>-</td> <td>-</td>
+      </tr>
+      <tr>
+        <td>-</td> <td>-</td> <td>-</td>      
+      </tr>
+      <tr>
+        <td>-</td> <td>-</td> <td>-</td>
+      </tr>
+    </table>
+  </p>
+</body>
+</html>

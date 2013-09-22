@@ -1,0 +1,9 @@
+<div ng-controller='game' class='game container'>
+	<strong>{{name}}</strong>
+	<br />
+	<div ng-repeat='(row_index, row) in board'>
+		<div ng-repeat='(col_index, col) in row'
+			class="cell"
+			ng-click='move(row_index, col_index)'>{{col}}</div>
+	</div>
+</div>

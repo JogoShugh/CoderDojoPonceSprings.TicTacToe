@@ -1,0 +1,33 @@
+<step>
+<name>Josh Gough</name>
+<id>JOSH_GOUGH</id>
+<html><![CDATA[<!DOCTYPE html>
+<html>
+    <head>
+        <title>Josh Gough's first HTML Game</title>
+    </head>
+    
+    <body>
+        <h1>Tic-Tac-Toe</h1>
+        
+        <div id='instructions'>
+            <ul>
+                <li>X goes first</li>
+                <li>Followed by O</li>
+                <li>3-in-a-row wins!</li>
+            </ul>
+        </div>
+        
+        <div id="credits">
+            <hr />
+            <p>Brought to you by CoderDojo Ponce Springs</p>
+            <p><img src="http://goo.gl/Jf5Rry" /></p>
+            <hr />
+        </div>
+    </body>
+    
+</html>]]>
+</html>
+<js></js>
+<css></css>
+</step>

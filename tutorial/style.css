@@ -1,0 +1,30 @@
+body {
+  text-align: center;
+}
+
+.game {
+  margin: 0 auto;
+  display: table;
+  border-collapse: collapse;
+}
+
+.row {
+  display: table-row;
+}
+
+.cell {
+  display:table-cell;
+  vertical-align: middle;
+  text-align: center;
+  background: gold;
+  width:75px;
+  height:75px;
+  border: 2px solid goldenrod;
+  font-size: 60px;
+  font-family: impact;
+  text-shadow: 2px 2px yellow;
+}
+
+xmp {
+  display: none;
+}

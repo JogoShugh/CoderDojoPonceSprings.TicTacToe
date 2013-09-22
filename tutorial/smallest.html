@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html ng-app>
+<head>
+  <title>Tic-Tac-Toe</title>
+  <script data-require="angular.js@1.2.0-rc2" data-semver="1.2.0-rc2" src="http://code.angularjs.org/1.2.0-rc.2/angular.js"></script>
+  <script>
+function ticTacToeGame() {
+  var playerX = 'X',
+      playerO = 'O',
+      nextPlayerDictionary = { 'X' : playerO, 'O' : playerX },    
+      playerCurrent = playerX,
+      emptyCell = ' ';
+
+  this.board = 
+  [
+    [emptyCell, emptyCell, emptyCell],
+    [emptyCell, emptyCell, emptyCell],
+    [emptyCell, emptyCell, emptyCell]
+  ];
+
+  this.move = function(row_num, cell_num) {
+    if (this.board[row_num][cell_num] != emptyCell) {
+      return;
+    }
+    this.board[row_num][cell_num] = playerCurrent;
+    playerCurrent = nextPlayerDictionary[playerCurrent];
+  };
+
+  this.findWinner = function() {
+    
+  };
+}
+  </script>  
+</head>
+<body ng-controller='ticTacToeGame as theGame'>
+	<h1>Tic Tac Toe</h1>
+  <h2>The world's quickest, smallest, and possibly ugliest Tic-Tac-Toe!</h2>
+  <br />
+  <table border='1'>
+    <tr ng-repeat="(row_num, row) in theGame.board">
+      <td height="100" width="100" align="center"
+        ng-repeat="(cell_num, cell) in row track by $index"
+        ng-click="theGame.move(row_num, cell_num)"
+        class="{{theGame.board[row_num][cell_num]}}-cell"
+      >
+        {{theGame.board[row_num][cell_num]}}
+      </td>
+    </tr>
+  </table>
+  <style type='text/css'>
+body {
+  margin: 0 auto;
+  text-align: center;
+}  
+table {
+  display: inline-table;
+  border: 4px solid midnightblue;
+  background: yellow;
+  font-family: impact;
+  font-size: 75px;
+  border-collapse: collapse;
+  text-shadow: 3px 3px darkgoldenrod;
+}
+
+td {
+  border: 4px solid darkblue;
+}
+
+.X-cell {
+  color: gold;
+}
+
+.O-cell {
+  color: darkgreen;
+}
+  </style>  
+</body>
+</html>

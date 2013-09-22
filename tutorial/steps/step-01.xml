@@ -1,0 +1,34 @@
+<step>
+<name>Intro</name>
+<id>*YOURS*</id>
+<html><![CDATA[<!DOCTYPE html>
+<html>
+    <head>
+        <title>{{Name}}'s first HTML Game</title>
+    </head>
+    
+    <body>
+        <h1>Tic-Tac-Toe</h1>
+        
+        <div id='instructions'>
+            <ul>
+                <li>X goes first</li>
+                <li>Followed by O</li>
+                <li>3-in-a-row wins!</li>
+            </ul>
+        </div>
+        
+        <div id="credits">
+            <hr />
+            <p>Brought to you by {{YourCompanyName}}</p>
+            <p><img src="{{YourCompanyLogoHere.jpg}}" /></p>
+            <hr />
+        </div>
+        <a href="example.html">See an example!</a>
+    </body>
+    
+</html>]]>
+</html>
+<js></js>
+<css></css>
+</step>

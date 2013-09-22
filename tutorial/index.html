@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html ng-app>
+<head>
+  <script src="angular.js"></script>
+  <style type='text/css'>
+body {
+  margin: 0 auto;
+  text-align: center;
+}
+
+h1 {
+  font-family: sans-serif;
+  font-size: 50px;
+  text-shadow: 2px 2px lightgray;
+  background: yellow;  
+  border: 2px solid darkgreen;
+}
+
+h2 {
+  color: darkblue;
+  font-family: sans-serif;
+  background: orange;
+  display: inline-block;
+}
+.gameBoard {
+  background: yellow;
+  display: inline-table;
+  font-size: 48px;
+  font-family: impact;
+  color: darkgreen;
+  text-shadow: 2px 2px gold;
+  border-collapse: collapse;  
+}
+
+.row {
+  display: table-row;
+}
+
+.row span {
+  display: table-cell;
+  vertical-align: middle;
+  font-size: 48px;
+  height: 100px;
+  width: 100px;
+  border: 4px solid darkgoldenrod;
+}
+
+.row span:after {
+  display: block;
+  position: absolute;
+  background: black;
+  color: white;
+  padding-left: 2px;
+  padding-right: 2px;
+  text-shadow: none;
+  font-family: monospace;
+  font-weight: bold;
+  content: attr(data-id);
+  font-size: 18px;
+}
+  </style>  
+</head>
+<body>
+	<h1>Tic Tac Toe</h1>
+  <h2>Brought to you by Josh</h2>
+  <br />
+  <div class='gameBoard'>    
+    <div class='row'>
+      <span data-id='0,0'>X</span> <span data-id='0,1'>O</span> <span data-id='0,2'>O</span>
+    </div>
+  </div>
+</body>
+</html>
