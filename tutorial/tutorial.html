@@ -46,7 +46,7 @@ iframe {
     display: none;
 }
     </style>
-		<script src='lib/jquery/jquery-1.10.2.min.js'></script>		
+		<script src='lib/jquery/jquery-1.10.2.min.js'></script>	
 		<script src='lib/angular/angular.min.js'></script>
 		<script src='lib/angular/angular-resource.min.js'></script>
     <script src='lib/angular-bootstrap/js/ui-bootstrap-tpls-0.5.0.js'></script>
@@ -112,6 +112,8 @@ learnlocity.controller('tutorialController', function($rootScope, $scope, $http)
 			}
 		};
 
+		console.log(item);
+		
 		$rootScope.peersCode.push(item);  	
 		if (id == '*YOURS*') {
 			$rootScope.stepsCode.push(item);
