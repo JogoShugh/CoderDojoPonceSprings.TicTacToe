@@ -33,14 +33,14 @@
   <div class='editor' ng-show='displays.preview'>
     <div style='padding: 3px'><strong>Preview</strong> <i class='icon-eye-open icon-white'></i></div>
     <div class='editor-controls'>
-      <button class='btn btn-mini btn-inverse' ng-click='shorterPreview()'>shorter <i class='icon-arrow-up icon-white'></i> </button><button class='btn btn-mini btn-inverse' ng-click='tallerPreview()'>longer <i class='icon-arrow-down icon-white'></i></button> 
+      <button class='btn btn-mini btn-inverse' ng-click='previewShorter()'>shorter <i class='icon-arrow-up icon-white'></i> </button><button class='btn btn-mini btn-inverse' ng-click='previewLonger()'>longer <i class='icon-arrow-down icon-white'></i></button> 
     </div>
     <iframe style='width: 100%;border: 2px double darkgray' id='{{code.name}}'></iframe>
   </div>  
   <div class='editor' ng-show='displays.html'>
     <div style='padding: 3px'><strong>HTML</strong> <i class='icon-pencil icon-white'></i></div>
     <div class='editor-controls'>
-      <button class='btn btn-mini btn-inverse' ng-click='shorter("html")'>shorter <i class='icon-arrow-up icon-white'></i> </button><button class='btn btn-mini btn-inverse' ng-click='taller("html")'>longer <i class='icon-arrow-down icon-white'></i></button> 
+      <button class='btn btn-mini btn-inverse' ng-click='shorter("html")'>shorter <i class='icon-arrow-up icon-white'></i> </button><button class='btn btn-mini btn-inverse' ng-click='longer("html")'>longer <i class='icon-arrow-down icon-white'></i></button> 
     </div>                
     <div class='ace_wrapper'>
       <xmp style='margin-top: 0px' ui-ace="{
@@ -55,7 +55,7 @@
   <div class='editor' ng-show='displays.css'>
     <div style='padding: 3px'><strong>CSS</strong> <i class='icon-pencil icon-white'></i></div>
     <div class='editor-controls'>
-      <button class='btn btn-mini btn-inverse' ng-click='shorter("css")'>shorter <i class='icon-arrow-up icon-white'></i> </button><button class='btn btn-mini btn-inverse' ng-click='taller("css")'>longer <i class='icon-arrow-down icon-white'></i></button> 
+      <button class='btn btn-mini btn-inverse' ng-click='shorter("css")'>shorter <i class='icon-arrow-up icon-white'></i> </button><button class='btn btn-mini btn-inverse' ng-click='longer("css")'>longer <i class='icon-arrow-down icon-white'></i></button> 
     </div>                               
     <div class='ace_wrapper'>
       <div ui-ace="{
@@ -70,7 +70,7 @@
   <div class='editor' ng-show='displays.js'>
     <div style='padding: 3px'><strong>JS</strong> <i class='icon-pencil icon-white'></i></div>
     <div class='editor-controls'>
-      <button class='btn btn-mini btn-inverse' ng-click='shorter("js")'>shorter <i class='icon-arrow-up icon-white'></i> </button><button class='btn btn-mini btn-inverse' ng-click='taller("js")'>longer <i class='icon-arrow-down icon-white'></i></button> 
+      <button class='btn btn-mini btn-inverse' ng-click='shorter("js")'>shorter <i class='icon-arrow-up icon-white'></i> </button><button class='btn btn-mini btn-inverse' ng-click='longer("js")'>longer <i class='icon-arrow-down icon-white'></i></button> 
     </div>
     <div class='ace_wrapper'>    
       <div ui-ace="{

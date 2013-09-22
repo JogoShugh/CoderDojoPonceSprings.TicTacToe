@@ -48,15 +48,15 @@
 		$scope.shorter = (target) ->
 			changeHeight target, -CHANGE_HEIGHT_DELTA
 
-		$scope.taller = (target) ->
+		$scope.longer = (target) ->
 			changeHeight target, CHANGE_HEIGHT_DELTA
 
-		$scope.shorterPreview = ->
+		$scope.previewShorter = ->
 			el = angular.element("#" + $scope.code.name)[0]
 			height = adjustedHeight(el.offsetHeight, -CHANGE_HEIGHT_DELTA)
 			el.style.height = height
 
-		$scope.tallerPreview = ->
+		$scope.previewLonger = ->
 			el = angular.element("#" + $scope.code.name)[0]
 			height = adjustedHeight(el.offsetHeight, CHANGE_HEIGHT_DELTA)
 			el.style.height = height
