@@ -1,33 +1,50 @@
 <div class='well well-small'>
   <div style='background: beige; padding: 3px;'>
-    <h4 style='display: inline-block'>Show:</h4>
     <div class='btn-group'>
       <button type='button' 
-        class='btn btn-primary'
+        class='btn btn-info'
         ng-model='displays.html'
         btn-checkbox>HTML</button>
       <button type='button' 
-        class='btn btn-primary'
+        class='btn btn-info'
         ng-model='displays.css'
         btn-checkbox>CSS</button>
       <button type='button'
-        class='btn btn-primary'
+        class='btn btn-info'
         ng-model='displays.js'
         btn-checkbox>JS</button>
       <button type='button' 
-        class='btn btn-inverse'
+        class='btn btn-success'
         ng-click='preview()'
-        >Preview <i class='icon-eye-open icon-white'></i></button>
+        ng-show='!displays.preview'
+        >Show Preview <i class='icon-eye-open icon-white'></i></button>
+      <button type='button' 
+        class='btn btn-inverse'
+        ng-click='previewHide()'
+        ng-show='displays.preview'
+        >Hide Preview <i class='icon-eye-open icon-white'></i></button>        
+      <button type='button' 
+        class='btn btn-success'
+        ng-click='preview()'
+        ng-show='displays.preview'
+        >Update Preview <i class='icon-eye-open icon-white'></i></button>
     </div>
   </div>
-  <div class='editor' ng-show='displays.html'>
-    <div style='padding: 3px'><strong>HTML</strong> <i class='icon-pencil'></i></div>
+  <div class='editor' ng-show='displays.preview'>
+    <div style='padding: 3px'><strong>Preview</strong> <i class='icon-eye-open icon-white'></i></div>
     <div class='editor-controls'>
-      <button class='btn btn-mini btn-inverse' ng-click='shorter("html")'>shorter <i class='icon-arrow-up icon-white'></i> </button><button class='btn btn-mini btn-inverse' ng-click='taller("html")'>taller <i class='icon-arrow-down icon-white'></i></button> 
+      <button class='btn btn-mini btn-inverse' ng-click='shorterPreview()'>shorter <i class='icon-arrow-up icon-white'></i> </button><button class='btn btn-mini btn-inverse' ng-click='tallerPreview()'>longer <i class='icon-arrow-down icon-white'></i></button> 
+    </div>
+    <iframe style='width: 100%;border: 2px double darkgray' id='{{code.name}}'></iframe>
+  </div>  
+  <div class='editor' ng-show='displays.html'>
+    <div style='padding: 3px'><strong>HTML</strong> <i class='icon-pencil icon-white'></i></div>
+    <div class='editor-controls'>
+      <button class='btn btn-mini btn-inverse' ng-click='shorter("html")'>shorter <i class='icon-arrow-up icon-white'></i> </button><button class='btn btn-mini btn-inverse' ng-click='taller("html")'>longer <i class='icon-arrow-down icon-white'></i></button> 
     </div>                
     <div class='ace_wrapper'>
       <xmp style='margin-top: 0px' ui-ace="{
-        theme: 'monokai',
+        theme: 'chrome',
         useWrapMode: true,
         showGutter: true,
         mode: 'html',
@@ -36,13 +53,13 @@
     </div>
   </div>
   <div class='editor' ng-show='displays.css'>
-    <div style='padding: 3px'><strong>CSS</strong> <i class='icon-pencil'></i></div>
+    <div style='padding: 3px'><strong>CSS</strong> <i class='icon-pencil icon-white'></i></div>
     <div class='editor-controls'>
-      <button class='btn btn-mini btn-inverse' ng-click='shorter("css")'>shorter <i class='icon-arrow-up icon-white'></i> </button><button class='btn btn-mini btn-inverse' ng-click='taller("css")'>taller <i class='icon-arrow-down icon-white'></i></button> 
+      <button class='btn btn-mini btn-inverse' ng-click='shorter("css")'>shorter <i class='icon-arrow-up icon-white'></i> </button><button class='btn btn-mini btn-inverse' ng-click='taller("css")'>longer <i class='icon-arrow-down icon-white'></i></button> 
     </div>                               
     <div class='ace_wrapper'>
       <div ui-ace="{
-        theme: 'monokai',
+        theme: 'chrome',
         useWrapMode: true,
         showGutter: true,
         mode: 'css',
@@ -51,25 +68,18 @@
     </div>
   </div>
   <div class='editor' ng-show='displays.js'>
-    <div style='padding: 3px'><strong>JS</strong> <i class='icon-pencil'></i></div>
+    <div style='padding: 3px'><strong>JS</strong> <i class='icon-pencil icon-white'></i></div>
     <div class='editor-controls'>
-      <button class='btn btn-mini btn-inverse' ng-click='shorter("js")'>shorter <i class='icon-arrow-up icon-white'></i> </button><button class='btn btn-mini btn-inverse' ng-click='taller("js")'>taller <i class='icon-arrow-down icon-white'></i></button> 
+      <button class='btn btn-mini btn-inverse' ng-click='shorter("js")'>shorter <i class='icon-arrow-up icon-white'></i> </button><button class='btn btn-mini btn-inverse' ng-click='taller("js")'>longer <i class='icon-arrow-down icon-white'></i></button> 
     </div>
     <div class='ace_wrapper'>    
       <div ui-ace="{
-        theme: 'monokai',
+        theme: 'chrome',
         useWrapMode: true,
         showGutter: true,
         mode: 'javascript',
         onLoad: jsLoaded                        
       }" ng-model="code.code['js']"></div>
     </div>
-  </div>
-  <div ng-show='displays.preview'>
-    <div style='padding: 3px'><strong>Preview</strong> <i class='icon-eye-open'></i></div>
-    <div class='editor-controls'>
-      <button class='btn btn-mini btn-inverse' ng-click='shorterPreview()'>shorter <i class='icon-arrow-up icon-white'></i> </button><button class='btn btn-mini btn-inverse' ng-click='tallerPreview()'>taller <i class='icon-arrow-down icon-white'></i></button> 
-    </div>
-    <iframe style='width: 100%;border: 2px double darkgray' id='{{code.name}}'></iframe>
   </div>
 </div>

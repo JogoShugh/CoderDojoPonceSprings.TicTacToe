@@ -8,7 +8,7 @@
 			html:true
 			css:true
 			js:true
-			preview:true
+			preview:false
 
 		jsEditor = null
 		htmlEditor = null
@@ -32,14 +32,18 @@
 		$scope.htmlLoaded = (ace) ->
 			htmlEditor = ace
 			editors["html"] = ace
+			ace.setFontSize("14px")
 
 		$scope.cssLoaded = (ace) ->
 			cssEditor = ace
 			editors["css"] = ace
+			ace.setFontSize("14px")
+
 
 		$scope.jsLoaded = (ace) ->
 			jsEditor = ace
 			editors["js"] = ace
+			ace.setFontSize("14px")			
 
 		$scope.shorter = (target) ->
 			changeHeight target, -CHANGE_HEIGHT_DELTA
@@ -58,6 +62,7 @@
 			el.style.height = height
 
 		$scope.preview = ->
+			$scope.displays.preview = true
 			script = document.createElement("script")
 			script.type = "text/javascript"	    
 			script.text = jsEditor.getSession().getValue()
@@ -83,4 +88,8 @@
 			doc.open()
 			doc.write "<html>" + html.html() + "</html>"
 			doc.close()
+		
+		$scope.previewHide = ->
+			$scope.displays.preview = false
+
 )()
