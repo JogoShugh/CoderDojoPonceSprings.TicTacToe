@@ -83,7 +83,7 @@ iframe {
 			            <a class='btn btn-primary btn-small' ng-click='peerCodeSpy(code)'>Spy</a>
 			        </div>
 			        <div ng-repeat='peerCode in peers'>
-			          <div ng-init='code=peerCode'>
+			          <div ng-init='code=peerCode;previewOnLoad=true'>
 			            <div ng-include="'learnLocityEditor.html'" ng-controller='editorController'></div>
 			          </div>
 			        </div>
@@ -183,7 +183,7 @@ learnlocity.controller('tutorialController', function($rootScope, $scope, $http)
 	};
 	$rootScope.notMine = function(code) {
 		return function(item) {
-			return item.id != "*YOURS*";
+			return item.id != "__YOURS__";
 		};
 	};	
 
@@ -209,7 +209,7 @@ learnlocity.controller('tutorialController', function($rootScope, $scope, $http)
 		};
 		
 		$rootScope.peersCode.push(item);  	
-		if (id == '*YOURS*') {
+		if (id == '__YOURS__') {
 			$rootScope.stepsCode.push(item);
 		}
 	}

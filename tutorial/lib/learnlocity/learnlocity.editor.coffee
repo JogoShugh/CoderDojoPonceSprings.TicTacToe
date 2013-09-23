@@ -1,7 +1,7 @@
 (->
 	mod = angular.module('learnlocity.editor', ['ui.ace', 'ui.bootstrap'])
 
-	mod.controller 'editorController', ($scope)->		
+	mod.controller 'editorController', ($scope, $timeout)->
 		CHANGE_HEIGHT_DELTA = 50
 
 		$scope.displays =
@@ -23,10 +23,13 @@
 			css: null
 			js: null
 
+		$scope.editorsToLoadCount = 3
+
 		configureEditor = (editor) ->
 			editor.setFontSize("14px")
 			session = editor.getSession()
 			session.on("change", editorContentChanged)
+			$scope.editorsToLoadCount--
 
 		editorContentChanged = ->
 			if $scope.displays.preview && $scope.update.whenTyping then $scope.preview()
@@ -64,12 +67,12 @@
 			changeHeight target, CHANGE_HEIGHT_DELTA
 
 		$scope.previewShorter = ->
-			$('.' + $scope.code.name).each ->
+			$('#' + $scope.code.id).each ->
 				height = adjustedHeight(@offsetHeight, -CHANGE_HEIGHT_DELTA)
 				@style.height = height
 
 		$scope.previewLonger = ->
-			$('.' + $scope.code.name).each ->
+			$('#' + $scope.code.id).each ->
 				height = adjustedHeight(@offsetHeight, CHANGE_HEIGHT_DELTA)
 				@style.height = height
 
@@ -94,7 +97,7 @@
 			html.append head
 			html.append body
 
-			iframes = $("." + $scope.code.name).each ->
+			$("#" + $scope.code.id).each ->
 				doc = @contentWindow.document
 				doc.open()
 				doc.write "<html>" + html.html() + "</html>"
@@ -102,4 +105,17 @@
 		
 		$scope.previewHide = ->
 			$scope.displays.preview = false
+
+		# TODO: this is a little bit hacktastic:
+		$scope.$watch 'editorsToLoadCount', ->
+			if $scope.editorsToLoadCount <= 0
+				$timeout ->
+					if $scope.previewOnLoad
+						$scope.preview()
+						$timeout ->
+							$scope.previewLonger()
+							$scope.previewLonger()
+							$scope.previewLonger()
+						, 100
+				, 250
 )()
