@@ -13,7 +13,7 @@ iframe {
 }
 
 .editor {
-  border: 2px double darkgray;
+  border: 1px solid darkgray;
   background: black;
   color: white;
 }
@@ -67,7 +67,28 @@ iframe {
 			<button class='btn btn-inverse btn-mini' ng-click='peersVisible = !peersVisible' ng-show='peersVisible'>Hide Peers</button>	    	
 	    	<br />
 	    	<br />
-	    	<div class='row-fluid'>	    		
+	    	<div class='row-fluid'>
+			    <tabset ng-controller='tutorialController' ng-cloak
+			    	class="{{getTutorialClass(peersVisible)}}">
+			      <tab heading="Code Editor">
+			        <div ng-repeat='stepCode in stepsCode'>
+			          <div ng-init='code=stepCode'>
+			            <div ng-include="'learnLocityEditor.html'" ng-controller='editorController'></div>
+			          </div>
+			        </div>      	
+			      </tab>
+			      <tab heading="Peers' Code">
+			        <div ng-repeat='code in peersCode | filter:notMine(code)'>
+			          {{code.name}} 
+			            <a class='btn btn-primary btn-small' ng-click='peerCodeSpy(code)'>Spy</a>
+			        </div>
+			        <div ng-repeat='peerCode in peers'>
+			          <div ng-init='code=peerCode'>
+			            <div ng-include="'learnLocityEditor.html'" ng-controller='editorController'></div>
+			          </div>
+			        </div>
+			      </tab>
+			    </tabset>
 	    		<div class="span5" style='background: lightyellow;padding:4px' ng-controller='peersController' ng-show='peersVisible'>
 	    			<h4>Step Peers</h4>
 	    			<tabset>
@@ -124,36 +145,14 @@ iframe {
 			    			</div>	    					
 	    				</tab>	    					    				
 	    			</tabset>
-	    		</div>
-			    <tabset ng-controller='tutorialController' ng-cloak
-			    	class="{{getTutorialClass(peersVisible)}}">
-			      <tab heading="Code Editor">
-			        <div ng-repeat='stepCode in stepsCode'>
-			          <div ng-init='code=stepCode'>
-			            <div ng-include="'learnLocityEditor.html'" ng-controller='editorController'></div>
-			          </div>
-			        </div>      	
-			      </tab>
-			      <tab heading="Peers' Code">
-			        <div ng-repeat='code in peersCode | filter:notMine(code)'>
-			          {{code.name}} 
-			            <a class='btn btn-primary btn-small' ng-click='peerCodeSpy(code)'>Spy</a>
-			        </div>
-			        <div ng-repeat='peerCode in peers'>
-			          <div ng-init='code=peerCode'>
-			            <div ng-include="'learnLocityEditor.html'" ng-controller='editorController'></div>
-			          </div>
-			        </div>
-			      </tab>
-			    </tabset>
+	    		</div>			    
 			</div>
 		</div>			  
 	</body>
 	<script>
 var learnlocity = angular.module('learnlocity',['learnlocity.identity', 'learnlocity.editor', 'ui.bootstrap']);
 learnlocity.run(function($rootScope) {
-	$rootScope.peersVisible = true;
-	console.log($rootScope.peersVisible)
+	$rootScope.peersVisible = false;
 });
 
 learnlocity.controller('peersController', function($rootScope, $scope, $http) {
@@ -178,7 +177,6 @@ learnlocity.controller('peersController', function($rootScope, $scope, $http) {
 
 learnlocity.controller('tutorialController', function($rootScope, $scope, $http) {
 	$scope.getTutorialClass = function() {
-		console.log($rootScope.peersVisible);
 		if ($rootScope.peersVisible === undefined) return 'span7';
 		if ($rootScope.peersVisible) return 'span7';
 		return 'span12';
@@ -209,8 +207,6 @@ learnlocity.controller('tutorialController', function($rootScope, $scope, $http)
 				css: css
 			}
 		};
-
-		console.log(item);
 		
 		$rootScope.peersCode.push(item);  	
 		if (id == '*YOURS*') {

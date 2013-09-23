@@ -1,7 +1,7 @@
 (->
 	mod = angular.module('learnlocity.editor', ['ui.ace', 'ui.bootstrap'])
 
-	mod.controller 'editorController', ($scope)->
+	mod.controller 'editorController', ($scope)->		
 		CHANGE_HEIGHT_DELTA = 50
 
 		$scope.displays =
@@ -10,6 +10,11 @@
 			js:true
 			preview:false
 
+		$scope.update = { whenTyping : true }
+
+		$scope.getEditorsClass = ->
+			return if $scope.displays.preview then 'span6' else 'span12'
+
 		jsEditor = null
 		htmlEditor = null
 		cssEditor = null
@@ -17,6 +22,14 @@
 			html: null
 			css: null
 			js: null
+
+		configureEditor = (editor) ->
+			editor.setFontSize("14px")
+			session = editor.getSession()
+			session.on("change", editorContentChanged)
+
+		editorContentChanged = ->
+			if $scope.displays.preview && $scope.update.whenTyping then $scope.preview()
 
 		changeHeight = (target, delta) ->
 			el = editors[target].container.parentElement
@@ -29,21 +42,20 @@
 			height = height + delta + "px"
 			return height
 
-		$scope.htmlLoaded = (ace) ->
-			htmlEditor = ace
-			editors["html"] = ace
-			ace.setFontSize("14px")
+		$scope.htmlLoaded = (editor) ->
+			htmlEditor = editor
+			editors["html"] = editor
+			configureEditor editor
 
-		$scope.cssLoaded = (ace) ->
-			cssEditor = ace
-			editors["css"] = ace
-			ace.setFontSize("14px")
+		$scope.cssLoaded = (editor) ->
+			cssEditor = editor
+			editors["css"] = editor
+			configureEditor editor
 
-
-		$scope.jsLoaded = (ace) ->
-			jsEditor = ace
-			editors["js"] = ace
-			ace.setFontSize("14px")			
+		$scope.jsLoaded = (editor) ->
+			jsEditor = editor
+			editors["js"] = editor
+			configureEditor editor	
 
 		$scope.shorter = (target) ->
 			changeHeight target, -CHANGE_HEIGHT_DELTA
@@ -52,14 +64,14 @@
 			changeHeight target, CHANGE_HEIGHT_DELTA
 
 		$scope.previewShorter = ->
-			el = angular.element("#" + $scope.code.name)[0]
-			height = adjustedHeight(el.offsetHeight, -CHANGE_HEIGHT_DELTA)
-			el.style.height = height
+			$('.' + $scope.code.name).each ->
+				height = adjustedHeight(@offsetHeight, -CHANGE_HEIGHT_DELTA)
+				@style.height = height
 
 		$scope.previewLonger = ->
-			el = angular.element("#" + $scope.code.name)[0]
-			height = adjustedHeight(el.offsetHeight, CHANGE_HEIGHT_DELTA)
-			el.style.height = height
+			$('.' + $scope.code.name).each ->
+				height = adjustedHeight(@offsetHeight, CHANGE_HEIGHT_DELTA)
+				@style.height = height
 
 		$scope.preview = ->
 			$scope.displays.preview = true
@@ -82,14 +94,12 @@
 			html.append head
 			html.append body
 
-			iframe = document.getElementById($scope.code.name)
-
-			doc = iframe.contentWindow.document
-			doc.open()
-			doc.write "<html>" + html.html() + "</html>"
-			doc.close()
+			iframes = $("." + $scope.code.name).each ->
+				doc = @contentWindow.document
+				doc.open()
+				doc.write "<html>" + html.html() + "</html>"
+				doc.close()
 		
 		$scope.previewHide = ->
 			$scope.displays.preview = false
-
 )()
