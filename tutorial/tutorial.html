@@ -192,15 +192,17 @@ learnlocity.controller('tutorialController', function($rootScope, $scope, $http)
 
   	function createCodeFromXml(data) {
 		var xml = new DOMParser().parseFromString(data, "application/xml");
-		var name = xml.getElementsByTagName('name')[0].textContent;
+		var name = xml.getElementsByTagName('title')[0].textContent;
 		var id = xml.getElementsByTagName('id')[0].textContent;
-		var html = xml.getElementsByTagName('html')[0].textContent;
-		var js = xml.getElementsByTagName('js')[0].textContent;
-		var css = xml.getElementsByTagName('css')[0].textContent;
+		var story = xml.getElementsByTagName('section')[0].textContent;
+		var html = xml.getElementsByTagName('section')[1].textContent;		
+		var js = xml.getElementsByTagName('script')[0].textContent;
+		var css = xml.getElementsByTagName('style')[0].textContent;
 
 		var item = {
 			name: name,
 			id: id,
+			story: story,
 			code: {
 				html: html,
 				js: js,
@@ -213,9 +215,10 @@ learnlocity.controller('tutorialController', function($rootScope, $scope, $http)
 			$rootScope.stepsCode.push(item);
 		}
 	}
-
-	$http.get('steps/step-01.xml').success(createCodeFromXml);
-	$http.get('steps/step-01-josh.xml').success(createCodeFromXml);
+	$http.get('steps/step-01.html').success(createCodeFromXml);
+	//$http.get('steps/step-02-josh.html').success(createCodeFromXml);
+	//$http.get('steps/step-01-josh.html').success(createCodeFromXml);
+	//$http.get('steps/step-02-josh.html').success(createCodeFromXml);
 
 	$rootScope.peers = [];
 	$rootScope.peerCodeSpy = function(code) {
@@ -229,7 +232,7 @@ learnlocity.controller('tutorialController', function($rootScope, $scope, $http)
   <script type='text/coffeescript' src='lib/learnlocity/learnlocity.editor.coffee'></script>
   <script src='lib/mongolab/mongoLabResourceFactory.js'></script>  
   <script type='text/coffeescript' src='lib/learnlocity/learnlocity.api.coffee'></script>  
-	<script type="text/javascript" src="lib/coffee/coffee-script.min.js"></script>
+  <script type="text/javascript" src="lib/coffee/coffee-script.min.js"></script>
   <script type="text/coffeescript">
 $ ->
   angular.bootstrap document, ['learnlocity', 'ui.bootstrap']

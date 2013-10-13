@@ -17,64 +17,94 @@
         
   var app = angular.module('tic-chat-toe', ['ui.bootstrap']);
 
-  app.service('BusInMemory', function() {
-    var channels = [];
-    function channelFind(name) {
-      return _.findWhere(channels, {name: name});
+  app.provider('Bus', function() {
+    this._busType = 'Bus';
+
+    this.useBusInMemory = function(busType) {
+      this._busType = 'BusInMemory';
+    };
+
+    function createBusInMemory() {
+      var channels = [];
+      function channelFind(name) {
+        return _.findWhere(channels, {name: name});
+      }
+      return {
+        subscribe: function(channel, callback) {
+          var subscription = {
+            channel: channel,
+            callback: callback
+          };
+          var channel = channelFind(subscription.channel);
+          if (!channel) {
+            channel = { name: subscription.channel, subscribers:[] }
+            channels.push(channel);
+          }
+          channel.subscribers.push(subscription.callback);
+        },
+        publish: function(channel, messageType, data) {
+          var message = {
+            channel: channel,
+            message: {
+              message_type: messageType,
+              message: data
+            }
+          };        
+          var channel = channelFind(message.channel);
+          if (channel) {
+            _.each(channel.subscribers, function(subscriber) {
+              subscriber(message.message);
+            });
+          }
+        }
+      };
     }
 
-    return {
-      subscribe: function(channel, callback) {
-        var subscription = {
-          channel: channel,
-          callback: callback
-        };
-        var channel = channelFind(subscription.channel);
-        if (!channel) {
-          channel = { name: subscription.channel, subscribers:[] }
-          channels.push(channel);
+    function createBus() {
+      return {
+        subscribe: function(channel, callback) {
+          var subscription = {
+            channel: channel,
+            callback: callback
+          };
+          PUBNUB.subscribe(subscription);
+        },
+        publish: function(channel, messageType, data) {
+          var message = {
+            channel: channel,
+            message: {
+              message_type: messageType,
+              message: data
+            }
+          };
+          PUBNUB.publish(message);
         }
-        channel.subscribers.push(subscription.callback);
-      },
-      publish: function(channel, messageType, data) {
-        var message = {
-          channel: channel,
-          message: {
-            message_type: messageType,
-            message: data
-          }
-        };        
-        var channel = channelFind(message.channel);
-        if (channel) {
-          _.each(channel.subscribers, function(subscriber) {
-            subscriber(message.message);
-          });
-        }
+      };
+    }
+
+    this.$get = function() {
+      if (this._busType == 'BusInMemory') {
+        return createBusInMemory();
+      } else {
+        return createBus();
       }
     };
   });
 
-  app.service('Bus', function() {
-    return {
-      subscribe: function(channel, callback) {
-        var subscription = {
-          channel: channel,
-          callback: callback
-        };
-        PUBNUB.subscribe(subscription);
-      },
-      publish: function(channel, messageType, data) {
-        var message = {
-          channel: channel,
-          message: {
-            message_type: messageType,
-            message: data
-          }
-        };
-        PUBNUB.publish(message);
-      }
-    };
+  /*
+  app.service('BusInMemory', 
   });
+  */
+  /*
+  app.service('Bus',
+  });
+  */
+
+  /*
+  app.config(function(BusProvider){
+    BusProvider.useBusInMemory();
+  });
+  */
 
   app.controller('lobbyCtrl', function($scope, $rootScope, Bus) {
     //var Bus = BusInMemory;
@@ -125,10 +155,19 @@
     var gamesActive = [];
     $scope.gamesActive = gamesActive;
 
+    function gameTabActivate(gameToActivate) {
+      angular.forEach($scope.gamesActive, function(game) {
+        game.active = false;
+      });
+      gameToActivate.active = true;
+    }
+
     $scope.gameCreate = function() {
       var game = new TicChatToe(boardSize.value, streakLen.value, gameName.value);
+      game.active = false;
       gamesActive.push(game);
       gamesJoined.push(gameName.value);
+      gameTabActivate(game);
       $rootScope.gameCreateChannel(gameName.value, game);
       publishToLobby('game_created', {
         name: gameName.value,
@@ -139,8 +178,10 @@
 
     $scope.gameJoin = function(game) {
       var game = new TicChatToe(game.boardSize, game.streakLen, game.name, TicChatToe.PlayerO);
+      game.active = false;
       gamesActive.push(game);
       gamesJoined.push(game.name);
+      gameTabActivate(game);
       $rootScope.gameCreateChannel(game.name, game);
     };
 
@@ -178,8 +219,8 @@
     }
 
     $scope.move = function(cell) {
-      console.log($scope.game.player);
-      console.log($scope.game.playerCurrent);
+      console.log('Game player: ' + $scope.game.player);
+      console.log('Player current: ' + $scope.game.playerCurrent);
       if ($scope.game.player != $scope.game.playerCurrent) {
         return;
       }

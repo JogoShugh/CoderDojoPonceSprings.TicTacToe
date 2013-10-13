@@ -33,7 +33,7 @@
     this.moves = [];
     this.winningMoves = [];
     this.catsGame = false;
-    this.playerCurrent = this.player;
+    this.playerCurrent = X;
     
     for (var row_index = 0; row_index < this.boardSize; row_index++) {
       var row = [];
@@ -86,7 +86,9 @@
     else if (this.moves.length == this.getMaxMovesCount()) {
       this.catsGame = true;    }
     else {
+      console.log('Changing playerCurrent (old): ' + this.playerCurrent);
       this.playerCurrent = playerNextMap[this.playerCurrent];
+      console.log('Changing playerCurrent (new): ' + this.playerCurrent);      
     }
   };
   

@@ -23,6 +23,7 @@
       <tab
         ng-repeat='game in gamesActive'
         heading='{{game.name}}'
+        active='game.active'
       >
         <div
           ng-controller='gameCtrl'

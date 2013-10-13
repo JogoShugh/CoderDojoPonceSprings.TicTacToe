@@ -1,0 +1,92 @@
+<html>
+  <head>
+    <title>Tic-Tac-Toe</title>
+    <id>__YOURS__</id>
+    <style>
+body {
+  text-align: center; /* or: left right justify inherit */ 
+                      /* more choices: http://docs.webplatform.org/wiki/css/properties/text-align */
+  
+  background: dodgerblue; /* or: goldenrod violet springgreen green orchid tomato */ 
+                          /* more choices: http://www.w3schools.com/cssref/css_colornames.asp */
+} 
+
+h1 {
+  color: midnightblue; /* or: goldenrod violet springgreen green orchid tomato */ /* more choices: http://www.w3schools.com/cssref/css_colornames.asp */
+
+  font-family: monospace; /* or: serif sans-serif */
+                          /* more choices: http://www.w3schools.com/cssref/css_websafe_fonts.asp */
+  font-size: 100px; /* or: 50px 25px 200px */
+                    /* learn more: http://www.w3schools.com/cssref/pr_font_font-size.asp */
+}
+
+h2 {
+  font-family: sans-serif;  /* or: serif sans-serif */
+                            /* more choices: http://www.w3schools.com/cssref/css_websafe_fonts.asp */   
+}
+
+table {
+  text-align: center; /* or: left right justify inherit */ 
+                      /* more choices: http://docs.webplatform.org/wiki/css/properties/text-align */
+  display: inline-table; /* or: block inline inline-block run-in table */;
+                         /* more choices: http://www.w3schools.com/cssref/pr_class_display.asp */
+
+  background: yellow; 
+  font-family: impact; /* or: Georgia Verdana WingDings "Trebuchet MS" */
+                       /* more choices: http://www.w3schools.com/cssref/css_websafe_fonts.asp */
+
+
+}
+
+td {
+  width: 100px; /* or: 50px 25px 200px */
+                /* more info: http://www.w3schools.com/cssref/pr_dim_width.asp */;
+  height: 100px; /* or: 50px 25px 200px */
+  font-size: 50px; /* or: 50px 25px 200px */
+                   /* more info: http://www.w3schools.com/cssref/pr_font_font-size.asp */
+
+}      
+    </style>
+    <script>var playerCurrent = 'X';
+var nextPlayers = {'X' : 'O', 'O': 'X'};
+function move(event) {
+  if (event.target.textContent != '-') {
+    return
+  } 
+  else {
+    event.target.textContent = playerCurrent;
+    playerCurrent = nextPlayers[playerCurrent];
+  }
+}
+    </script>
+  </head>
+  <body>
+    <section></section>
+    <section><![CDATA[
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Tic-Tac-Toe</title>
+  </head>
+  <body>
+    <h1>Tic-Tac-Toe</h1>
+    <h2>The world's quickest, smallest, and possibly ugliest Tic-Tac-Toe!</h2>
+    <br />
+    <p>
+      <table border='1' onclick='move(event)'>
+        <caption>Tic tac toe is fun!</caption> 
+        <tr>
+          <td>-</td> <td>-</td> <td>-</td>
+        </tr>
+        <tr>
+          <td>-</td> <td>-</td> <td>-</td>      
+        </tr>
+        <tr>
+          <td>-</td> <td>-</td> <td>-</td>
+        </tr>
+      </table>
+    </p>
+  </body>
+</html>]]></section>
+  </body>
+</html>

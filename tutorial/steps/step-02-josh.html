@@ -1,0 +1,77 @@
+<html>
+  <head>
+    <title>Tic-Tac-Toe</title>
+    <id>__YOURS__</id>
+    <style>
+body {
+  text-align: center;
+  background: dodgerblue;
+} 
+
+h1 {
+  color: midnightblue;
+  font-family: monospace;
+  font-size: 100px;
+}
+
+h2 {
+  font-family: sans-serif;
+}
+
+table {
+  text-align: center;
+  display: inline-table;
+  background: yellow;
+  font-family: impact;
+}
+
+td {
+  width: 100px;
+  height: 100px;
+  font-size: 50px
+}      
+    </style>
+    <script>var playerCurrent = 'X';
+var nextPlayers = {'X' : 'O', 'O': 'X'};
+function move(event) {
+  //console.dir(event);
+  if (event.target.textContent != '-') {
+    return
+  } 
+  else {
+    event.target.textContent = playerCurrent;
+    playerCurrent = nextPlayers[playerCurrent];
+  }
+}
+    </script>
+  </head>
+  <body>
+    <section></section>
+    <section><![CDATA[
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Tic-Tac-Toe</title>
+  </head>
+  <body>
+    <h1>Tic-Tac-Toe</h1>
+    <h2>The world's quickest, smallest, and possibly ugliest Tic-Tac-Toe!</h2>
+    <br />
+    <p>
+      <table border='1' onclick='move(event)'>
+        <caption>Tic tac toe is fun!</caption> 
+        <tr>
+          <td>-</td> <td>-</td> <td>-</td>
+        </tr>
+        <tr>
+          <td>-</td> <td>-</td> <td>-</td>      
+        </tr>
+        <tr>
+          <td>-</td> <td>-</td> <td>-</td>
+        </tr>
+      </table>
+    </p>
+  </body>
+</html>]]></section>
+  </body>
+</html>

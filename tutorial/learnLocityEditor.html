@@ -40,26 +40,21 @@
   </div>
   <div class='row-fluid'>    
     <div class='{{getEditorsClass()}}'>
+      <div class='editor' ng-bind-html-unsafe='code.story'></div>
       <div class='editor' ng-show='displays.html'>
-        <div style='padding: 3px'><strong>HTML</strong> <i class='icon-pencil icon-white'></i></div>
-        <div class='editor-controls'>
-          <button class='btn btn-mini btn-inverse' ng-click='shorter("html")'>shorter <i class='icon-arrow-up icon-white'></i> </button><button class='btn btn-mini btn-inverse' ng-click='longer("html")'>longer <i class='icon-arrow-down icon-white'></i></button> 
-        </div>                
+        <div style='padding: 3px'><strong>HTML</strong> <i class='icon-pencil icon-white'></i>&nbsp;<button class='btn btn-mini' ng-click='shorter("html")'>shorter <i class='icon-arrow-up'></i> </button>&nbsp;<button class='btn btn-mini' ng-click='longer("html")'>longer <i class='icon-arrow-down'></i></button></div>
         <div class='ace_wrapper'>
-          <xmp style='margin-top: 0px' ui-ace="{
+          <div style='margin-top: 0px' ui-ace="{
             theme: 'chrome',
             useWrapMode: true,
             showGutter: true,
             mode: 'html',
             onLoad: htmlLoaded
-          }" ng-model="code.code['html']"></xmp>
+          }" ng-model="code.code['html']"></div>
         </div>
       </div>
       <div class='editor' ng-show='displays.css'>
-        <div style='padding: 3px'><strong>CSS</strong> <i class='icon-pencil icon-white'></i></div>
-        <div class='editor-controls'>
-          <button class='btn btn-mini btn-inverse' ng-click='shorter("css")'>shorter <i class='icon-arrow-up icon-white'></i> </button><button class='btn btn-mini btn-inverse' ng-click='longer("css")'>longer <i class='icon-arrow-down icon-white'></i></button> 
-        </div>                               
+        <div style='padding: 3px'><strong>CSS</strong> <i class='icon-pencil icon-white'></i>&nbsp;<button class='btn btn-mini' ng-click='shorter("css")'>shorter <i class='icon-arrow-up'></i> </button>&nbsp;<button class='btn btn-mini' ng-click='longer("css")'>longer <i class='icon-arrow-down'></i></button></div>
         <div class='ace_wrapper'>
           <div ui-ace="{
             theme: 'chrome',
@@ -71,10 +66,7 @@
         </div>
       </div>
       <div class='editor' ng-show='displays.js'>
-        <div style='padding: 3px'><strong>JS</strong> <i class='icon-pencil icon-white'></i></div>
-        <div class='editor-controls'>
-          <button class='btn btn-mini btn-inverse' ng-click='shorter("js")'>shorter <i class='icon-arrow-up icon-white'></i> </button><button class='btn btn-mini btn-inverse' ng-click='longer("js")'>longer <i class='icon-arrow-down icon-white'></i></button> 
-        </div>
+        <div style='padding: 3px'><strong>JS</strong> <i class='icon-pencil icon-white'></i>&nbsp;<button class='btn btn-mini' ng-click='shorter("js")'>shorter <i class='icon-arrow-up'></i> </button>&nbsp;<button class='btn btn-mini' ng-click='longer("js")'>longer <i class='icon-arrow-down'></i></button></div>
         <div class='ace_wrapper'>    
           <div ui-ace="{
             theme: 'chrome',
@@ -88,10 +80,7 @@
     </div>
     <div class='span6'>
       <div class='editor' ng-show='displays.preview'>
-        <div style='padding: 3px'><strong>Preview</strong> <i class='icon-eye-open icon-white'></i></div>
-        <div class='editor-controls'>
-          <button class='btn btn-mini btn-inverse' ng-click='previewShorter()'>shorter <i class='icon-arrow-up icon-white'></i> </button><button class='btn btn-mini btn-inverse' ng-click='previewLonger()'>longer <i class='icon-arrow-down icon-white'></i></button> 
-        </div>
+        <div style='padding: 3px'><strong>Preview</strong> <i class='icon-eye-open icon-white'></i>&nbsp;<button class='btn btn-mini' ng-click='previewShorter()'>shorter <i class='icon-arrow-up'></i> </button>&nbsp;<button class='btn btn-mini' ng-click='previewLonger()'>longer <i class='icon-arrow-down'></i></button></div>
         <iframe style='width: 100%;border: 2px double darkgray' id='{{code.id}}'></iframe>
       </div>    
     </div>
