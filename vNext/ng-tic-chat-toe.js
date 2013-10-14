@@ -13,9 +13,9 @@
         });          
       }
     }
-  }
+  }  
         
-  var app = angular.module('tic-chat-toe', ['ui.bootstrap']);
+  var app = angular.module('tic-chat-toe', ['ui.bootstrap', 'learnlocity.identity']);
 
   app.provider('Bus', function() {
     this._busType = 'Bus';
@@ -67,7 +67,7 @@
             channel: channel,
             callback: callback
           };
-          PUBNUB.subscribe(subscription);
+          myPubNub.subscribe(subscription);
         },
         publish: function(channel, messageType, data) {
           var message = {
@@ -77,7 +77,20 @@
               message: data
             }
           };
-          PUBNUB.publish(message);
+          myPubNub.publish(message);
+        },
+        here_now: function(channel, callback) {
+          myPubNub.here_now({
+            channel: channel,
+            callback: callback
+          });
+        },
+        history: function(channel, callback) {
+          myPubNub.history({
+            channel: channel,
+            limit: 100,
+            callback: callback
+          });
         }
       };
     }
@@ -106,8 +119,9 @@
   });
   */
 
+  var myPubNub = null;
+
   app.controller('lobbyCtrl', function($scope, $rootScope, Bus) {
-    //var Bus = BusInMemory;
     var lobbyChannel = 'The_Lobby';    
 
     var gameName = {
@@ -142,6 +156,16 @@
       Bus.subscribe(lobbyChannel, function(message) {
         invoke($scope, $scope, 'on' + message.message_type, [message]);
       });
+      Bus.here_now(lobbyChannel, function(messages) {
+        console.log(messages);
+        invoke($scope, $scope, 'onherenow', [messages.uuids]);
+      });
+    }
+
+    function subscribeToMyOwnChannel() {
+      Bus.subscribe($rootScope.userName, function(message) {
+        invoke($scope, $scope, 'on' + message.message_type, [message]);
+      });
     }
 
     function publishToLobby(messageType, data) {
@@ -150,6 +174,7 @@
 
     var gamesOpen = [];
     $scope.gamesOpen = gamesOpen;
+    
     var gamesJoined = [];
     
     var gamesActive = [];
@@ -172,7 +197,8 @@
       publishToLobby('game_created', {
         name: gameName.value,
         boardSize: boardSize.value,
-        streakLen: streakLen.value
+        streakLen: streakLen.value,
+        userHosting: $rootScope.userName
       });
     };
 
@@ -182,18 +208,42 @@
       gamesActive.push(game);
       gamesJoined.push(game.name);
       gameTabActivate(game);
-      $rootScope.gameCreateChannel(game.name, game);
+      $rootScope.gameCreateChannel(game.name, game, true);
+      var joinMessage = {
+        gameName: game.name,
+        userChallenger: $rootScope.userName
+      };
+      console.log('join message: ' + joinMessage);
+      Bus.publish(game.name, 'join', joinMessage);
     };
 
-    $rootScope.gameCreateChannel = function(gameName, game) {
+    $rootScope.gameCreateChannel = function(gameName, game, requestHistory) {
       Bus.subscribe(gameName, function(message) {
         invoke($scope, game, 'on' + message.message_type, [message.message]);
       });
+      if (requestHistory) {
+        Bus.history(gameName, function(messages) {
+          for (var i = 0; i < messages.length; i++) {
+            var message = messages[i];
+            invoke($scope, game, 'on' + message.message_type, [message.message]);
+          }
+        });
+      }
     };    
 
     $rootScope.sendLobbyMessage = publishToLobby;
 
-    subscribeToTheLobby();
+    // Watch for login, then take action by configuring PubNub:
+    $rootScope.$watch('userName', function(val) {
+      if (val === undefined) return;
+      myPubNub = PUBNUB.init({
+        publish_key   : 'pub-c-f4a90e76-f06e-42b8-9594-3756a8bac175',
+        subscribe_key : 'sub-c-daf9c6dc-e063-11e2-ab32-02ee2ddab7fe',
+        uuid          : $rootScope.userName
+      });
+      subscribeToTheLobby();
+      subscribeToMyOwnChannel();
+    });    
 
     // Handlers:
     $scope.ongame_created = function(message) {
@@ -201,10 +251,18 @@
         gamesOpen.push(message.message);
       }
     };
+
+    var whoIsOnline = [];
+    $scope.whoIsOnline = whoIsOnline;
+    $scope.onherenow = function(messages) {
+      angular.forEach(messages, function(who) {
+        console.log(who);
+        $scope.whoIsOnline.push({uuid:who});        
+      });
+    }
   });
 
   app.controller('gameCtrl', function($scope, $rootScope, $timeout, Bus) {
-    //var Bus = BusInMemory;
     $scope.gameStarted = false;
     $scope.moveAttempted = false;
 
@@ -215,7 +273,7 @@
     };
 
     function sendGameMessage(message_type, data) {
-      Bus.publish($scope.game.name, message_type, data)
+      Bus.publish($scope.game.name, message_type, data);
     }
 
     $scope.move = function(cell) {
@@ -227,7 +285,7 @@
       var moveAttempt = TicChatToe.move(cell.row, cell.col, $scope.game.player);
       $scope.moveAttempted = true;
       sendGameMessage('move', moveAttempt);
-     };    
+    };
 
     $scope.getWinnerStatus = function(move) {
       if (!$scope.moveAttempted) return '';

@@ -4,50 +4,70 @@
     <link rel="stylesheet" href="style.css" />
     <link rel='stylesheet' href='lib/angular-bootstrap/css/bootstrap-combined.min.css' />    
   </head>
-  <body ng-app="tic-chat-toe" ng-controller='lobbyCtrl'>
+  <body ng-cloak>
     <h1>Tic-Chat-Toe</h1>    
     <hr />
-    <tabset>
-      <tab heading="Join Game">
-        <div ng-repeat='game in gamesOpen'>
-          {{game.name}} <small class='label label-info'>board: {{game.boardSize}}, win: {{game.streakLen}}</small> <a class='btn btn-primary btn-small' ng-click='gameJoin(game)'>Join</a>
-        </div>
-      </tab>
-      <tab heading="Create Game">
-        <p ng-repeat="element in gameCreateForm | orderBy:'order'">
-          <label>{{element.label}}:</label>
-          <input type="{{element.type}}" required="{{element.required}}" ng-model="element.value" />
-        </p>
-        <a class='btn btn-primary' ng-click='gameCreate()'>Create new game!</a>        
-      </tab>
-      <tab
-        ng-repeat='game in gamesActive'
-        heading='{{game.name}}'
-        active='game.active'
-      >
-        <div
-          ng-controller='gameCtrl'
-          ng-init='gameInit(game)'
+    <p ng-controller='identityController'>
+      <span class='label label-success' ng-show='userLoggedIn'>Welcome, {{userName}}</span>
+      <button class='btn btn-primary' ng-click='userIdentifyDialogShow()' ng-show='!userLoggedIn'>Log In or Register</button>
+    </p>   
+    <div ng-controller='lobbyCtrl' ng-show='userLoggedIn'>
+      <tabset>
+        <tab heading="Who's Online">
+          <div ng-repeat='who in whoIsOnline'>
+            {{who.uuid}}
+            <hr />
+          </div>
+        </tab>
+        <tab heading="Join Game">
+          <div ng-repeat='game in gamesOpen'>
+            <strong>{{game.name}}</strong> by {{game.userHosting}} <small class='label label-info'>board: {{game.boardSize}}, win: {{game.streakLen}}</small> <a class='btn btn-primary btn-small' ng-click='gameJoin(game)'>Join</a>
+          </div>
+        </tab>
+        <tab heading="Create Game">
+          <p ng-repeat="element in gameCreateForm | orderBy:'order'">
+            <label>{{element.label}}:</label>
+            <input type="{{element.type}}" required="{{element.required}}" ng-model="element.value" />
+          </p>
+          <a class='btn btn-primary' ng-click='gameCreate()'>Create new game!</a>        
+        </tab>
+        <tab
+          ng-repeat='game in gamesActive'
+          heading='{{game.name}}'
+          active='game.active'
         >
-          <div ng-show='gameStarted'>
-            <div ng-show='game.gameOver()'><strong>Game over!</strong></div>
-            <div ng-repeat="row in board">
-              <span 
-                ng-repeat="col in row" class="cell {{getWinnerStatus(col)}}" ng-click='move(col)'>
-                {{col.player}}</span>
+          <div
+            ng-controller='gameCtrl'
+            ng-init='gameInit(game)'
+          >
+            <div ng-show='gameStarted'>
+              <div ng-show='game.gameOver()'><strong>Game over!</strong></div>
+              <div ng-repeat="row in board">
+                <span 
+                  ng-repeat="col in row" class="cell {{getWinnerStatus(col)}}" ng-click='move(col)'>
+                  {{col.player}}</span>
+              </div>
             </div>
           </div>
-        </div>
-      </div>      
-    </tabset>
+        </div>      
+      </tabset>
+    </div>
+    <script src="http://cdn.pubnub.com/pubnub-3.2.min.js"></script>        
     <script src="underscore.min.js"></script>
-    <script src="angular.js"></script>
+    <script src='lib/jquery/jquery-1.10.2.min.js'></script>
+    <script src="lib/angular/angular.min.js"></script>
+    <script src="lib/angular/angular-resource.min.js"></script>
     <script src="tic-chat-toe.js"></script>
     <script src="ng-tic-chat-toe.js"></script>
     <script src='lib/angular-bootstrap/js/ui-bootstrap-tpls-0.5.0.js'></script>
-    <div id="pubnub" pub-key="pub-c-f4a90e76-f06e-42b8-9594-3756a8bac175" 
-    sub-key="sub-c-daf9c6dc-e063-11e2-ab32-02ee2ddab7fe">
-    </div>
-    <script src="http://cdn.pubnub.com/pubnub-3.1.min.js"></script>    
+    <script type='text/coffeescript' src='lib/learnlocity/learnlocity.identity.coffee'></script>
+    <script type='text/coffeescript' src='lib/learnlocity/learnlocity.editor.coffee'></script>
+    <script src='lib/mongolab/mongoLabResourceFactory.js'></script>  
+    <script type='text/coffeescript' src='lib/learnlocity/learnlocity.api.coffee'></script>  
+    <script src="lib/coffee/coffee-script.min.js"></script>
+    <script type="text/coffeescript">
+$ ->
+  angular.bootstrap document, ['tic-chat-toe']
+    </script>    
   </body>
 </html>

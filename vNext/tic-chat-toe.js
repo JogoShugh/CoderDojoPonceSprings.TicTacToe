@@ -58,8 +58,6 @@
   };
 
   TicChatToe.prototype.onmove = function(move) {
-    console.log("Game is:");
-    console.log(this.player);
     if (this.gameOver()) {
       console.error('Game over already!');
       return;
@@ -74,7 +72,6 @@
       return;
     }
     */
-    console.log('On move passed all checks:' + move);
     this.moves.push(move);
     this.board[move.row][move.col].player = move.player;
     
@@ -90,6 +87,14 @@
       this.playerCurrent = playerNextMap[this.playerCurrent];
       console.log('Changing playerCurrent (new): ' + this.playerCurrent);      
     }
+  };
+
+  TicChatToe.prototype.onjoin = function(join) {
+    console.log('join: ' + join);
+    /*
+    if (message.userChallenger == $rootScope.userName) return;
+    console.log(message.userChallenger + ' joined');
+    */
   };
   
   TicChatToe.prototype.getBoard = function() {
