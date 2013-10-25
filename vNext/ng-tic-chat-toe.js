@@ -202,6 +202,38 @@
       });
     };
 
+    $scope.gameJoinRequest = function(game) {
+      var joinRequest = {
+        gameName: game.name,
+        userChallenger: $rootScope.userName
+      };
+      Bus.publish(game.userHosting, 'joinRequest', joinRequest);
+    };
+
+    $scope.onjoinRequest = function(message) {
+      console.log("join request");
+      var challengeAcceptedResult = confirm(message.message.userChallenger + " wants to play you in game " + message.message.gameName + ". Do you accept?");
+      var acceptChallengeMessage = {
+        gameName: message.message.gameName,
+        userHosting: $rootScope.userName,
+        challengeAccepted: challengeAcceptedResult
+      };
+      Bus.publish(message.message.userChallenger, 'challengeAcceptAnswer', acceptChallengeMessage);
+    };
+
+    $scope.onchallengeAcceptAnswer = function(message) {
+      if (message.message.challengeAccepted) {
+        var game = gameFindByName(message.message.gameName);
+        if (game) {
+          $scope.gameJoin(game);
+        }
+      }
+    };
+
+    var gameFindByName = function(gameName) {
+      return _.findWhere(gamesOpen, {name:gameName});
+    };
+
     $scope.gameJoin = function(game) {
       var game = new TicChatToe(game.boardSize, game.streakLen, game.name, TicChatToe.PlayerO);
       game.active = false;

@@ -19,9 +19,9 @@
             <hr />
           </div>
         </tab>
-        <tab heading="Join Game">
+        <tab heading="Open Games">
           <div ng-repeat='game in gamesOpen'>
-            <strong>{{game.name}}</strong> by {{game.userHosting}} <small class='label label-info'>board: {{game.boardSize}}, win: {{game.streakLen}}</small> <a class='btn btn-primary btn-small' ng-click='gameJoin(game)'>Join</a>
+            <strong>{{game.name}}</strong> by {{game.userHosting}} <small class='label label-info'>board: {{game.boardSize}}, win: {{game.streakLen}}</small> <a class='btn btn-primary btn-small' ng-click='gameJoinRequest(game)'>Challenge</a>
           </div>
         </tab>
         <tab heading="Create Game">
