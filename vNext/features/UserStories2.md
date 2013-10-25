@@ -34,8 +34,8 @@ As a member I can view my game history
 As a member I can view other members match history
 
 As a member I can view an opponents match history before I accept a match join request
-  View head to head history
-  View the opponents overall game history
+* View head to head history
+* View the opponents overall game history
 
 
 
