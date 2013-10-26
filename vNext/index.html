@@ -31,6 +31,13 @@
           </p>
           <a class='btn btn-primary' ng-click='gameCreate()'>Create new game!</a>        
         </tab>
+        <tab heading="Match History">
+            <p ng-repeat="element in gameCreateForm | orderBy:'order'">
+            <label>{{element.label}}:</label>
+            <input type="{{element.type}}" required="{{element.required}}" ng-model="element.value" />
+          </p>
+          <a class='btn btn-primary' ng-click='gameCreate()'>Create new game!</a>        
+        </tab>
         <tab
           ng-repeat='game in gamesActive'
           heading='{{game.name}}'
