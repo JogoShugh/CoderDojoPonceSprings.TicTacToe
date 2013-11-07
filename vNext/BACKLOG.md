@@ -13,14 +13,17 @@ The **BLUESKY** section is for speculative ideas and awesome ideas. It doesn't m
 
 ## In Progress
 
-* Create exercise for showing who is the current player in a game
-* Create exercise for keeping track of personal head-to-head results scoreboard
-* Create exercise for displaying head-to-head reuslts on a global scoreboard as results become available
+* Create personal head-to-head results scoreboard
+* Create global head-to-head results scoreboard that updates as games finish
+
 
 # Prioritized
 
 ## Exercises for CoderDojo Week 1
 
+* Create exercise for showing who is the current player in a game
+* Create exercise for keeping track of personal head-to-head results scoreboard
+* Create exercise for displaying head-to-head reuslts on a global scoreboard as results become available
 * Create exercise for adding sound when a move is made (different for X and O)
   * Create exercise for allowing specifying a custom sound for each player
 * Create exercise for playing a cheer when a player wins on their screen and a boo or aww shucks on the losing 
@@ -57,6 +60,7 @@ player's screen
 
 # DONE
 
+* 2013.11.07, Showing who is the current player in a game
 * 2013.11.06, Clean up vNext folder to remove unused files
 * 2013.11.06, Clean up lib folder to remove unused library files
 * 2013.11.06, Examine the script tags for optimization opportunities
