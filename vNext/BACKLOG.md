@@ -1,17 +1,14 @@
 # BACKLOG
 
-## Clean up work
-
-* Clean up vNext folder to remove unused files
-* Clean up lib folder to remove unused library files
-* Examine the script tags for optimization opportunities
-
-## Exercises for CoderDojo Week 1
+## Next
 
 * Create exercise for keeping track of personal head-to-head results scoreboard
 * Create exercise for displaying head-to-head reuslts on a global scoreboard as results become available
 * Create exercise for adding sound when a move is made (different for X and O)
-  * Create exercise for allowing specifying a custom sound for each player 
+  * Create exercise for allowing specifying a custom sound for each player
+
+## Exercises for CoderDojo Week 1
+
 * Create exercise for playing a cheer when a player wins on their screen and a boo or aww shucks on the losing 
 player's screen
 * Create exercise for animating the drawing of a player's move
@@ -42,3 +39,10 @@ player's screen
 * And, what about team games, where it's still multiple players, but it's played with alternating turns
   * For example, instead of just 3 in a row, it's 4 in a row, but 2 players per team
   * This would make for some funny situations
+
+# DONE
+
+2013.11.06, Clean up vNext folder to remove unused files
+2013.11.06, Clean up lib folder to remove unused library files
+2013.11.06, Examine the script tags for optimization opportunities
+
