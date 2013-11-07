@@ -1,11 +1,24 @@
 # BACKLOG
 
-## Next
+We use this page to keep track of what we're doing next, what comes after that, and to record when we get things done.
+
+1. We are working on things under **In Progress**. When we finish them, we move them to the very bottom of the page under the **DONE** heading and prefix them with a date and a comma.
+2. Then, we move 3 or 4 items from the **Prioritized** section into **In Progress**
+3. Around that time, we pick a few replacements from the **Identified** section that we think can and should be 
+next priorities.
+4. We may, if we see fit, pull items from the **BLUESKY** and break them down into some **Identified** tasks.
+
+The **BLUESKY** section is for speculative ideas and awesome ideas. It doesn't mean we're going to specifically do that.
+
+
+## In Progress
 
 * Create exercise for keeping track of personal head-to-head results scoreboard
 * Create exercise for displaying head-to-head reuslts on a global scoreboard as results become available
 * Create exercise for adding sound when a move is made (different for X and O)
   * Create exercise for allowing specifying a custom sound for each player
+
+# Prioritized
 
 ## Exercises for CoderDojo Week 1
 
@@ -15,7 +28,7 @@ player's screen
   * Pop in, fade in, swipe in, etc (Angular animations)  
 * Create exercise for allowing avatar image selection for player (small icon) and game move icon (should they be diff? What about a gallery of avatars and a common border color or superimposed transparent X or O?)
 
-## Exercises for CoderDojo Week 2
+# Identified
 
 * Create exercise for adding global chatroom
 * Create exercise for adding game-specific chatroom
@@ -26,6 +39,7 @@ player's screen
 * Add more social button support (AddThis.com?)
 
 # BLUESKY
+
 * How about a game where there are more tiles, but you have to get at least 2-3-in-a-row, or 3, or 4?
   * What if you could give up a turn in exchange for removing the opponent's move?
   * What if you could get extra points for have more than 3 in a row, regardless of if you made it to 6 or more?
