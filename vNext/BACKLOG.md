@@ -56,7 +56,7 @@ player's screen
 
 # DONE
 
-2013.11.06, Clean up vNext folder to remove unused files
-2013.11.06, Clean up lib folder to remove unused library files
-2013.11.06, Examine the script tags for optimization opportunities
+* 2013.11.06, Clean up vNext folder to remove unused files
+* 2013.11.06, Clean up lib folder to remove unused library files
+* 2013.11.06, Examine the script tags for optimization opportunities
 
