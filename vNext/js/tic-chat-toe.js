@@ -96,7 +96,7 @@
     console.log(message.userChallenger + ' joined');
     */
   };
-  
+ 
   TicChatToe.prototype.getBoard = function() {
     return this.board;
   };

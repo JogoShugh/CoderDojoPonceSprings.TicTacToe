@@ -56,7 +56,9 @@
               subscriber(message.message);
             });
           }
-        }
+        },
+        here_now: function(channel, callback) {      
+        }        
       };
     }
 
@@ -122,6 +124,7 @@
   var myPubNub = null;
 
   app.controller('lobbyCtrl', function($scope, $rootScope, Bus) {
+    console.log(Bus);
     var lobbyChannel = 'The_Lobby';    
 
     var gameName = {
@@ -144,12 +147,19 @@
           required: 'true',
           value: 3,
           order: 2
-        };
+        },
+        gameModeSinglePlayer = {
+          label: 'Single player game?',
+          type: 'test',
+          value: false,
+          order: 3
+        }
     $scope.gameName = gameName;
     $scope.gameCreateForm = [
       gameName,
       boardSize,
-      streakLen
+      streakLen,
+      gameModeSinglePlayer
     ];
 
     function subscribeToTheLobby() {
@@ -190,6 +200,8 @@
     $scope.gameCreate = function() {
       var game = new TicChatToe(boardSize.value, streakLen.value, gameName.value);
       game.active = false;
+      console.log('Game mode: ' + gameModeSinglePlayer.value);
+      game.gameModeSinglePlayer = gameModeSinglePlayer.value;
       gamesActive.push(game);
       gamesJoined.push(gameName.value);
       gameTabActivate(game);
@@ -268,11 +280,14 @@
     // Watch for login, then take action by configuring PubNub:
     $rootScope.$watch('userName', function(val) {
       if (val === undefined) return;
-      myPubNub = PUBNUB.init({
-        publish_key   : 'pub-c-f4a90e76-f06e-42b8-9594-3756a8bac175',
-        subscribe_key : 'sub-c-daf9c6dc-e063-11e2-ab32-02ee2ddab7fe',
-        uuid          : $rootScope.userName
-      });
+      try {
+        myPubNub = PUBNUB.init({
+          publish_key   : 'pub-c-f4a90e76-f06e-42b8-9594-3756a8bac175',
+          subscribe_key : 'sub-c-daf9c6dc-e063-11e2-ab32-02ee2ddab7fe',
+          uuid          : $rootScope.userName
+        });
+      } catch (ex) {        
+      }
       subscribeToTheLobby();
       subscribeToMyOwnChannel();
     });    
@@ -297,7 +312,6 @@
   app.controller('gameCtrl', function($scope, $rootScope, $timeout, Bus) {
     $scope.gameStarted = false;
     $scope.moveAttempted = false;
-
     $scope.gameInit = function(game) {
       $scope.board = game.getBoard();
       $scope.game = game;
@@ -309,12 +323,10 @@
     }
 
     $scope.move = function(cell) {
-      console.log('Game player: ' + $scope.game.player);
-      console.log('Player current: ' + $scope.game.playerCurrent);
-      if ($scope.game.player != $scope.game.playerCurrent) {
+      if (!$scope.game.gameModeSinglePlayer === "true" || $scope.game.player != $scope.game.playerCurrent) {
         return;
       }
-      var moveAttempt = TicChatToe.move(cell.row, cell.col, $scope.game.player);
+      var moveAttempt = TicChatToe.move(cell.row, cell.col, $scope.game.playerCurrent);
       $scope.moveAttempted = true;
       sendGameMessage('move', moveAttempt);
     };
@@ -330,5 +342,11 @@
       }
       return 'loser';
     };
+
+    $scope.$watch('game.gameOver()', function(val) {
+      if (val === true) {
+        console.log('the game: ' + $scope.game.name + '  is over!');
+      }
+    });    
   });
 })();

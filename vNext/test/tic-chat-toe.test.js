@@ -1,7 +1,7 @@
 'use strict';
 var should = require('should');
-var tct = require('./tic-chat-toe');
-var _ = require('./underscore.min');
+var tct = require('../js/tic-chat-toe');
+var _ = require('../lib/underscore/underscore.min');
 
 var X = 'X';
 var O = 'O';
