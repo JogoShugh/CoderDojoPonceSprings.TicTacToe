@@ -190,6 +190,9 @@
     var gamesActive = [];
     $scope.gamesActive = gamesActive;
 
+    var gamesCompleted = [];
+    $rootScope.gamesCompleted = gamesCompleted;
+
     function gameTabActivate(gameToActivate) {
       angular.forEach($scope.gamesActive, function(game) {
         game.active = false;
@@ -202,6 +205,7 @@
       game.active = false;
       console.log('Game mode: ' + gameModeSinglePlayer.value);
       game.gameModeSinglePlayer = gameModeSinglePlayer.value;
+      game.hostedByMe = true;
       gamesActive.push(game);
       gamesJoined.push(gameName.value);
       gameTabActivate(game);
@@ -230,6 +234,10 @@
         userHosting: $rootScope.userName,
         challengeAccepted: challengeAcceptedResult
       };
+      if (acceptChallengeMessage === true) {
+        var game = gameFindByName(message.message.gameName);
+        game.opponent = message.message.userChallenger;
+      }
       Bus.publish(message.message.userChallenger, 'challengeAcceptAnswer', acceptChallengeMessage);
     };
 
@@ -238,6 +246,7 @@
         var game = gameFindByName(message.message.gameName);
         if (game) {
           $scope.gameJoin(game);
+          game.opponent = game.userHosting;
         }
       }
     };
@@ -344,8 +353,22 @@
     };
 
     $scope.$watch('game.gameOver()', function(val) {
+      console.log('game.gameOver? ' + val);
       if (val === true) {
-        console.log('the game: ' + $scope.game.name + '  is over!');
+        var game = $scope.game;        
+        var winner = game.getWinner().winner;
+        // TODO: maybe move this into the game logic itself?
+        if (game.hostedByMe && winner === TicChatToe.PlayerX
+            ||
+            !game.hostedByMe && winner === TicChatToe.PlayerO
+          ) {
+            game.playerWinner = "You";
+            game.playerLoser = game.opponent;
+        } else {
+          game.playerWinner = game.opponent;
+          game.playerLoser = "you";
+        }
+        $rootScope.gamesCompleted.push(game);
       }
     });    
   });

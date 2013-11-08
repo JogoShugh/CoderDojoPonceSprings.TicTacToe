@@ -18,12 +18,12 @@
             {{who.uuid}}
             <hr />
           </div>
-        </tab>
+        </tab>        
         <tab heading='Open Games'>
           <div ng-repeat='game in gamesOpen'>
             <strong>{{game.name}}</strong> by {{game.userHosting}} <small class='label label-info'>board: {{game.boardSize}}, win: {{game.streakLen}}</small> <a class='btn btn-primary btn-small' ng-click='gameJoinRequest(game)'>Challenge</a>
           </div>
-        </tab>
+        </tab>        
         <tab heading='Create Game'>
           <p ng-repeat="element in gameCreateForm | orderBy:'order'">
             <label>{{element.label}}:</label>
@@ -31,6 +31,11 @@
           </p>
           <a class='btn btn-primary' ng-click='gameCreate()'>Create new game!</a>        
         </tab>
+        <tab heading='Game History'>
+          <div ng-repeat='game in gamesCompleted'>
+            <strong>{{game.name}}:</strong> {{game.playerWinner}} beat {{game.playerLoser}}
+          </div>
+        </tab>        
         <tab
           ng-repeat='game in gamesActive'
           heading='{{game.name}}'
@@ -41,6 +46,7 @@
             ng-init='gameInit(game)'
           >
             <div ng-show='gameStarted'>
+              <div ng-show='!game.gameOver()'>Current player: <strong>{{game.playerCurrent}}</strong></div>
               <div ng-show='game.gameOver()'><strong>Game over!</strong></div>
               <div ng-repeat='row in board'>
                 <span 
