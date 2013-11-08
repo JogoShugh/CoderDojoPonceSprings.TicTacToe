@@ -167,7 +167,6 @@
         invoke($scope, $scope, 'on' + message.message_type, [message]);
       });
       Bus.here_now(lobbyChannel, function(messages) {
-        console.log(messages);
         invoke($scope, $scope, 'onherenow', [messages.uuids]);
       });
     }
@@ -203,7 +202,6 @@
     $scope.gameCreate = function() {
       var game = new TicChatToe(boardSize.value, streakLen.value, gameName.value);
       game.active = false;
-      console.log('Game mode: ' + gameModeSinglePlayer.value);
       game.gameModeSinglePlayer = gameModeSinglePlayer.value;
       game.hostedByMe = true;
       gamesActive.push(game);
@@ -227,7 +225,6 @@
     };
 
     $scope.onjoinRequest = function(message) {
-      console.log("join request");
       var challengeAcceptedResult = confirm(message.message.userChallenger + " wants to play you in game " + message.message.gameName + ". Do you accept?");
       var acceptChallengeMessage = {
         gameName: message.message.gameName,
@@ -237,7 +234,6 @@
       if (challengeAcceptedResult === true) {
         var game = gamesActiveFindByName(message.message.gameName);
         game.opponent = message.message.userChallenger;        
-        console.log('opponent: ' + game.opponent);
       }
       Bus.publish(message.message.userChallenger, 'challengeAcceptAnswer', acceptChallengeMessage);
     };
@@ -259,11 +255,10 @@
       return _.findWhere(gamesActive, {name:gameName});
     };    
 
-    $scope.gameJoin = function(game) {
-      var game = new TicChatToe(game.boardSize, game.streakLen, game.name, TicChatToe.PlayerO);
+    $scope.gameJoin = function(gameCreate) {
+      var game = new TicChatToe(gameCreate.boardSize, gameCreate.streakLen, gameCreate.name, TicChatToe.PlayerO);
       game.active = false;
-      game.opponent = game.userHosting;
-      console.log(game);
+      game.opponent = gameCreate.userHosting;
       gamesActive.push(game);
       gamesJoined.push(game.name);
       gameTabActivate(game);
@@ -317,7 +312,6 @@
     $scope.whoIsOnline = whoIsOnline;
     $scope.onherenow = function(messages) {
       angular.forEach(messages, function(who) {
-        console.log(who);
         $scope.whoIsOnline.push({uuid:who});        
       });
     }
@@ -358,14 +352,10 @@
     };
 
     $scope.$watch('game.gameOver()', function(val) {
-      console.log('game.gameOver? ' + val);
       if (val === true) {
         var game = $scope.game;        
         var winner = game.getWinner().winner;
-        console.log(game);
         // TODO: maybe move this into the game logic itself?
-        console.log('over: opponent: ' + game.opponent);
-        console.log('over:  hostedByMe: ' + game.hostedByMe);
         if (game.hostedByMe && winner === TicChatToe.PlayerX
             ||
             !game.hostedByMe && winner === TicChatToe.PlayerO
@@ -376,7 +366,7 @@
           game.playerWinner = game.opponent;
           game.playerLoser = "you";
         }
-        $rootScope.gamesCompleted.push(game);
+        $rootScope.gamesCompleted.unshift(game);
       }
     });    
   });
