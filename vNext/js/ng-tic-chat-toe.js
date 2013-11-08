@@ -234,9 +234,10 @@
         userHosting: $rootScope.userName,
         challengeAccepted: challengeAcceptedResult
       };
-      if (acceptChallengeMessage === true) {
-        var game = gameFindByName(message.message.gameName);
-        game.opponent = message.message.userChallenger;
+      if (challengeAcceptedResult === true) {
+        var game = gamesActiveFindByName(message.message.gameName);
+        game.opponent = message.message.userChallenger;        
+        console.log('opponent: ' + game.opponent);
       }
       Bus.publish(message.message.userChallenger, 'challengeAcceptAnswer', acceptChallengeMessage);
     };
@@ -246,7 +247,6 @@
         var game = gameFindByName(message.message.gameName);
         if (game) {
           $scope.gameJoin(game);
-          game.opponent = game.userHosting;
         }
       }
     };
@@ -255,9 +255,15 @@
       return _.findWhere(gamesOpen, {name:gameName});
     };
 
+    var gamesActiveFindByName = function(gameName) {
+      return _.findWhere(gamesActive, {name:gameName});
+    };    
+
     $scope.gameJoin = function(game) {
       var game = new TicChatToe(game.boardSize, game.streakLen, game.name, TicChatToe.PlayerO);
       game.active = false;
+      game.opponent = game.userHosting;
+      console.log(game);
       gamesActive.push(game);
       gamesJoined.push(game.name);
       gameTabActivate(game);
@@ -266,7 +272,6 @@
         gameName: game.name,
         userChallenger: $rootScope.userName
       };
-      console.log('join message: ' + joinMessage);
       Bus.publish(game.name, 'join', joinMessage);
     };
 
@@ -357,7 +362,10 @@
       if (val === true) {
         var game = $scope.game;        
         var winner = game.getWinner().winner;
+        console.log(game);
         // TODO: maybe move this into the game logic itself?
+        console.log('over: opponent: ' + game.opponent);
+        console.log('over:  hostedByMe: ' + game.hostedByMe);
         if (game.hostedByMe && winner === TicChatToe.PlayerX
             ||
             !game.hostedByMe && winner === TicChatToe.PlayerO
