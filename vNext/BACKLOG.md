@@ -1,4 +1,3 @@
-# BACKLOG
 
 We use this page to keep track of what we're doing next, what comes after that, and to record when we get things done.
 
@@ -11,11 +10,12 @@ next priorities.
 The **BLUESKY** section is for speculative ideas and awesome ideas. It doesn't mean we're going to specifically do that.
 
 
-## In Progress
+# In Progress
 
 * Create personal head-to-head results scoreboard
 * Create global head-to-head results scoreboard that updates as games finish
 
+# BACKLOG
 
 # Prioritized
 
