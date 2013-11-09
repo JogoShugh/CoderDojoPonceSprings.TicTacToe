@@ -275,6 +275,7 @@
         gameName: game.name,
         userChallenger: $rootScope.userName
       };
+      game.requested = true;
       Bus.publish(game.userHosting, 'joinRequest', joinRequest);
     };
 
@@ -375,6 +376,7 @@
     $scope.ongame_created = function(message) {
       if (!_.findWhere(gamesJoined, {name:message.message.name})) {
         $rootScope.gameEvent('gameOpenAvailable', function() {
+          message.message.requested = false;
           gamesOpen.push(message.message);
         }, $scope);
       }
