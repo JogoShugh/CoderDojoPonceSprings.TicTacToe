@@ -31,8 +31,13 @@
           </p>
           <a class='btn btn-primary' ng-click='gameCreate()'>Create new game!</a>        
         </tab>
-        <tab heading='Game History'>
+        <tab heading='Results'>
           <div ng-repeat='game in gamesCompleted' class='well well-small'>
+            <strong>{{game.name}}:</strong> {{game.playerWinner}} beat {{game.playerLoser}}
+          </div>
+        </tab>
+        <tab heading='Scoreboard'>
+          <div ng-repeat='game in gamesAllCompleted' class='well well-small'>
             <strong>{{game.name}}:</strong> {{game.playerWinner}} beat {{game.playerLoser}}
           </div>
         </tab>        

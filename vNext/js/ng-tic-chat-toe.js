@@ -122,10 +122,10 @@
   */
 
   var myPubNub = null;
+  var lobbyChannel = 'The_Lobby';
 
   app.controller('lobbyCtrl', function($scope, $rootScope, Bus) {
     console.log(Bus);
-    var lobbyChannel = 'The_Lobby';    
 
     var gameName = {
           label: 'Game name',
@@ -191,6 +191,9 @@
 
     var gamesCompleted = [];
     $rootScope.gamesCompleted = gamesCompleted;
+
+    var gamesAllCompleted = [];
+    $rootScope.gamesAllCompleted = gamesAllCompleted;    
 
     function gameTabActivate(gameToActivate) {
       angular.forEach($scope.gamesActive, function(game) {
@@ -314,7 +317,11 @@
       angular.forEach(messages, function(who) {
         $scope.whoIsOnline.push({uuid:who});        
       });
-    }
+    };
+
+    $scope.ongameCompleted = function(message) {
+      $rootScope.gamesAllCompleted.unshift(message.message);
+    };
   });
 
   app.controller('gameCtrl', function($scope, $rootScope, $timeout, Bus) {
@@ -329,6 +336,10 @@
     function sendGameMessage(message_type, data) {
       Bus.publish($scope.game.name, message_type, data);
     }
+
+    function publishToLobby(messageType, data) {
+      Bus.publish(lobbyChannel, messageType, data);
+    }    
 
     $scope.move = function(cell) {
       if (!$scope.game.gameModeSinglePlayer === "true" || $scope.game.player != $scope.game.playerCurrent) {
@@ -356,17 +367,31 @@
         var game = $scope.game;        
         var winner = game.getWinner().winner;
         // TODO: maybe move this into the game logic itself?
+        var playerWinner = '',
+            playerLoser = '';
         if (game.hostedByMe && winner === TicChatToe.PlayerX
             ||
             !game.hostedByMe && winner === TicChatToe.PlayerO
           ) {
             game.playerWinner = "You";
+            playerWinner = $rootScope.userName;
             game.playerLoser = game.opponent;
+            playerLoser = game.opponent;
         } else {
           game.playerWinner = game.opponent;
+          playerWinner = game.opponent;
           game.playerLoser = "you";
+          playerLoser = $rootScope.userName;
         }
         $rootScope.gamesCompleted.unshift(game);
+        // Send a global message to all players
+        if (game.hostedByMe) {
+          publishToLobby('gameCompleted', {
+            name: game.name,
+            playerWinner: playerWinner,
+            playerLoser: playerLoser
+          });
+        }
       }
     });    
   });
