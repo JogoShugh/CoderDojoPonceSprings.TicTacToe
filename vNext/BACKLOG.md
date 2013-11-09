@@ -17,6 +17,8 @@ The **BLUESKY** section is for speculative ideas and awesome ideas. It doesn't m
 
 # Prioritized
 
+###Chatlog and Bugfixes
+
 ## Exercises for CoderDojo Week 1
 
 * Create exercise for showing who is the current player in a game
