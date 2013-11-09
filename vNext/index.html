@@ -2,7 +2,8 @@
 <html>
   <head>
     <link rel='stylesheet' href='css/style.css' />
-    <link rel='stylesheet' href='lib/angular-bootstrap/css/bootstrap-combined.min.css' />    
+    <link rel='stylesheet' href='lib/angular-bootstrap/css/bootstrap-combined.min.css' />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/2.0/animate.min.css">
   </head>
   <body ng-cloak>
     <h1>Tic-Chat-Toe</h1>    
@@ -12,15 +13,19 @@
       <button class='btn btn-primary' ng-click='userIdentifyDialogShow()' ng-show='!userLoggedIn'>Log In or Register</button>
     </p>   
     <div ng-controller='lobbyCtrl' ng-show='userLoggedIn'>
+      <a class='btn btn-inverse btn-small' ng-click='audioEnabled = false' ng-show='audioEnabled'>Turn off sounds</a>
+      <a class='btn btn-inverse btn-small' ng-click='audioEnabled = true' ng-show='!audioEnabled'>Turn on sounds</a>
+      <hr />
       <tabset>
         <tab heading="Who's Online">
-          <div ng-repeat='who in whoIsOnline'>
+          <div class'animate' ng-repeat='who in whoIsOnline'>
             {{who.uuid}}
             <hr />
           </div>
         </tab>        
-        <tab heading='Open Games'>
-          <div ng-repeat='game in gamesOpen'>
+        <tab>
+          <tab-heading><span class='{{gamesOpenClass()}}'>Open Games{{gamesOpenCount()}}</span></tab-heading>
+          <div ng-repeat='game in gamesOpen' class='animate'>
             <strong>{{game.name}}</strong> by {{game.userHosting}} <small class='label label-info'>board: {{game.boardSize}}, win: {{game.streakLen}}</small> <a class='btn btn-primary btn-small' ng-click='gameJoinRequest(game)'>Challenge</a>
           </div>
         </tab>        
@@ -37,7 +42,7 @@
           </div>
         </tab>
         <tab heading='Scoreboard'>
-          <div ng-repeat='game in gamesAllCompleted' class='well well-small'>
+          <div class='animate well well-small' ng-repeat='game in gamesAllCompleted'>
             <strong>{{game.name}}:</strong> {{game.playerWinner}} beat {{game.playerLoser}}
           </div>
         </tab>        
@@ -55,7 +60,7 @@
               <div ng-show='game.gameOver()'><strong>Game over!</strong></div>
               <div ng-repeat='row in board'>
                 <span 
-                  ng-repeat='col in row' class='cell {{getWinnerStatus(col)}}' ng-click='move(col)'>
+                  ng-repeat='col in row' class='animate cell {{getWinnerStatus(col)}}' ng-click='move(col)'>
                   {{col.player}}</span>
               </div>
             </div>
@@ -68,6 +73,7 @@
     <script src='lib/jquery/jquery-1.10.2.min.js'></script>
     <script src='lib/angular/angular.min.js'></script>
     <script src='lib/angular/angular-resource.min.js'></script>
+    <script src='lib/angular/angular-animate.min.js'></script>
     <script src='lib/mongolab/mongoLabResourceFactory.js'></script>    
     <script src='lib/angular-bootstrap/js/ui-bootstrap-tpls-0.5.0.js'></script>
     <script src='lib/learnlocity/learnlocity.identity.coffee' type='text/coffeescript'></script>
@@ -78,7 +84,7 @@
     <script src='lib/coffee/coffee-script.min.js'></script>
     <script type='text/coffeescript'>
 $ ->
-  angular.bootstrap document, ['tic-chat-toe']
+  angular.bootstrap document, ['tic-chat-toe', 'ngAnimate']
     </script>    
   </body>
 </html>

@@ -48,6 +48,9 @@
   TicChatToe.prototype.startNewGame = function() {
     this.initializeNewGame();
   }
+
+  TicChatToe.prototype.onmoveComplete = function() {    
+  }
   
   TicChatToe.prototype.getMaxMovesCount = function() {
     return this.board.length * this.board.length;
@@ -74,7 +77,8 @@
     */
     this.moves.push(move);
     this.board[move.row][move.col].player = move.player;
-    
+    this.onmoveComplete(move);
+
     var winningMoves = TicChatToe.findWinner(this.moves, this.streakLen);
    
     if (winningMoves.length == this.streakLen) {
@@ -83,14 +87,11 @@
     else if (this.moves.length == this.getMaxMovesCount()) {
       this.catsGame = true;    }
     else {
-      console.log('Changing playerCurrent (old): ' + this.playerCurrent);
       this.playerCurrent = playerNextMap[this.playerCurrent];
-      console.log('Changing playerCurrent (new): ' + this.playerCurrent);      
     }
   };
 
   TicChatToe.prototype.onjoin = function(join) {
-    console.log('join: ' + join);
     /*
     if (message.userChallenger == $rootScope.userName) return;
     console.log(message.userChallenger + ' joined');

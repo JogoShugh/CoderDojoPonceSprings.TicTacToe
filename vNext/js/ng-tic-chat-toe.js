@@ -122,10 +122,40 @@
   */
 
   var myPubNub = null;
-  var lobbyChannel = 'The_Lobby';
+  var lobbyChannel = 'The_Lobby'; 
 
   app.controller('lobbyCtrl', function($scope, $rootScope, Bus) {
-    console.log(Bus);
+    $scope.audioEnabled = true;
+
+    function playAudio(audioName, callback, scope) {
+      if ($scope.audioEnabled) {
+        var callbackExecuted = false;
+        try {
+          var audio = document.createElement('audio');        
+          audio.src = '/audio/' + audioName + '.mp3';    
+          audio.addEventListener('ended', function() {
+            if (callback) {
+              scope.$apply(function() {
+                callback();
+                callbackExecuted = true;
+                audio.pause();       
+              });
+            }
+          });
+          audio.play();
+        } catch (ex) {
+          if (callback && !callbackExecuted ) {
+            callback();
+          }
+        }
+      } else {
+        if (callback) {
+          callback();
+        }
+      }
+    }
+
+    $rootScope.gameEvent = playAudio;
 
     var gameName = {
           label: 'Game name',
@@ -184,6 +214,23 @@
     var gamesOpen = [];
     $scope.gamesOpen = gamesOpen;
     
+    $scope.gamesOpenCount = function() {
+      if (gamesOpen.length > 0) {
+        return " (" + gamesOpen.length + ")";
+      } else {
+        return "";
+      }
+    };
+
+    $scope.gamesOpenClass = function() {
+      if (gamesOpen.length > 0) {
+        return "flash";
+      } else {
+        return "";
+      }
+    };    
+
+
     var gamesJoined = [];
     
     var gamesActive = [];
@@ -204,6 +251,10 @@
 
     $scope.gameCreate = function() {
       var game = new TicChatToe(boardSize.value, streakLen.value, gameName.value);
+      game.onmoveComplete = function(move) {
+        var gameEventType = 'playerMove' + move.player;
+        $rootScope.gameEvent(gameEventType);
+      };
       game.active = false;
       game.gameModeSinglePlayer = gameModeSinglePlayer.value;
       game.hostedByMe = true;
@@ -228,25 +279,37 @@
     };
 
     $scope.onjoinRequest = function(message) {
-      var challengeAcceptedResult = confirm(message.message.userChallenger + " wants to play you in game " + message.message.gameName + ". Do you accept?");
-      var acceptChallengeMessage = {
-        gameName: message.message.gameName,
-        userHosting: $rootScope.userName,
-        challengeAccepted: challengeAcceptedResult
-      };
-      if (challengeAcceptedResult === true) {
-        var game = gamesActiveFindByName(message.message.gameName);
-        game.opponent = message.message.userChallenger;        
-      }
-      Bus.publish(message.message.userChallenger, 'challengeAcceptAnswer', acceptChallengeMessage);
+      $rootScope.gameEvent('challengeIncoming', function() {
+        var challengeAcceptedResult = confirm(message.message.userChallenger + " wants to play you in game " + message.message.gameName + ". Do you accept?");
+        var acceptChallengeMessage = {
+          gameName: message.message.gameName,
+          userHosting: $rootScope.userName,
+          challengeAccepted: challengeAcceptedResult
+        };
+        if (challengeAcceptedResult === true) {
+          var game = gamesActiveFindByName(message.message.gameName);
+          game.opponent = message.message.userChallenger;        
+        }
+        Bus.publish(message.message.userChallenger, 'challengeAcceptAnswer', acceptChallengeMessage);
+        if (challengeAcceptedResult === true) {
+          publishToLobby('gameStarted', {
+            name: message.message.gameName,
+            userHosting: $rootScope.gameName,
+            opponent: message.message.userChallenger
+          });
+        }
+      }, $scope);
     };
 
     $scope.onchallengeAcceptAnswer = function(message) {
       if (message.message.challengeAccepted) {
+        $rootScope.gameEvent('challengeAccepted');
         var game = gameFindByName(message.message.gameName);
         if (game) {
           $scope.gameJoin(game);
         }
+      } else {
+        $rootScope.gameEvent('challengeDeclined');
       }
     };
 
@@ -260,6 +323,10 @@
 
     $scope.gameJoin = function(gameCreate) {
       var game = new TicChatToe(gameCreate.boardSize, gameCreate.streakLen, gameCreate.name, TicChatToe.PlayerO);
+      game.onmoveComplete = function(move) {
+        var gameEventType = 'playerMove' + move.player;
+        $rootScope.gameEvent(gameEventType);
+      };      
       game.active = false;
       game.opponent = gameCreate.userHosting;
       gamesActive.push(game);
@@ -307,7 +374,9 @@
     // Handlers:
     $scope.ongame_created = function(message) {
       if (!_.findWhere(gamesJoined, {name:message.message.name})) {
-        gamesOpen.push(message.message);
+        $rootScope.gameEvent('gameOpenAvailable', function() {
+          gamesOpen.push(message.message);
+        }, $scope);
       }
     };
 
@@ -319,8 +388,19 @@
       });
     };
 
+    $scope.ongameStarted = function(message) {
+      var game = gameFindByName(message.message.name);
+      for(var i = 0; i < gamesOpen.length; i++) {
+        if (gamesOpen[i] === game) {
+          gamesOpen.splice(i);
+        }
+      }
+    };
+
     $scope.ongameCompleted = function(message) {
-      $rootScope.gamesAllCompleted.unshift(message.message);
+      $rootScope.gameEvent('gameAllComplete', function() {
+        $rootScope.gamesAllCompleted.unshift(message.message);
+      }, $scope);
     };
   });
 
@@ -355,7 +435,6 @@
       if (!$scope.game.gameOver()) return '';
       if ($scope.game.winningMoves.length > 0) {
         var item = _.findWhere($scope.game.winningMoves, {row:move.row, col:move.col});
-        console.dir(item);
         var found = item != null && item != undefined;
         if (found) return 'winner';
       }
@@ -377,11 +456,13 @@
             playerWinner = $rootScope.userName;
             game.playerLoser = game.opponent;
             playerLoser = game.opponent;
+            $rootScope.gameEvent('gameWon');
         } else {
           game.playerWinner = game.opponent;
           playerWinner = game.opponent;
           game.playerLoser = "you";
           playerLoser = $rootScope.userName;
+          $rootScope.gameEvent('gameLost');
         }
         $rootScope.gamesCompleted.unshift(game);
         // Send a global message to all players
