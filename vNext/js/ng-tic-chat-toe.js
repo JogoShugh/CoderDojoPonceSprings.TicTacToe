@@ -132,7 +132,7 @@
         var callbackExecuted = false;
         try {
           var audio = document.createElement('audio');        
-          audio.src = '/audio/' + audioName + '.mp3';    
+          audio.src = 'audio/' + audioName + '.mp3';    
           audio.addEventListener('ended', function() {
             if (callback) {
               scope.$apply(function() {
