@@ -1,4 +1,3 @@
-
 We use this page to keep track of what we're doing next, what comes after that, and to record when we get things done.
 
 1. We are working on things under **In Progress**. When we finish them, we move them to the very bottom of the page under the **DONE** heading and prefix them with a date and a comma.
@@ -12,7 +11,6 @@ The **BLUESKY** section is for speculative ideas and awesome ideas. It doesn't m
 
 # In Progress
 
-* Create personal head-to-head results scoreboard
 * Create global head-to-head results scoreboard that updates as games finish
 
 # BACKLOG
@@ -60,6 +58,7 @@ player's screen
 
 # DONE
 
+* 2013.11.08, Create personal head-to-head results scoreboard
 * 2013.11.07, Showing who is the current player in a game
 * 2013.11.06, Clean up vNext folder to remove unused files
 * 2013.11.06, Clean up lib folder to remove unused library files
