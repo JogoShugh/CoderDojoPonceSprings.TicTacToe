@@ -14,14 +14,14 @@ To contribute, you first to set up your local development environment.
 
 If you're running windows, do this:
 
-* Open a Windows Command prompt by As Administrator 
-* Create a directory for this project by typing `md C:\Projects` and hitting `Enter`
-* Type `cd C:\Projects` and hit `Enter`
-* Now type `dev_setup\win\01_install_chocolatey.bat` to install the Chocolatey package manager for Windows
+* Open a Windows Command prompt **As Administrator**.
+* Create a directory for this project by typing `md C:\Projects` and hitting `Enter`.
+* Type `cd C:\Projects` and hit `Enter`.
+* Now type `dev_setup\win\01_install_chocolatey.bat` to install the Chocolatey package manager for Windows.
 * After Chocolatey installs, you have to start a **brand new** Windows Command prompt and then type `cd C:\Projects` to get back into the directory you just created. This is because Chocolatey is now in your system PATH, so you can easily run it.
-* Now type `dev_setp\win\02_install_dev_tols.bat` to install Git and Node.js -- two tools needed to work on this project
+* Now type `dev_setp\win\02_install_dev_tols.bat` to install Git and Node.js -- two tools needed to work on this project.
 * Now, from your Windows Start Menu, look for `Git Bash` and run it. This is a different kind of command prompt that is more powerful and more standard than the Windows Command prompt.
-* Navigate to the Projects directory by typing `cd /c/Projects`
+* Navigate to the Projects directory by typing `cd /c/Projects`.
 
 ## Mac
 
@@ -36,8 +36,8 @@ TODO: See Mac above.
 Once you have your operating-system specific setup completed, the steps become essentially the same.
 
 * Assuming you are in the `Projects` directory, then:
-* Type `git clone https://github.com/JogoShugh/CoderDojoPonceSprings.TicTacToe.git` 
-  * This clones, or copies, the source code from GitHub.com into a directory called `CoderDojoPonceSprings.TicTacToe`
+* Type `git clone https://github.com/JogoShugh/CoderDojoPonceSprings.TicTacToe.git`.
+  * This clones, or copies, the source code from GitHub.com into a directory called `CoderDojoPonceSprings.TicTacToe`.
 * Once the code is clonsed, start typing `cd Coder` but then hit the `Tab` key on your keyboard. This should automatically complete the directory name for you. Then just hit enter!
 * Now, for the fun stuff.
 * Type `cd vNext` to get into the directory where the game code is.
@@ -56,7 +56,7 @@ npm i -g mocha
 
 The `cat` command simply [catenates](http://www.merriam-webster.com/dictionary/catenate) the lines from the file name you give it out to the screen so you can see what's inside the file. That's all.
 
-* Now we're going to execute the same file to run the commands inside of it. Type `./01_install_globals.sh`
+* Type `./01_install_globals.sh` now to execute the same file to run the commands inside of it.
 
 If this works, you should start to see output like this:
 
