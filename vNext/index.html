@@ -26,7 +26,7 @@
         <tab>
           <tab-heading><span class='{{gamesOpenClass()}}'>Open Games{{gamesOpenCount()}}</span></tab-heading>
           <div ng-repeat='game in gamesOpen' class='animate'>
-            <strong>{{game.name}}</strong> by {{game.userHosting}} <small class='label label-info'>board: {{game.boardSize}}, win: {{game.streakLen}}</small> <a class='btn btn-primary btn-small' ng-click='gameJoinRequest(game)'>Challenge</a>
+            <strong>{{game.name}}</strong> by {{game.userHosting}} <small class='label label-info'>board: {{game.boardSize}}, win: {{game.streakLen}}</small> <a class='btn btn-primary btn-small' ng-click='gameJoinRequest(game)' ng-disabled='game.requested'>Challenge</a>
           </div>
         </tab>        
         <tab heading='Create Game'>
@@ -51,6 +51,7 @@
           heading='{{game.name}}'
           active='game.active'
         >
+          <tab-heading>{{game.name}}<strong ng-show='game.gameOver()' ng-click='gameClose(game)'>&nbsp;X</strong></tab-heading>
           <div
             ng-controller='gameCtrl'
             ng-init='gameInit(game)'
