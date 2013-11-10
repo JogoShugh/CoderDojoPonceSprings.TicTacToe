@@ -11,7 +11,8 @@ The **BLUESKY** section is for speculative ideas and awesome ideas. It doesn't m
 
 # In Progress
 
-* Create global head-to-head results scoreboard that updates as games finish
+* Invite another player to play a game privately, without the game showing up in "Open Games" where other people can 
+hijack the game before your opponent can join.
 
 # BACKLOG
 
@@ -60,6 +61,10 @@ player's screen
 
 # DONE
 
+* 2013.11.10, Send chat messages privately to your opponent during an active game
+* 2013.11.10, Send chat messages to all on-line members in the lobby tab
+* 2013.11.10, Close a completed game by clicking an X on the tab heading
+* 2013.11.08, See game results from your own and other games on a global scoreboard right after the games finish
 * 2013.11.08, Create personal head-to-head results scoreboard
 * 2013.11.07, Showing who is the current player in a game
 * 2013.11.06, Clean up vNext folder to remove unused files
