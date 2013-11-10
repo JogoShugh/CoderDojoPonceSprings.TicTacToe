@@ -278,12 +278,14 @@
     };
 
     $scope.gameJoinRequest = function(game) {
-      var joinRequest = {
-        gameName: game.name,
-        userChallenger: $rootScope.userName
-      };
-      game.requested = true;
-      Bus.publish(game.userHosting, 'joinRequest', joinRequest);
+      if (!game.requested) {
+        var joinRequest = {
+          gameName: game.name,
+          userChallenger: $rootScope.userName
+        };
+        game.requested = true;
+        Bus.publish(game.userHosting, 'joinRequest', joinRequest);
+      }
     };
 
     $scope.onjoinRequest = function(message) {
