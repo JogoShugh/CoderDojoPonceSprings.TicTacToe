@@ -20,6 +20,8 @@ hijack the game before your opponent can join.
 
 ###Chatlog and Bugfixes
 
+Alex: I immplemented some basic Lobby Chat ang Game-Level Chat. Really super-basic right now. Maybe you could spice it up?
+
 ## Exercises for CoderDojo Week 1
 
 * Create exercise for showing who is the current player in a game
