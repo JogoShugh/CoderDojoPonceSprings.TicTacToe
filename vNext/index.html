@@ -51,6 +51,7 @@
           heading='{{game.name}}'
           active='game.active'
         >
+          <tab-heading>{{game.name}}<strong ng-show='game.gameOver()' ng-click='gameClose(game)'>&nbsp;X</strong></tab-heading>
           <div
             ng-controller='gameCtrl'
             ng-init='gameInit(game)'

@@ -404,6 +404,14 @@
         $rootScope.gamesAllCompleted.unshift(message.message);
       }, $scope);
     };
+
+    $scope.gameClose = function(game) {
+      for(var i = 0; i < gamesActive.length; i++) {
+        if (gamesActive[i] === game) {
+          gamesActive.splice(i);
+        }
+      }
+    };
   });
 
   app.controller('gameCtrl', function($scope, $rootScope, $timeout, Bus) {
