@@ -56,7 +56,7 @@ npm i -g mocha
 
 The `cat` command simply [catenates](http://www.merriam-webster.com/dictionary/catenate) the lines from the file name you give it out to the screen so you can see what's inside the file. That's all.
 
-* Type `./01_install_globals.sh` now to execute the same file to run the commands inside of it.
+* Type `./01_install_globals.sh` now to **execute** the same file to run the commands inside of it.
 
 If this works, you should start to see output like this:
 
