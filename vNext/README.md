@@ -89,3 +89,7 @@ $ Listening on port 3030 with root:
 If you got that, now try to browse to link: [http://localhost:3030/index.html](http://localhost:3030/index.html)
 
 If it comes up, then **congratulations** you are now hosting your own game server and you can play against others!
+
+# Getting help
+
+If the installation didn't work, please submit an Issue in our GitHub issues and included the steps to reproduce any errors you saw, and also copy and paste any error messages into the issue.
