@@ -56,8 +56,6 @@
               subscriber(message.message);
             });
           }
-        },
-        here_now: function(channel, callback) {      
         }        
       };
     }
@@ -80,12 +78,6 @@
             }
           };
           myPubNub.publish(message);
-        },
-        here_now: function(channel, callback) {
-          myPubNub.here_now({
-            channel: channel,
-            callback: callback
-          });
         },
         history: function(channel, callback) {
           myPubNub.history({
@@ -192,15 +184,6 @@
       gameModeSinglePlayer
     ];
 
-    function subscribeToTheLobby() {
-      Bus.subscribe(lobbyChannel, function(message) {
-        invoke($scope, $scope, 'on' + message.message_type, [message]);
-      });
-      Bus.here_now(lobbyChannel, function(messages) {
-        invoke($scope, $scope, 'onherenow', [messages.uuids]);
-      });
-    }
-
     function subscribeToMyOwnChannel() {
       Bus.subscribe($rootScope.userName, function(message) {
         invoke($scope, $scope, 'on' + message.message_type, [message]);
@@ -210,6 +193,30 @@
     function publishToLobby(messageType, data) {
       Bus.publish(lobbyChannel, messageType, data);
     }
+
+    function subscribeToTheLobby() {
+      Bus.subscribe(lobbyChannel, function(message) {
+        console.log(message);
+        invoke($scope, $scope, 'on' + message.message_type, [message]);
+      });
+    }
+
+    var lobbyChatMessages = [];
+    $scope.lobbyChatMessages = lobbyChatMessages;
+
+    $scope.lobbyChatMessageInput = {value: ''};
+
+    $scope.lobbyChatMessageSend = function() {
+      publishToLobby('lobbyChatMessage', {
+        uuid: $rootScope.userName,
+        message: $scope.lobbyChatMessageInput.value
+      });      
+      $scope.lobbyChatMessageInput.value = '';
+    };    
+
+    $scope.onlobbyChatMessage = function(message) {
+      lobbyChatMessages.unshift(message.message);
+    };
 
     var gamesOpen = [];
     $scope.gamesOpen = gamesOpen;
@@ -370,6 +377,10 @@
       }
       subscribeToTheLobby();
       subscribeToMyOwnChannel();
+      publishToLobby('lobbyChatMessage', {
+        uuid: 'Tic-Chat-Toe',
+        message: $rootScope.userName + ' joined the lobby chat'
+      });      
     });    
 
     // Handlers:

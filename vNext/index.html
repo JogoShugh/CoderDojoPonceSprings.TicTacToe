@@ -17,10 +17,13 @@
       <a class='btn btn-inverse btn-small' ng-click='audioEnabled = true' ng-show='!audioEnabled'>Turn on sounds</a>
       <hr />
       <tabset>
-        <tab heading="Who's Online">
-          <div class'animate' ng-repeat='who in whoIsOnline'>
-            {{who.uuid}}
-            <hr />
+        <tab heading="Lobby Chat">
+          <div class="input-append">
+            <input class="span8" ng-model='lobbyChatMessageInput.value' type='text'>
+            <button class="btn" type="button" ng-click='lobbyChatMessageSend()'>Send</button>
+          </div>          
+          <div class'animate well well-small' ng-repeat='message in lobbyChatMessages'>
+            <strong>{{message.uuid}}</strong>: {{message.message}}
           </div>
         </tab>        
         <tab>
@@ -36,7 +39,7 @@
           </p>
           <a class='btn btn-primary' ng-click='gameCreate()'>Create new game!</a>        
         </tab>
-        <tab heading='Results'>
+        <tab heading='History'>
           <div ng-repeat='game in gamesCompleted' class='well well-small'>
             <strong>{{game.name}}:</strong> {{game.playerWinner}} beat {{game.playerLoser}}
           </div>
