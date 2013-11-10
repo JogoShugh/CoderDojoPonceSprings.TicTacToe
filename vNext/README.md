@@ -8,7 +8,7 @@ Just be warned that it's always changing and is likely to have bugs :) We welcom
 
 # Contributing 
 
-To contribute, you first to set up your local development environment. 
+To contribute, you first need to set up your local development environment. 
 
 ## Windows
 
