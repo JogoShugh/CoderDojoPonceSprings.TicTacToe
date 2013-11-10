@@ -3,7 +3,7 @@
   <head>
     <link rel='stylesheet' href='css/style.css' />
     <link rel='stylesheet' href='lib/angular-bootstrap/css/bootstrap-combined.min.css' />
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/2.0/animate.min.css">
+    <link rel='stylesheet' href='//cdnjs.cloudflare.com/ajax/libs/animate.css/2.0/animate.min.css'>
   </head>
   <body ng-cloak>
     <h1>Tic-Chat-Toe</h1>    
@@ -17,10 +17,10 @@
       <a class='btn btn-inverse btn-small' ng-click='audioEnabled = true' ng-show='!audioEnabled'>Turn on sounds</a>
       <hr />
       <tabset>
-        <tab heading="Lobby Chat">
-          <div class="input-append">
-            <input class="span8" ng-model='lobbyChatMessageInput.value' type='text'>
-            <button class="btn" type="button" ng-click='lobbyChatMessageSend()'>Send</button>
+        <tab heading='Lobby Chat'>
+          <div class='input-append'>
+            <input class='span8' ng-model='lobbyChatMessageInput.value' type='text'>
+            <button class='btn' type='button' ng-click='lobbyChatMessageSend()'>Send</button>
           </div>          
           <div class'animate well well-small' ng-repeat='message in lobbyChatMessages'>
             <strong>{{message.uuid}}</strong>: {{message.message}}
@@ -58,8 +58,9 @@
           <div
             ng-controller='gameCtrl'
             ng-init='gameInit(game)'
+            class='container-fluid'
           >
-            <div ng-show='gameStarted'>
+            <div ng-show='gameStarted' class='span4'>
               <div ng-show='!game.gameOver()'>Current player: <strong>{{game.playerCurrent}}</strong></div>
               <div ng-show='game.gameOver()'><strong>Game over!</strong></div>
               <div ng-repeat='row in board'>
@@ -67,6 +68,15 @@
                   ng-repeat='col in row' class='animate cell {{getWinnerStatus(col)}}' ng-click='move(col)'>
                   {{col.player}}</span>
               </div>
+            </div>
+            <div class='span8'>
+              <div class='input-append'>
+                <input class='span8' ng-model='gameChatMessageInput.value' type='text'>
+                <button class='btn' type='button' ng-click='gameChatMessageSend()'>Send</button>
+              </div>          
+              <div class'animate well well-small' ng-repeat='message in gameChatMessages'>
+                <strong>{{message.uuid}}</strong>: {{message.message}}
+              </div>              
             </div>
           </div>
         </div>      

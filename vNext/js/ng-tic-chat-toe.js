@@ -432,6 +432,7 @@
       $scope.board = game.getBoard();
       $scope.game = game;
       $scope.gameStarted = true;
+      gameChatInit(game);
     };
 
     function sendGameMessage(message_type, data) {
@@ -495,6 +496,25 @@
           });
         }
       }
-    });    
+    });
+
+    function gameChatInit(game) {
+      var gameChatMessages = [];
+      $scope.gameChatMessages = gameChatMessages;
+
+      $scope.gameChatMessageInput = {value: ''};
+
+      $scope.gameChatMessageSend = function() {
+        sendGameMessage('gameChatMessage', {
+          uuid: $rootScope.userName,
+          message: $scope.gameChatMessageInput.value
+        });      
+        $scope.gameChatMessageInput.value = '';
+      };    
+
+      game.ongameChatMessage = function(message) {
+        gameChatMessages.unshift(message);
+      };
+    }
   });
 })();
