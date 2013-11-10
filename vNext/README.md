@@ -31,7 +31,7 @@ TODO: We'd love help if someone can document how to get started on Mac.
 
 TODO: See Mac above.
 
-## All
+## After OS-specific steps above
 
 Once you have your operating-system specific setup completed, the steps become essentially the same.
 
