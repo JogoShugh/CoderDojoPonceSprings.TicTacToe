@@ -92,4 +92,4 @@ If it comes up, then **congratulations** you are now hosting your own game serve
 
 # Getting help
 
-If the installation didn't work, please submit an Issue in our GitHub issues and included the steps to reproduce any errors you saw, and also copy and paste any error messages into the issue.
+If the installation didn't work, please submit an Issue in our GitHub issues and include the steps to reproduce any errors you saw, and also copy and paste any error messages into the issue.
