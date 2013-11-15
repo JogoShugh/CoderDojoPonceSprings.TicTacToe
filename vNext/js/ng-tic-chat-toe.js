@@ -1,130 +1,83 @@
 (function() {
   'use strict';
-  function invoke(scope, obj, functionName, args) {
-    var handler = obj[functionName];
-    if (handler && typeof handler == 'function') {
-      var phase = scope.$root.$$phase;
-      if(phase == '$apply' || phase == '$digest') {
-        handler.apply(obj, args);
-      }
-      else {
-        scope.$apply(function() {
-          handler.apply(obj, args);
-        });          
-      }
-    }
-  }  
+  var AUDIO_BASE_URL = "http://jogoshugh.github.io/CoderDojoPonceSprings.TicTacToe/vNext/audio/";
         
-  var app = angular.module('tic-chat-toe', ['ui.bootstrap', 'learnlocity.identity']);
+  var app = angular.module('tic-chat-toe', ['ui.bootstrap', 'ngAnimate', 'message-bus', 'learnlocity.identity']);
 
-  app.provider('Bus', function() {
-    this._busType = 'Bus';
+  var lobbyChannelName = 'LobbyChannel'; // A channel for global messages that all members see
 
-    this.useBusInMemory = function(busType) {
-      this._busType = 'BusInMemory';
-    };
-
-    function createBusInMemory() {
-      var channels = [];
-      function channelFind(name) {
-        return _.findWhere(channels, {name: name});
-      }
-      return {
-        subscribe: function(channel, callback) {
-          var subscription = {
-            channel: channel,
-            callback: callback
-          };
-          var channel = channelFind(subscription.channel);
-          if (!channel) {
-            channel = { name: subscription.channel, subscribers:[] }
-            channels.push(channel);
-          }
-          channel.subscribers.push(subscription.callback);
-        },
-        publish: function(channel, messageType, data) {
-          var message = {
-            channel: channel,
-            message: {
-              message_type: messageType,
-              message: data
-            }
-          };        
-          var channel = channelFind(message.channel);
-          if (channel) {
-            _.each(channel.subscribers, function(subscriber) {
-              subscriber(message.message);
-            });
-          }
-        }        
-      };
-    }
-
-    function createBus() {
-      return {
-        subscribe: function(channel, callback) {
-          var subscription = {
-            channel: channel,
-            callback: callback
-          };
-          myPubNub.subscribe(subscription);
-        },
-        publish: function(channel, messageType, data) {
-          var message = {
-            channel: channel,
-            message: {
-              message_type: messageType,
-              message: data
-            }
-          };
-          myPubNub.publish(message);
-        },
-        history: function(channel, callback) {
-          myPubNub.history({
-            channel: channel,
-            limit: 100,
-            callback: callback
-          });
-        }
-      };
-    }
-
-    this.$get = function() {
-      if (this._busType == 'BusInMemory') {
-        return createBusInMemory();
-      } else {
-        return createBus();
-      }
-    };
-  });
-
-  /*
-  app.service('BusInMemory', 
-  });
-  */
-  /*
-  app.service('Bus',
-  });
-  */
-
-  /*
-  app.config(function(BusProvider){
-    BusProvider.useBusInMemory();
-  });
-  */
-
-  var myPubNub = null;
-  var lobbyChannel = 'The_Lobby'; 
-
-  app.controller('lobbyCtrl', function($scope, $rootScope, Bus) {
+  app.controller('lobbyController', function($scope, $rootScope, Bus) {
     $scope.audioEnabled = true;
 
+    $rootScope.gameEvent = playAudio;
+
+    var gameName = {
+      label: 'Game name',
+      type: 'text',
+      required: 'true',
+      value: '',
+      order: 0,
+      min: 3,
+      max: 100     
+    },
+    boardSize = {
+      label: 'How many rows and columns',
+      type: 'number',
+      required: 'true',
+      value: 3,
+      order: 1,
+      min: 3,
+      max: 20
+    },
+    streakLen = {
+      label: 'Winning streak length',
+      type: 'number',
+      required: 'true',
+      value: 3,
+      order: 2,
+      min: 3,
+      max: 20
+    },
+    gameModeSinglePlayer = {
+      label: 'Single player practice game?',
+      type: 'checkbox',
+      required: 'false',
+      value: false,
+      order: 3,
+      min: 3,
+      max: 20      
+    };
+    $scope.gameName = gameName;
+    $scope.gameCreateForm = [
+      gameName,
+      boardSize,
+      streakLen,
+      gameModeSinglePlayer
+    ];
+
+    function subscribeToMyOwnChannel() {
+      Bus.subscribe($rootScope.userName, function(message) {
+        invoke($scope, $scope, 'on' + message.message_type, [message]);
+      });
+    }
+
+    function publishToLobby(messageType, data) {
+      Bus.publish(lobbyChannelName, messageType, data);
+    }
+
+    function subscribeToTheLobby() {
+      Bus.subscribe(lobbyChannelName, function(message) {
+        console.log(message);
+        invoke($scope, $scope, 'on' + message.message_type, [message]);
+      });
+    }
+    
     function playAudio(audioName, callback, scope) {
       if ($scope.audioEnabled) {
         var callbackExecuted = false;
         try {
           var audio = document.createElement('audio');        
-          audio.src = 'audio/' + audioName + '.mp3';    
+          audio.src = AUDIO_BASE_URL + audioName + '.mp3';    
           audio.addEventListener('ended', function() {
             if (callback) {
               scope.$apply(function() {
@@ -145,61 +98,7 @@
           callback();
         }
       }
-    }
-
-    $rootScope.gameEvent = playAudio;
-
-    var gameName = {
-          label: 'Game name',
-          type: 'text',
-          required: 'true',
-          value: '',
-          order: 0
-        },
-        boardSize = {
-          label: 'How many rows and columns',
-          type: 'number',
-          required: 'true',
-          value: 3,
-          order: 1
-        },
-        streakLen = {
-          label: 'Winning streak length',
-          type: 'number',
-          required: 'true',
-          value: 3,
-          order: 2
-        },
-        gameModeSinglePlayer = {
-          label: 'Single player game?',
-          type: 'test',
-          value: false,
-          order: 3
-        }
-    $scope.gameName = gameName;
-    $scope.gameCreateForm = [
-      gameName,
-      boardSize,
-      streakLen,
-      gameModeSinglePlayer
-    ];
-
-    function subscribeToMyOwnChannel() {
-      Bus.subscribe($rootScope.userName, function(message) {
-        invoke($scope, $scope, 'on' + message.message_type, [message]);
-      });
-    }
-
-    function publishToLobby(messageType, data) {
-      Bus.publish(lobbyChannel, messageType, data);
-    }
-
-    function subscribeToTheLobby() {
-      Bus.subscribe(lobbyChannel, function(message) {
-        console.log(message);
-        invoke($scope, $scope, 'on' + message.message_type, [message]);
-      });
-    }
+    }    
 
     var lobbyChatMessages = [];
     $scope.lobbyChatMessages = lobbyChatMessages;
@@ -214,8 +113,23 @@
       $scope.lobbyChatMessageInput.value = '';
     };    
 
+    var lobbyChatMessageUnseenCount = 0;
+    
     $scope.onlobbyChatMessage = function(message) {
       lobbyChatMessages.unshift(message.message);
+      lobbyChatMessageUnseenCount++;
+    };
+    
+    $scope.lobbyChatMessagesNewCount = function(tab) {
+      // TODO this is now working right:
+      //if (lobbyChatMessageUnseenCount > 0) {
+      //  return "&nbsp;(" + lobbyChatMessageUnseenCount + ")";
+      //}
+      return "";
+    };
+    
+    $scope.lobbyChatMessagesSeen = function() {
+      lobbyChatMessageUnseenCount = 0;
     };
 
     var gamesOpen = [];
@@ -235,8 +149,7 @@
       } else {
         return "";
       }
-    };    
-
+    };
 
     var gamesJoined = [];
     
@@ -263,18 +176,23 @@
         $rootScope.gameEvent(gameEventType);
       };
       game.active = false;
+      console.log('gameModeSinglePlayer:');
+      console.log(gameModeSinglePlayer.value);
       game.gameModeSinglePlayer = gameModeSinglePlayer.value;
       game.hostedByMe = true;
       gamesActive.push(game);
       gamesJoined.push(gameName.value);
       gameTabActivate(game);
       $rootScope.gameCreateChannel(gameName.value, game);
-      publishToLobby('game_created', {
-        name: gameName.value,
-        boardSize: boardSize.value,
-        streakLen: streakLen.value,
-        userHosting: $rootScope.userName
-      });
+      if (!game.gameModeSinglePlayer) {
+        publishToLobby('game_created', {
+          name: gameName.value,
+          boardSize: boardSize.value,
+          streakLen: streakLen.value,
+          userHosting: $rootScope.userName
+        });
+      }
+      gameName.value = '';
     };
 
     $scope.gameJoinRequest = function(game) {
@@ -319,7 +237,12 @@
           $scope.gameJoin(game);
         }
       } else {
-        $rootScope.gameEvent('challengeDeclined');
+        $rootScope.gameEvent('challengeDeclined', function() {
+          var game = gameFindByName(message.message.gameName);
+          if (game) {
+            game.challengeDeclined = true;
+          }
+        }, $rootScope);
       }
     };
 
@@ -370,7 +293,7 @@
     $rootScope.$watch('userName', function(val) {
       if (val === undefined) return;
       try {
-        myPubNub = PUBNUB.init({
+        TicChatToeBus = PUBNUB.init({
           publish_key   : 'pub-c-f4a90e76-f06e-42b8-9594-3756a8bac175',
           subscribe_key : 'sub-c-daf9c6dc-e063-11e2-ab32-02ee2ddab7fe',
           uuid          : $rootScope.userName
@@ -395,19 +318,11 @@
       }
     };
 
-    var whoIsOnline = [];
-    $scope.whoIsOnline = whoIsOnline;
-    $scope.onherenow = function(messages) {
-      angular.forEach(messages, function(who) {
-        $scope.whoIsOnline.push({uuid:who});        
-      });
-    };
-
     $scope.ongameStarted = function(message) {
       var game = gameFindByName(message.message.name);
       for(var i = 0; i < gamesOpen.length; i++) {
         if (gamesOpen[i] === game) {
-          gamesOpen.splice(i);
+          gamesOpen.splice(i,1);
         }
       }
     };
@@ -421,13 +336,13 @@
     $scope.gameClose = function(game) {
       for(var i = 0; i < gamesActive.length; i++) {
         if (gamesActive[i] === game) {
-          gamesActive.splice(i);
+          gamesActive.splice(i,1);
         }
       }
     };
   });
 
-  app.controller('gameCtrl', function($scope, $rootScope, $timeout, Bus) {
+  app.controller('gameController', function($scope, $rootScope, $timeout, Bus) {
     $scope.gameStarted = false;
     $scope.moveAttempted = false;
     $scope.gameInit = function(game) {
@@ -442,11 +357,11 @@
     }
 
     function publishToLobby(messageType, data) {
-      Bus.publish(lobbyChannel, messageType, data);
+      Bus.publish(lobbyChannelName, messageType, data);
     }    
 
     $scope.move = function(cell) {
-      if (!$scope.game.gameModeSinglePlayer === "true" || $scope.game.player != $scope.game.playerCurrent) {
+      if ($scope.game.gameModeSinglePlayer !== true && $scope.game.player != $scope.game.playerCurrent) {
         return;
       }
       var moveAttempt = TicChatToe.move(cell.row, cell.col, $scope.game.playerCurrent);
@@ -467,7 +382,11 @@
 
     $scope.$watch('game.gameOver()', function(val) {
       if (val === true) {
-        var game = $scope.game;        
+        var game = $scope.game;
+        if (game.gameModeSinglePlayer) {
+          $rootScope.gameEvent('gameWon');
+          return;
+        }
         var winner = game.getWinner().winner;
         // TODO: maybe move this into the game logic itself?
         var playerWinner = '',
