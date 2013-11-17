@@ -11,12 +11,15 @@ The **BLUESKY** section is for speculative ideas and awesome ideas. It doesn't m
 
 # In Progress
 
-* Invite another player to play a game privately, without the game showing up in "Open Games" where other people can 
-hijack the game before your opponent can join.
+* Show required winning streak length in an active game.
 
 # BACKLOG
 
 # Prioritized
+
+* Expire open game invite after 60 seconds.
+* Invite another player to play a game privately, without the game showing up in "Open Games" where other people can 
+hijack the game before your opponent can join.
 
 ###Chatlog and Bugfixes
 
