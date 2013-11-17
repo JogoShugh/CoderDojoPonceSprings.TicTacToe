@@ -82,7 +82,8 @@
             class='container-fluid'
           >
             <div ng-show='gameStarted'>
-              <div ng-show='!game.gameOver()'>Current player: <strong>{{game.playerCurrent}}</strong></div>
+              <div ng-show='!game.gameOver()'><p>Current player: <span class="label label-inverse">{{game.playerCurrent}}</span> Moves to win: <span class="label label-inverse">{{game.streakLen}}</span></p></div>
+              
               <div ng-show='game.gameOver()'><strong>Game over!</strong></div>
               <div ng-repeat='row in board'>
                 <span 
