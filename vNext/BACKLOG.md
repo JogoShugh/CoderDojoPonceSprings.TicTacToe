@@ -11,7 +11,8 @@ The **BLUESKY** section is for speculative ideas and awesome ideas. It doesn't m
 
 # In Progress
 
-* Show required winning streak length in an active game: #7
+* [Show required winning streak length in an active game](https://github.com/JogoShugh/CoderDojoPonceSprings.TicTacToe/issues/7)
+
 # BACKLOG
 
 # Prioritized
