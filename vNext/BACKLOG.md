@@ -11,8 +11,7 @@ The **BLUESKY** section is for speculative ideas and awesome ideas. It doesn't m
 
 # In Progress
 
-* Show required winning streak length in an active game. @dsaldric and @doomsday87
-
+* Show required winning streak length in an active game: #7
 # BACKLOG
 
 # Prioritized
