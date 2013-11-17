@@ -21,7 +21,8 @@ The **BLUESKY** section is for speculative ideas and awesome ideas. It doesn't m
 * Expire open game invite after 60 seconds.
 * Invite another player to play a game privately, without the game showing up in "Open Games" where other people can 
 hijack the game before your opponent can join.
-
+* Prevent a streak-length from being larger than the board size. This relates to issue 4, [Create game form validation](https://github.com/JogoShugh/CoderDojoPonceSprings.TicTacToe/issues/4)
+* 
 ###Chatlog and Bugfixes
 
 Alex: I immplemented some basic Lobby Chat ang Game-Level Chat. Really super-basic right now. Maybe you could spice it up?
