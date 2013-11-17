@@ -14,7 +14,7 @@ To contribute, you first need to set up your local development environment.
 
 If you're running windows, do this:
 
-* Open a Windows Command prompt **As Administrator**.
+* Open a Windows Command prompt, `cmd.exe`, **As Administrator**.
 * Create a directory for this project by typing `md C:\Projects` and hitting `Enter`.
 * Type `cd C:\Projects` and hit `Enter`.
 * Now type `dev_setup\win\01_install_chocolatey.bat` to install the Chocolatey package manager for Windows.
