@@ -1,9 +1,9 @@
 We use this page to keep track of what we're doing next, what comes after that, and to record when we get things done.
 
 1. We are working on things under **In Progress**. When we finish them, we move them to the very bottom of the page under the **DONE** heading and prefix them with a date and a comma.
-2. Then, we move 3 or 4 items from the **Prioritized** section into **In Progress**
+2. Then, we move 3 or 4 items from the **Upcoming** section into **In Progress**
 3. Around that time, we pick a few replacements from the **Identified** section that we think can and should be 
-next priorities.
+upcoming next.
 4. We may, if we see fit, pull items from the **BLUESKY** and break them down into some **Identified** tasks.
 
 The **BLUESKY** section is for speculative ideas and awesome ideas. It doesn't mean we're going to specifically do that.
