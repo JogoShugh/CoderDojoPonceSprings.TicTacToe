@@ -14,7 +14,7 @@ To contribute, you first need to set up your local development environment.
 
 If you're running windows, do this:
 
-* Open a Windows Command prompt, `cmd.exe`, **As Administrator**.
+* Open **As Administrator** a Windows Command prompt, `cmd.exe`. 
 * Create a directory for this project by typing `md C:\Projects` and hitting `Enter`.
 * Type `cd C:\Projects` and hit `Enter`.
 * Now type `dev_setup\win\01_install_chocolatey.bat` to install the Chocolatey package manager for Windows.
@@ -23,6 +23,7 @@ If you're running windows, do this:
 * Next type `02_install_dev_tools.bat` to install Git and Node.js -- two tools needed to work on this project.
 * Now, from your Windows Start Menu, look for `Git Bash` and run it. This is a different kind of command prompt that is more powerful and more standard than the Windows Command prompt.
 * Navigate to the Projects directory by typing `cd /c/Projects`.
+* Scroll down to the **After OS-specific steps above** section below and follow those steps:
 
 ## Mac
 
