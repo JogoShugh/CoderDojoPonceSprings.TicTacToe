@@ -22,6 +22,7 @@ The **BLUESKY** section is for speculative ideas and awesome ideas. It doesn't m
 * Invite another player to play a game privately, without the game showing up in "Open Games" where other people can 
 hijack the game before your opponent can join.
 * Prevent a streak-length from being larger than the board size. This relates to issue 4, [Create game form validation](https://github.com/JogoShugh/CoderDojoPonceSprings.TicTacToe/issues/4)
+  * Related: truly, honestly, require a Game Name. Without a game name, there is no challenge channel and it "blows up" 
 * BUG: [clicking too fast ends up sending too many scores](https://github.com/JogoShugh/CoderDojoPonceSprings.TicTacToe/issues/8) (Rohan from HBM)
 
 ## Exercises for CoderDojo Week 1
@@ -39,7 +40,9 @@ player's screen
 
 # Identified
 
+* Login or Register: Default focus to the username field
 * Allow forfeit of an Active Game
+* When a game is created with the same name as a previous game, figure out a way for this not to conflict -- perhaps generate a UUID for the channel name, instead of using the game name
 * Create exercise for adding global chatroom
 * Create exercise for adding game-specific chatroom
 * Create exercise for adding private messaging
