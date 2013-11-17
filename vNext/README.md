@@ -49,7 +49,7 @@ This should produce something like this:
 
 ```text
 jgough@JGOUGH /c/Projects/CoderDojoPonceSprings.TicTacToe/vNext (master)
-$ cat 01_install_globals.sh
+$ cat install_globals.sh
 #!/bin/bash
 npm i -g nws
 npm i -g mocha
