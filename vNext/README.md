@@ -19,7 +19,8 @@ If you're running windows, do this:
 * Type `cd C:\Projects` and hit `Enter`.
 * Now type `dev_setup\win\01_install_chocolatey.bat` to install the Chocolatey package manager for Windows.
 * After Chocolatey installs, type `choco` just to verify that it worked. You should a message like `Please run chocolatey /? or chocolatey help` along with the version number.
-* Now type `dev_setup\win\02_install_dev_tols.bat` to install Git and Node.js -- two tools needed to work on this project.
+* Now type `cd dev_setup\win\`
+* Next tyhpe `02_install_dev_tools.bat` to install Git and Node.js -- two tools needed to work on this project.
 * Now, from your Windows Start Menu, look for `Git Bash` and run it. This is a different kind of command prompt that is more powerful and more standard than the Windows Command prompt.
 * Navigate to the Projects directory by typing `cd /c/Projects`.
 
