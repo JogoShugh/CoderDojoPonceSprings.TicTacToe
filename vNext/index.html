@@ -33,7 +33,7 @@
             <button class='btn' type='button' ng-click='lobbyChatMessageSend()'>Send</button>
           </div>
           <div ng-show='lobbyChatMessages.length == 0'><span class='label label-info'>No chat messages. Send one!</span></div>
-          <div class'animate' ng-repeat='message in lobbyChatMessages'>
+          <div class='animate' ng-repeat='message in lobbyChatMessages'>
             <div class='chat-message'>
               <strong>{{message.uuid}}</strong>: {{message.message}}
             </div>

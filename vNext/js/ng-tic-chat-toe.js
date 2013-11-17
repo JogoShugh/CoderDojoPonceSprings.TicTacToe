@@ -6,7 +6,7 @@
 
   var lobbyChannelName = 'LobbyChannel'; // A channel for global messages that all members see
 
-  app.controller('lobbyController', function($scope, $rootScope, Bus) {
+  app.controller('lobbyController', function($scope, $rootScope, Bus,$timeout) {
     $scope.audioEnabled = true;
 
     $rootScope.gameEvent = playAudio;
@@ -151,6 +151,24 @@
       }
     };
 
+    $scope.removeGame = function(game) {
+      for(var i = 0; i < gamesActive.length; i++) {
+        if (gamesActive[i] === game) {
+          gamesActive.splice(i,1);
+        }
+      }
+      for(var i = 0; i < gamesJoined.length; i++) {
+        if (gamesJoined[i] === game) {
+          gamesJoined.splice(i,1);
+        }
+      }
+      for(var i = 0; i < gamesOpen.length; i++) {
+        if (gamesOpen[i] === game) {
+          gamesOpen.splice(i,1);
+        }
+      }
+    }
+
     var gamesJoined = [];
     
     var gamesActive = [];
@@ -171,6 +189,7 @@
 
     $scope.gameCreate = function() {
       var game = new TicChatToe(boardSize.value, streakLen.value, gameName.value);
+      var timeoutValue = 60000;
       game.onmoveComplete = function(move) {
         var gameEventType = 'playerMove' + move.player;
         $rootScope.gameEvent(gameEventType);
@@ -191,7 +210,17 @@
           streakLen: streakLen.value,
           userHosting: $rootScope.userName
         });
+        var time = $timeout(function(){
+          if(game.active){
+            $timeout.cancel(time);
+          }
+          else{
+            removeGame(game)
+          }  
+
+        },timeoutValue);
       }
+
       gameName.value = '';
     };
 
