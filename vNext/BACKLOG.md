@@ -15,7 +15,7 @@ The **BLUESKY** section is for speculative ideas and awesome ideas. It doesn't m
 
 # BACKLOG
 
-# Prioritized
+# Upcoming
 
 * Send chat messages on enter
 * Expire open game invite after 60 seconds.
