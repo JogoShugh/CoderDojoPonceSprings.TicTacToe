@@ -11,12 +11,13 @@ The **BLUESKY** section is for speculative ideas and awesome ideas. It doesn't m
 
 # In Progress
 
-* Show required winning streak length in an active game.
+* Show required winning streak length in an active game. @dsaldric and @doomsday87
 
 # BACKLOG
 
 # Prioritized
 
+* Send chat messages on enter
 * Expire open game invite after 60 seconds.
 * Invite another player to play a game privately, without the game showing up in "Open Games" where other people can 
 hijack the game before your opponent can join.
