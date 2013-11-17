@@ -43,7 +43,7 @@ Once you have your operating-system specific setup completed, the steps become e
 * Once the code is clonsed, start typing `cd Coder` but then hit the `Tab` key on your keyboard. This should automatically complete the directory name for you. Then just hit enter!
 * Now, for the fun stuff.
 * Type `cd vNext` to get into the directory where the game code is.
-* Type `cat 01_install_globals.sh`. 
+* Type `cat install_globals.sh`. 
 
 This should produce something like this:
 
@@ -58,7 +58,7 @@ npm i -g mocha
 
 The `cat` command simply [catenates](http://www.merriam-webster.com/dictionary/catenate) the lines from the file name you give it out to the screen so you can see what's inside the file. That's all.
 
-* Type `./01_install_globals.sh` now to **execute** the same file to run the commands inside of it.
+* Type `./install_globals.sh` now to **execute** the same file to run the commands inside of it.
 
 If this works, you should start to see output like this:
 
