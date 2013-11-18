@@ -1,9 +1,9 @@
 We use this page to keep track of what we're doing next, what comes after that, and to record when we get things done.
 
 1. We are working on things under **In Progress**. When we finish them, we move them to the very bottom of the page under the **DONE** heading and prefix them with a date and a comma.
-2. Then, we move 3 or 4 items from the **Prioritized** section into **In Progress**
+2. Then, we move 3 or 4 items from the **Upcoming** section into **In Progress**
 3. Around that time, we pick a few replacements from the **Identified** section that we think can and should be 
-next priorities.
+upcoming next.
 4. We may, if we see fit, pull items from the **BLUESKY** and break them down into some **Identified** tasks.
 
 The **BLUESKY** section is for speculative ideas and awesome ideas. It doesn't mean we're going to specifically do that.
@@ -11,19 +11,19 @@ The **BLUESKY** section is for speculative ideas and awesome ideas. It doesn't m
 
 # In Progress
 
-* Show required winning streak length in an active game.
+* [Show required winning streak length in an active game](https://github.com/JogoShugh/CoderDojoPonceSprings.TicTacToe/issues/7)
 
 # BACKLOG
 
-# Prioritized
+# Upcoming
 
+* Send chat messages on enter
 * Expire open game invite after 60 seconds.
 * Invite another player to play a game privately, without the game showing up in "Open Games" where other people can 
 hijack the game before your opponent can join.
-
-###Chatlog and Bugfixes
-
-Alex: I immplemented some basic Lobby Chat ang Game-Level Chat. Really super-basic right now. Maybe you could spice it up?
+* Prevent a streak-length from being larger than the board size. This relates to issue 4, [Create game form validation](https://github.com/JogoShugh/CoderDojoPonceSprings.TicTacToe/issues/4)
+  * Related: truly, honestly, require a Game Name. Without a game name, there is no challenge channel and it "blows up" 
+* BUG: [clicking too fast ends up sending too many scores](https://github.com/JogoShugh/CoderDojoPonceSprings.TicTacToe/issues/8) (Rohan from HBM)
 
 ## Exercises for CoderDojo Week 1
 
@@ -40,6 +40,9 @@ player's screen
 
 # Identified
 
+* Login or Register: Default focus to the username field
+* Allow forfeit of an Active Game
+* When a game is created with the same name as a previous game, figure out a way for this not to conflict -- perhaps generate a UUID for the channel name, instead of using the game name
 * Create exercise for adding global chatroom
 * Create exercise for adding game-specific chatroom
 * Create exercise for adding private messaging
