@@ -165,6 +165,7 @@
       for(var i = 0; i < gamesOpen.length; i++) {
         if (gamesOpen[i] === game) {
           gamesOpen.splice(i,1);
+          $watch();
         }
       }
     }
@@ -189,7 +190,7 @@
 
     $scope.gameCreate = function() {
       var game = new TicChatToe(boardSize.value, streakLen.value, gameName.value);
-      var timeoutValue = 60000;
+      var timeoutValue = 30000;
       game.onmoveComplete = function(move) {
         var gameEventType = 'playerMove' + move.player;
         $rootScope.gameEvent(gameEventType);
@@ -215,7 +216,7 @@
             $timeout.cancel(time);
           }
           else{
-            removeGame(game)
+            $scope.removeGame(game);
           }  
 
         },timeoutValue);
