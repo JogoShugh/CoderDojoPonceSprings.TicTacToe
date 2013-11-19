@@ -158,14 +158,14 @@
         }
       }
       for(var i = 0; i < gamesJoined.length; i++) {
-        if (gamesJoined[i] === game) {
+        if (gamesJoined[i] === game.name) {
           gamesJoined.splice(i,1);
         }
       }
-      for(var i = 0; i < gamesOpen.length; i++) {
-        if (gamesOpen[i] === game) {
-          gamesOpen.splice(i,1);
-          $watch();
+      for(var i = 0; i < $scope.gamesOpen.length; i++) {
+        var gameToRemove = gameFindByName(game.name);
+        if (gamesOpen[i] === gameToRemove) {
+          $scope.gamesOpen.splice(i,1);
         }
       }
     }
@@ -212,7 +212,7 @@
           userHosting: $rootScope.userName
         });
         var time = $timeout(function(){
-          if(game.active){
+          if(game.requested){
             $timeout.cancel(time);
           }
           else{
@@ -344,6 +344,7 @@
         $rootScope.gameEvent('gameOpenAvailable', function() {
           message.message.requested = false;
           gamesOpen.push(message.message);
+          console.log(message.message);
         }, $scope);
       }
     };
