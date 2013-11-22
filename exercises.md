@@ -37,11 +37,16 @@ I just call it thinking. Let's start thinking.
 
 Game time!
 
+### Step 1: Play a game with one set of rules
+
 * Pair up with a classmate
 * Decide whose notes you will follow first
 * Play a game on paper using the rules defined by the notes you just selected
 * Play a rematch!
-* Use the other person's notes as rules to play the third game
+
+### Step 2: Play a game with another set of rules
+
+* Now, use the other person's notes as rules to play the third game
   * Probably they are the same, but see if you find any slight differences!
 * Play another rematch!
 
