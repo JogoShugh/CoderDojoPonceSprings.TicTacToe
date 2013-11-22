@@ -61,8 +61,8 @@ These days, one of the most common types of compatibility has to do with cell-ph
 
 **So, if you and your classmate's rules of gameplay are incompatible with each other, then modify them so that they are basically the same.**
 
-### Examples of incompatibility and improvements
+### Examples of incompatibility
 
-* Most people say X goes first, while others claim O. Decide between you and your classmate which player will go first.
+* Most people say X goes first, while others claim O. 
 * Well...that's the only one I can think of! Did you find others?
 
