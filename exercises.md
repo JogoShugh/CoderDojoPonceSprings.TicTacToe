@@ -66,3 +66,15 @@ These days, one of the most common types of compatibility has to do with cell-ph
 * Most people say X goes first, while others claim O. 
 * Well...that's the only one I can think of! Did you find others?
 
+# Exercise 3: Design a version of your game to play on **separate** sheets of paper
+
+Well, that was easy enough to play on a single sheet of paper, while sitting right next to your opponent, right?
+
+What about playing the game on separate sheets of paper? This would be easy enough if you were just sitting next to 
+each other. Instead of you actually doing this small change, let's just imagine what it could be like:
+
+
+
+
+
+
