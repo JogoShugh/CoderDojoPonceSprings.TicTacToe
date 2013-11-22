@@ -20,7 +20,7 @@ I just call it thinking. Let's start thinking.
 
 ### Step 2: Write your thoughts down
 
-* Write down what comes to your mind, in plain English phrases or sentences. You can write on paper, or you can type it into the text box below. **It's important that you try this on your own first, because we'll be referring to your notes later when you build the game.** 
+* Write down what comes to your mind, in plain English phrases or sentences. You can write on paper, or you can type it into the text box below. **While the mechanics and rules of such a simple game might seem like common sense to you, it's still important that you try this on your own first, because we'll be referring to your notes later when you build the game using code.** 
 * Once you've done this, then compare your answers to what I came up with below. Your answers may differ. They are probably no worse or better than my own, but if you had any difficulty then my answers can help you.
 
 ### Step 3: Compare your thoughts with mine
