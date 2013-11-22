@@ -107,7 +107,13 @@ Hopefully you figured out a good solution with all those restrictions!
 This is a bigger challenge, I know. But, everything you just figured out on your own, using paper, will be very 
 helpful in crafting the design of the software code to make this work.
 
+I'm going to walk you through this process, but along the way, you should try to complete the code to the best of your ability before looking at the "answers" in my own solution.
 
+# Step 1: Create the basic Tic-Tac-Toe board with HTML
+
+* Start a new Plunk within Plunker by navigating to http://plnkr.co/edit/?p=catalogue.
+* You should probably now hit the big blue `Save` button.
+* Even better, click the big blue `Sign in with GitHub` button.
 
 
 
