@@ -66,13 +66,33 @@ These days, one of the most common types of compatibility has to do with cell-ph
 * Most people say X goes first, while others claim O. 
 * Well...that's the only one I can think of! Did you find others?
 
-# Exercise 3: Design a version of your game to play on **separate** sheets of paper
+# Exercise 3: Design a version of your game to play on *separate* sheets of paper
 
-Well, that was easy enough to play on a single sheet of paper, while sitting right next to your opponent, right?
+It that was easy enough to play on a single sheet of paper, while sitting right next to your opponent, right?
 
-What about playing the game on separate sheets of paper? This would be easy enough if you were just sitting next to 
-each other. Instead of you actually doing this small change, let's just imagine what it could be like:
+Let's make things more complicated!
 
+## Step 0: Imagine a simple, but useless, two-sheet version
+
+What about playing the game on separate sheets of paper? This would be easy enough if you were just sitting next to each other. Instead of you actually doing this small change (because it will turn out to be pretty useless), let's just imagine a few variations of what that could be like:
+
+* You could simply write your moves down on each other's sheets -- simple enough
+* Or, you could each have your own sheet of paper and watch each other draw on your own sheets, and then write the same moves down on your own sheet
+
+Maybe there are other ways, but we're not very interested in those, because ultimately, we want to design the computer game such that you could be sitting at home, and your classmate sitting at home, and you could **still play against each other**. It's no solution at all if you have to run across the neighborhood and draw X's and O's on each other's sheets of paper!
+ 
+## Step 1: With your classmate, figure out a fun and useful two-sheet version!
+
+OK. We said that it would be useless to just sit next to your opponent and draw on each other's sheets of paper, or simply watch and copy. So, it's your turn to figure out a better way, but there are some restrictions!
+
+### The restrictions:
+
+* Each of you will start a game with a blank game board drawn on it.
+* You will verbally decide which player goes first.
+* You must sit in a way that you cannot see each other's sheet.
+* When the first player moves, he or she must communicate the move to his or her opponent without **speaking** and without **moving**.
+
+**One more rule: you may use as many sheets of paper as you like and for whatever purpose you see fit!**
 
 
 
