@@ -112,8 +112,61 @@ I'm going to walk you through this process, but along the way, you should try to
 # Step 1: Create the basic Tic-Tac-Toe board with HTML
 
 * Start a new Plunk within Plunker by navigating to http://plnkr.co/edit/?p=catalogue.
-* You should probably now hit the big blue `Save` button.
-* Even better, click the big blue `Sign in with GitHub` button.
+* Click the big blue `Sign in with GitHub` button. Create an account if you don't already have one with GitHub.
+* Now hit the big blue `Save` button in your new Plunk.
+  * Once you do this, your URL should now look something like mine: `http://plnkr.co/edit/mAK0VnwLWHCAQSfJ6G9B?p=catalogue`.
+  * It won't look *exactly* like mine, but you should see a big long string of latters and numbers after the `/edit/` part. This is a unique address for your game.
+* Do you remember the tags that we used to create the 3-by-3 game board in the first code example you saw?
+  * If yes, try to create a the board again in this editor without looking back to that code. 
+  * If not, you can look at the code here.
+* My code:
+
+```
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js"></script>
+  </head>
+  <body>
+    <h1>Tic Tac Toe!</h1>
+    <table border='1'>
+     <tr>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+     </tr>
+     <tr>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+     </tr>
+     <tr>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+     </tr>
+    </table>
+  </body>
+  <style>
+    table {
+      background-color: gold;
+    }
+    
+    td {
+      width: 75px;
+      height: 75px;
+      text-align: center;
+      font-size: 40px;
+    }
+  </style>
+</html>
+```
+
+ 
+
+
+
 
 
 
