@@ -50,4 +50,13 @@ Game time!
   * Probably they are the same, but see if you find any slight differences!
 * Play another rematch!
 
+## Step 3: Change your respective notes to be **compatible** with each other
 
+You've likely heard the word **compatible** used in a variety of contexts. If not, here's a [simple definition
+of compatible from Merriam-Webster dictionary](http://www.merriam-webster.com/dictionary/compatible):
+
+> designed to work with another device or system without modification
+
+These days, one of the most common types of compatibility has to do with cell-phone charging cables. If you or your friends or family members have Apple iPhones or iPads, but you use Android or other kinds of devices, then you know that you cannot use each others' charging cables. That's because the Apple cables are not **compatible** with the others.
+
+**So, if you and your classmate's rules of gameplay are incompatible with each other, then modify them so that they are basically the same.**
