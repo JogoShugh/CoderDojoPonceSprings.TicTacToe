@@ -4,14 +4,16 @@ Some people call this step design. Others call it modeling. Some call it analysi
 
 I just call it thinking.
 
-# Thinking about the game of Tic Tac Toe
+# Exercise 1: Thinking about the game of Tic Tac Toe
 
-Now let's think about how you play a typical game of Tic Tac Toe on paper for a few moments. Think about the following aspects:
+## Now let's think about how you play a typical pen and paper game of Tic Tac Toe
 
-* The board that you draw
-* The rules for who makes the first moves
+Take 3 to 5 minutes and think about the following aspects of a typical pen and paper game of Tic Tac Toe:
+
+* The board that you draw: how many parts does it have? What do you call them?
+* The rules for who makes the first move
 * The rules of alternating turns
-* How one player wins, and the different "paths" the player can take to win
+* How one player wins, and the different directions the player can take to win
 * Or, how a game can end in a tie
 
 Next, do this:
