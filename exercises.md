@@ -6,7 +6,7 @@ I just call it thinking.
 
 # Thinking about the game of Tic Tac Toe
 
-Now let's think about how you play a typical game of Tic Tac Toe on paper for a few moments. Think about the following aspects and write down your thoughts on paper, or in the text box below.
+Now let's think about how you play a typical game of Tic Tac Toe on paper for a few moments. Think about the following aspects:
 
 * The board that you draw
 * The rules for who makes the first moves
@@ -16,7 +16,7 @@ Now let's think about how you play a typical game of Tic Tac Toe on paper for a 
 
 Next, do this:
 
-* Write down what comes to your mind, in plain English phrases or sentences. **It's important that you try this on your own first, because we'll be referring to your notes later when you build the game.** 
+* Write down what comes to your mind, in plain English phrases or sentences. You can write on paper, or you can type it into the text box below. **It's important that you try this on your own first, because we'll be referring to your notes later when you build the game.** 
 * Once you've done this, then compare your answers to what I came up with below. Your answers may differ. They are probably no worse or better than my own, but if you had any difficulty then my answers can help you.
 
 My thoughts:
