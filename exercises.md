@@ -94,6 +94,19 @@ OK. We said that it would be useless to just sit next to your opponent and draw 
 
 **One more rule: you may use as many sheets of paper as you like and for whatever purpose you see fit!**
 
+## Step 2: Change partners and see if your two-sheet solutions are compatible
+
+Hopefully you figured out a good solution with all those restrictions!
+
+* Now, find a different classmate, and talk with him or her to determine if the two-sheet solution that you and your previous partner designed are **compatible** with each other. If not, try to revise your approach so that they are compatible. 
+* Now, get everyone together and start discussing the different two-sheet solutions you came up with amongst yourselves. See if you can all reach some simple rules and write them down on another sheet or on a projector or whiteboard. 
+* Play another couple of games using the shared rules. 
+
+# Exercise 4: Modify the Tic-Tac-Toe template you started with to be a multi-player game!
+
+This is a bigger challenge, I know. But, everything you just figured out on your own, using paper, will be very 
+helpful in crafting the design of the software code to make this work.
+
 
 
 
