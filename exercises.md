@@ -6,10 +6,18 @@ I just call it thinking.
 
 # Thinking about the game of Tic Tac Toe
 
-Think about how you play a typical game of Tic Tac Toe on paper for a few moments. Think about the board that you draw, the rules for how you make moves, alternate turns, and ultimately how one player wins, and how a game can end in a tie.
+Now let's think about how you play a typical game of Tic Tac Toe on paper for a few moments. Think about the following aspects and write down your thoughts on paper, or in the text box below.
 
-Now, write down what comes to your mind, in plain English phrases or sentences. You should do this on your own first,
-then compare your answers to what I came up with. Your answers may differ. They are probably no worse or better than my own.
+* The board that you draw
+* The rules for who makes the first moves
+* The rules of alternating turns
+* How one player wins, and the different "paths" the player can take to win
+* Or, how a game can end in a tie
+
+Next, do this:
+
+* Write down what comes to your mind, in plain English phrases or sentences. **It's important that you try this on your own first, because we'll be referring to your notes later when you build the game.** 
+* Once you've done this, then compare your answers to what I came up with below. Your answers may differ. They are probably no worse or better than my own, but if you had any difficulty then my answers can help you.
 
 My thoughts:
 
