@@ -13,6 +13,7 @@ I just call it thinking. Let's start thinking.
 * What does the board that you draw look like? How many parts does it have, and what do you call them?
 * How many players are in a game, and what symbols do they use?
 * Who makes the first move, and what do they do?
+* How does play alternate between players?
 * When does a game end with a winner? 
 * What are the different directions a winner can win with?
 * When is a game over, but with a tie? 
@@ -24,9 +25,10 @@ I just call it thinking. Let's start thinking.
 
 ### Step 3: Compare your thoughts with mine
 
-* A tic tac toe board consists of 3 rows, each row containing 3 empty squares, for a total of 9 squares
-* A game has two players, player X, and player O
-* The first player to play is X
-* A player makes a move by drawing an X or an O in one of the epmty squares, and then play aternates to the next player
-* When one player has successfully put their letter in 3 contiguous squares, then that player is the winner. The squares may be contiguous horizontall, vertically, or diagonally
-* If all 9 squares get filled without either player connecting 3-in-a-row, then the game is a tie, or a "cats game"
+* A tic tac toe board consists of 3 rows, each row containing 3 empty squares, for a total of 9 squares.
+* A game has two players, player X, and player O.
+* The first player to play is X, and makes the first move by drawing an X in one of the empty squares.
+* After the first move, player O makes a move by drawing an O in one of the empty squares, and then play alternates between the two players.
+* When one player has successfully put their letter in 3 contiguous squares, then that player is the winner.
+* The squares may be contiguous horizontally, vertically, or diagonally.
+* If all 9 squares get filled without either player connecting 3-in-a-row, then the game is a tie, or a "cats game".
