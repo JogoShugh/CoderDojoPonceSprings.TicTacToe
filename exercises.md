@@ -81,7 +81,7 @@ What about playing the game on separate sheets of paper? This would be easy enou
 
 Maybe there are other ways, but we're not very interested in those, because ultimately, we want to design the computer game such that you could be sitting at home, and your classmate sitting at home, and you could **still play against each other**. It's no solution at all if you have to run across the neighborhood and draw X's and O's on each other's sheets of paper!
  
-## Step 1: With your classmate, figure out a fun and useful two-sheet version!
+## Step 1: With your classmate, figure out a more useful and fun two-sheet version!
 
 OK. We said that it would be useless to just sit next to your opponent and draw on each other's sheets of paper, or simply watch and copy. So, it's your turn to figure out a better way, but there are some restrictions!
 
