@@ -10,11 +10,12 @@ I just call it thinking. Let's start thinking.
 
 ### Step 1: Take 3 to 5 minutes and think about the following aspects of a typical pen and paper game of Tic Tac Toe:
 
-* The board that you draw: how many parts does it have? What do you call them?
-* The rules for who makes the first move
-* The rules of alternating turns
-* How one player wins, and the different directions the player can take to win
-* Or, how a game can end in a tie
+* What does the board that you draw look like? How many parts does it have, and what do you call them?
+* How many players are in a game, and what symbols do they use?
+* Who makes the first move, and what do they do?
+* When does a game end with a winner? 
+* What are the different directions a winner can win with?
+* When is a game over, but with a tie? 
 
 ### Step 2: Write your thoughts down
 
