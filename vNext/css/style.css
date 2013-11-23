@@ -1,7 +1,16 @@
 /* Styles go here */
+
+.Header1 {
+text-align: center;
+}
+
+.Desc1 {
+text-align: center;
+}
+
 body {
   padding: 5px;
-  background-color: white;
+  background-color: #EEEEEE;
 }
 
 .cell {
@@ -13,8 +22,8 @@ body {
   font-size: 60px;
   font-family: impact;
   text-shadow: 1px 1px gold;
-  background: gold;
-  border: 1px solid goldenrod;
+  background: white;
+  border: 1px solid #272727;
   line-height: 48px;
 }
 

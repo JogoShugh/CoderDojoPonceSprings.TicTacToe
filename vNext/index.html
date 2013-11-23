@@ -10,11 +10,13 @@
   <body ng-app='tic-chat-toe' ng-cloak>
   
     <div class='hero-unit' ng-show='!userLoggedIn'>
-      <h1>Tic-Chat-Toe!</h1>
-      <p>
+      <h1 class='Header1'>Tic-Chat-Toe!</h1>
+      <p class='Desc1'>
         A simple game of X and O where 3, or 4, or 5, or 10 in a row wins!
       </p>
-      <p ng-controller='identityController'>
+      <br>
+      <br>
+      <p ng-controller='identityController' align='center'>
         <button class='btn btn-primary btn-large' ng-click='userIdentifyDialogShow()' ng-show='!userLoggedIn'>Play!</button>
       </p>           
     </div>
