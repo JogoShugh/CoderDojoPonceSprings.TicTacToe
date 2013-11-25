@@ -163,7 +163,32 @@ I'm going to walk you through this process, but along the way, you should try to
 </html>
 ```
 
- 
+# OUTLINE / NOTES
+
+I want the "system" that grows out of this to be able to guide a brand new student through a very quick
+introduction to HTML, followed by a quick introduction to CSS, followed by a rapid intro to JavaScript.
+
+It should, as soon as possible, result in a "playable" game, one that writes Xs and Os in the board very quickly.
+
+And, should then layer on successive improvements, which enable teaching of increasingly more challenging, and rewarding, 
+skills related to programming, HTML, and CSS development:
+
+* Basic tags
+* Basic styles
+* Calling functions on existing JavaScript objects
+* Setting var references to existing elements in the HTML page
+* Manipulating those elements via the JS console
+* Using if and else in response to prompt and confirm input dialogs
+* Creating a function to handle repetitive tasks about changing the HTML on screen
+* Creating a function to handle changing style values based on prompt values
+* Quickly incorporating internet play by changing colors or elements on other peer's screens (Style wars!)
+
+There should be "levels" or "challenges", gates by "Bosses" who ask for knowledge about the previous material. The student 
+should be able to self-assess whether they feel like they understood the material very well, somewhat well, poorly, or not at all, 
+and then will be asked questions that the authors feel correspond to that level of understanding.
+
+
+
 
 
 
