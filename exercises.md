@@ -101,7 +101,7 @@ OK. We said that it would be useless to just sit next to your opponent and draw 
 * Sit down so that you **cannot see each other**.
 * You **may not speak to your opponent**, or anyone else, to communicate your moves.
 * You **may not leave your chair** while playing a game.
-* **Finally**, when either of you believes that the game is won, lost, or tied, you _**may speak up and say so**_ -- to see if your system is working!**
+* **Finally**, when either of you believes that the game is won, lost, or tied, you _**may speak up and say so**_ -- to see if your system is working!
 
 ## Step 2: Change partners and see if your two-sheet solutions are compatible
 
