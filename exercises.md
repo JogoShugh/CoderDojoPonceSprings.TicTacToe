@@ -195,8 +195,63 @@ There should be "levels" or "challenges", gates by "Bosses" who ask for knowledg
 should be able to self-assess whether they feel like they understood the material very well, somewhat well, poorly, or not at all, 
 and then will be asked questions that the authors feel correspond to that level of understanding.
 
+## Exploratory session
 
+* Using Google Chrome's Dev tools, and also FireFox.
+* Open a document that has a lot of HTML samples
+* Show students how to inspect the document with the Element Inspector
+* Show them how to change element CSS colors and properties directly in the inspector
+* Show them how to call functions to invoke behaviors in the browser, like:
+ * alert()
+ * prompt()
+ * confirm()
+* Show them how to change the document's "by line" to have their own name, show in two ways:
+ * Using the document tree viewer in the console
+ * Using JavaScript getElementById() and .textContent. Also demonstrate .innerHTML and highlight the differences
+* Have a form with a few types of form elements in it* 
+* Have a section of the document that has buttons with onclick handlers
+ * One should do an alert, including displaying a message with data from the form inputs
+ * Another should display a different message depending upon a radio button
+ * Another should prompt() for a value wihch will then change the value inside a form 
+ * Another should simply change a radio button based on confirm true or false
+ * Another should combine confirm(prompt()) to ask whether to add an input value to a list of values
+ * Another should confirm whether to delete a single selected value from a selected list
+ * Another should confirm whether to delete ALL selected values
+* Challenge Tell them there are secret parts of the document that can only be rendered in two ways:
+ * By manually changing the code to show it.
+ * Or by writing a simple guessing game function to show it if the user guesses the right number
 
+## Challenges outline
+
+* Create an HTML document that includes a large heading with a name of the game, and a "by line" section that  uses a smaller heading that mentions yourself as the author, and also an even smaller heading that mentions CoderDojo Ponce Springs as providing help. For bonus: Use a hyperlink to http://www.github.com/CoderDojoPonceSprings
+* FORK IN ROAD: branch the next step based on competency check from above.
+  * Red: Not yet: 
+  * Green: Get it now:
+  * Blue: Could teach it:
+  * TODO: provide information that can help students figure out their options for what tags to use 
+* Add some colors and other styles to your document using Cascasing Style Sheets. At a minimum, colors for your game title, your by line. Change the document's background color, and the color of the text in document
+  * R: 
+  * G:
+  * B:
+* Add a button that says "Play Game" or "Start Game" or something like that. Make it so that when you click it, it displays a message in the document that says something like "Let the games begin!" or "Good luck!", or whatever you want it to say.
+  * This will involve JavaScript and document.getElementById() plus .textContent
+  * Therefore, need to provide a mini tutorial on JavaScript basics first.
+
+BRAINSTORM:
+
+* Create a 3 by 3 game board under the button
+* Apply styles and colors to the board, to figure out how to make invisible when the document loads
+* Modify button so that in addition to the message, it 
+
+Then:
+
+* Modify the code to switch between X and O properly
+* Apply styles and colors to differentiate X from O (later on this will be replaced by Avatar support that players chose on their own)
+* Display the "current player" above the board
+
+Then:
+
+* Add a Reset Game button and make sure it only appears after a game has started
 
 
 
