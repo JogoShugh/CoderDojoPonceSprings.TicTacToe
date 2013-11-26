@@ -107,13 +107,13 @@ Hopefully you figured out a good solution with all those restrictions!
 * Now, get everyone together and start discussing the different two-sheet solutions you came up with amongst yourselves. See if you can all reach some simple rules and write them down on another sheet or on a projector or whiteboard. 
 * Play another couple of games using the shared rules. 
 
-# Exercise 4: Modify the Tic-Tac-Toe template you started with to be a multi-player internet game!
+# Exercise 4: Modify the Tic-tac-toe template you started with to be a multi-player internet game!
 
 This is a bigger challenge, I know. But, everything you just figured out on your own, using nothing more than pen, paper, and some form of transportation, will be very helpful in crafting the design of the software code to make this work across the internet.
 
 I'm going to walk you through this process, but along the way, you should try to complete the code to the best of your ability before looking at the "answers" in my own solution.
 
-# Step 1: Create the basic Tic-Tac-Toe board with HTML
+# Step 1: Create the basic Tic-tac-toe board with HTML
 
 * Start a new Plunk within Plunker by navigating to http://plnkr.co/edit/?p=catalogue.
 * Click the big blue `Sign in with GitHub` button. Create an account if you don't already have one with GitHub.
