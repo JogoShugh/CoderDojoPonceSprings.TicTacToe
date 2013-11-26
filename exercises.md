@@ -70,9 +70,9 @@ These days, one of the most common types of compatibility has to do with cell-ph
 * Most people say X goes first, while others claim O. 
 * Well...that's the only one I can think of! Did you find others?
 
-# Exercise 3: Design a version of your game to play on *separate* sheets of paper
+# Exercise 3: Design a version of your game to play on *separate* sheets of paper (and at a distance!)
 
-It that was easy enough to play on a single sheet of paper, while sitting right next to your opponent, right?
+That was easy enough to play on a single sheet of paper, while sitting right next to your opponent, right?
 
 Let's make things more complicated!
 
@@ -93,10 +93,11 @@ OK. We said that it would be useless to just sit next to your opponent and draw 
 
 * Each of you will start a game with a blank game board drawn on it.
 * You will verbally decide which player goes first.
-* You must sit in a way that you cannot see each other's sheet.
-* When the first player moves, he or she must communicate the move to his or her opponent without **speaking** and without **moving**.
-
-**One more rule: you may use as many sheets of paper as you like and for whatever purpose you see fit!**
+* You must sit such that you cannot see each other.
+* When the first player moves, he or she must communicate the move to his or her opponent **without speaking** and **without leaving your chair**.
+* And, subsequent moves must also be played **without speaking** and **without leaving your chair**.
+* You may use pen and paper other than your own score sheet, and you may involve other people, but you may **not speak to them either**.
+* **Finally, when either of you believes that the game is won, lost, or tied, you can speak up and say so -- to see if your system is working!**
 
 ## Step 2: Change partners and see if your two-sheet solutions are compatible
 
@@ -106,10 +107,9 @@ Hopefully you figured out a good solution with all those restrictions!
 * Now, get everyone together and start discussing the different two-sheet solutions you came up with amongst yourselves. See if you can all reach some simple rules and write them down on another sheet or on a projector or whiteboard. 
 * Play another couple of games using the shared rules. 
 
-# Exercise 4: Modify the Tic-Tac-Toe template you started with to be a multi-player game!
+# Exercise 4: Modify the Tic-Tac-Toe template you started with to be a multi-player internet game!
 
-This is a bigger challenge, I know. But, everything you just figured out on your own, using paper, will be very 
-helpful in crafting the design of the software code to make this work.
+This is a bigger challenge, I know. But, everything you just figured out on your own, using nothing more than pen, paper, and some form of transportation, will be very helpful in crafting the design of the software code to make this work across the internet.
 
 I'm going to walk you through this process, but along the way, you should try to complete the code to the best of your ability before looking at the "answers" in my own solution.
 
