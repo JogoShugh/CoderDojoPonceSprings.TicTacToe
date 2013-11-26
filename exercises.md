@@ -1,3 +1,5 @@
+# Get in the game
+
 Before attempting to build a computer program, it's important to take some time to think about what you want to achieve, but without worrying about what the code will look like.
 
 Some people call this step design. Others call it modeling. Some call it analysis.
