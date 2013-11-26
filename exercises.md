@@ -99,10 +99,9 @@ OK. We said that it would be useless to just sit next to your opponent and draw 
 
 * Talk to each other to decide who will play the first move.
 * Sit down so that you cannot see each other.
-* You **may not speak** to your opponent to communicate your moves.
+* You **may not speak** to your opponent, or anyone else, to communicate your moves.
 * You **may not leave your chair** while playing a game.
-* You may use pen and paper and you may involve other people, but you **may not speak to them either**.
-* **Finally, when either of you believes that the game is won, lost, or tied, you can speak up and say so -- to see if your system is working!**
+* **Finally**, when either of you believes that the game is won, lost, or tied, you can _**speak up and say so**_ -- to see if your system is working!**
 
 ## Step 2: Change partners and see if your two-sheet solutions are compatible
 
