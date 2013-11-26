@@ -70,7 +70,7 @@ These days, one of the most common types of compatibility has to do with cell-ph
 * Most people say X goes first, while others claim O. 
 * Well...that's the only one I can think of! Did you find others?
 
-# Exercise 3: Design a version of your game to play on *separate* sheets of paper (and at a distance!)
+# Exercise 3: Design a version of your game to play on *separate* sheets of paper (and with some new restrictions!)
 
 That was easy enough to play on a single sheet of paper, while sitting right next to your opponent, right?
 
