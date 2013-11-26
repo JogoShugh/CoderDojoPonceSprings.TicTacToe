@@ -6,11 +6,13 @@ Some people call this step design. Others call it modeling. Some call it analysi
 
 I just call it thinking. Let's start thinking.
 
-# Exercise 1: Write down what you know about Tic Tac Toe
+# Exercise 1: Write down what you know about Tic-tac-toe
 
-Now let's think about how you play a typical pen and paper game of Tic Tac Toe
+Now let's think about how you play a typical pen and paper game of Tic-tac-toe.
 
-## Step 1: Take 3 to 5 minutes and think about the following aspects of a typical pen and paper game of Tic Tac Toe:
+![Tic Tac Toe](http://www.blogcdn.com/www.parentdish.com/media/2010/04/tic-tac-toe-425ds042010.jpg)
+
+## Step 1: Take 3 to 5 minutes and think about the following aspects of a typical pen and paper game of Tic-tac-toe:
 
 * What does the board that you draw look like? How many parts does it have, and what do you call them?
 * How many players are in a game, and what symbols do they use?
@@ -27,7 +29,7 @@ Now let's think about how you play a typical pen and paper game of Tic Tac Toe
 
 ## Step 3: Compare your thoughts with mine
 
-* A tic tac toe board consists of 3 rows, each row containing 3 empty squares, for a total of 9 squares.
+* A Tic-tac-toe board consists of 3 rows, each row containing 3 empty squares, for a total of 9 squares.
 * A game has two players, player X, and player O.
 * The first player to play is X, and makes the first move by drawing an X in one of the empty squares.
 * After the first move, player O makes a move by drawing an O in one of the empty squares, and then play alternates between the two players.
@@ -131,7 +133,7 @@ I'm going to walk you through this process, but along the way, you should try to
     <script src="script.js"></script>
   </head>
   <body>
-    <h1>Tic Tac Toe!</h1>
+    <h1>Tic-tac-toe!</h1>
     <table border='1'>
      <tr>
       <td>-</td>
