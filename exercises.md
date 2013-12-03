@@ -126,19 +126,20 @@ I'm going to walk you through this process, but along the way, you should try to
   * It won't look *exactly* like mine, but you should see a big long string of latters and numbers after the `/edit/` part. This is a unique address for your game.
 * Do you remember the tags that we used to create the 3-by-3 game board in the first code example you saw?
   * If yes, try to create a the board again in this editor without looking back to that code. 
-  * If not, you can look at the code here.
-* My code:
+  * If not, you can look at the code below.
+
+## My Solution
 
 ```
 <!DOCTYPE html>
 <html>
   <head>
-    <link rel="stylesheet" href="style.css">
-    <script src="script.js"></script>
+   <title>Tic-tac-toe!</title>
   </head>
   <body>
     <h1>Tic-tac-toe!</h1>
-    <table border='1'>
+    <h3>Brought to you by *enter your name*</h3>
+    <table border='1' onclick='move(event)'>
      <tr>
       <td>-</td>
       <td>-</td>
@@ -168,7 +169,82 @@ I'm going to walk you through this process, but along the way, you should try to
       font-size: 40px;
     }
   </style>
+  <script>
+  function move(event) {
+   console.log(event);
+   // TODO: add code here to place an X in the element that was clicked!
+  }
+  </script>
 </html>
 ```
 
-TODO: add new steps
+# Step 2: Render an X into a square when clicked
+
+Now that we have a basic board, let's modify the `move` function code so that it will place an **X** into one of the cells when it is clicked.
+
+## Hints
+
+Here are some topics you can inspect in the developer console or "Google" for that will help you figure this out:
+
+* Lookup the `onclick` event handler
+* Lookup the `event.target.tagName` property
+* Lookup the `event.target.textContext` property
+
+## My Solution
+
+```
+<!DOCTYPE html>
+<html>
+  <head>
+   <title>Tic-tac-toe!</title>
+  </head>
+  <body>
+    <h1>Tic-tac-toe!</h1>
+    <h3>Brought to you by *enter your name*</h3>
+    <table border='1' onclick='move(event)'>
+     <tr>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+     </tr>
+     <tr>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+     </tr>
+     <tr>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+     </tr>
+    </table>
+  </body>
+  <style>
+    table {
+      background-color: gold;
+    }
+    
+    td {
+      width: 75px;
+      height: 75px;
+      text-align: center;
+      font-size: 40px;
+    }
+  </style>
+  <script>
+  function move(event) {
+   if (event.target.tagName == 'TD') {
+    event.target.textContent = 'X'; 
+   }
+  }
+  </script>
+</html>
+```
+
+## Notes
+
+* What difference does it make if you the `innerHTML` property instead of `textContent`?
+* What can you do with the `event.target.style` object?
+
+
+
