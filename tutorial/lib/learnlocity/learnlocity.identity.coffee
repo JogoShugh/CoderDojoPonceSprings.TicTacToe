@@ -13,16 +13,16 @@
       ), (currentValue) ->
         ctrl.$setValidity 'mismatch', currentValue
 
-  dialog = null
+  modal = null
 
   dialogOptions =
     controller: 'identityController'
     templateUrl: 'partials/learnlocity.identity.identifyUser.html'
     backdrop: true
     keyboard: true
-    backdropClick: true
+    backdropClick: true # TODO what this for anyway?
 
-  mod.controller 'identityController', ($rootScope, $scope, $dialog, User) ->
+  mod.controller 'identityController', ($rootScope, $scope, $modal, User) ->
     clearErrors = ->
       $scope.userNameTaken = false
       $scope.loginFailed = false
@@ -33,11 +33,11 @@
       passwordConfirmation: ''
 
     $scope.showIdentifyUserDialog = ->
-      dialog = $dialog.dialog(dialogOptions)
-      dialog.open().then (result) -> console.log result if result
+      modal = $modal.open(dialogOptions)
+      modal.result.then (result) -> console.log result if result
 
     $scope.close = (result) ->
-      dialog.close result
+      modal.close result
 
     $scope.logIn = ->
       clearErrors()

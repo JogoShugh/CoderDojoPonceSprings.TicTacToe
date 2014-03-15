@@ -6,7 +6,7 @@
 	collection = (className) ->
 		mongoCollectionName = className.toLowerCase()
 		apiModule.factory className, ($resource) ->
-			return mongoLabResourceFactory $resource, mongoCollectionName, apiKey
+			return mongoLabResourceFactory $resource, dbUrl, mongoCollectionName, apiKey
 
 	collection "User"
 	collection "Snippet"

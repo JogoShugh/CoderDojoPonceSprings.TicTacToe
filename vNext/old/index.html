@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel='stylesheet' href='css/style.css' />
+    <link rel='stylesheet' href='lib/angular-bootstrap/css/bootstrap-combined.min.css' />
+    <link rel='stylesheet' href='//cdnjs.cloudflare.com/ajax/libs/animate.css/2.0/animate.min.css'>
+  </head>
+  <body ng-cloak>
+    <h1>Tic-Chat-Toe</h1>    
+    <hr />
+    <p ng-controller='identityController'>
+      <span class='label label-success' ng-show='userLoggedIn'>Welcome, {{userName}}</span>
+      <button class='btn btn-primary' ng-click='userIdentifyDialogShow()' ng-show='!userLoggedIn'>Log In or Register</button>
+    </p>   
+    <div ng-controller='lobbyCtrl' ng-show='userLoggedIn'>
+      <a class='btn btn-inverse btn-small' ng-click='audioEnabled = false' ng-show='audioEnabled'>Turn off sounds</a>
+      <a class='btn btn-inverse btn-small' ng-click='audioEnabled = true' ng-show='!audioEnabled'>Turn on sounds</a>
+      <hr />
+      <tabset>
+        <tab heading='Lobby Chat'>
+          <div class='input-append'>
+            <input class='span8' ng-model='lobbyChatMessageInput.value' type='text'>
+            <button class='btn' type='button' ng-click='lobbyChatMessageSend()'>Send</button>
+          </div>          
+          <div class'animate well well-small' ng-repeat='message in lobbyChatMessages'>
+            <strong>{{message.uuid}}</strong>: {{message.message}}
+          </div>
+        </tab>        
+        <tab>
+          <tab-heading><span class='{{gamesOpenClass()}}'>Open Games{{gamesOpenCount()}}</span></tab-heading>
+          <div ng-repeat='game in gamesOpen' class='animate'>
+            <strong>{{game.name}}</strong> by {{game.userHosting}} <small class='label label-info'>board: {{game.boardSize}}, win: {{game.streakLen}}</small> <a class='btn btn-primary btn-small' ng-click='gameJoinRequest(game)' ng-disabled='game.requested'>{{game.requested? 'Waiting!' : 'Challenge' }}</a>
+          </div>
+        </tab>        
+        <tab heading='Create Game'>
+          <p ng-repeat="element in gameCreateForm | orderBy:'order'">
+            <label>{{element.label}}:</label>
+            <input type='{{element.type}}' required='{{element.required}}' ng-model='element.value' />
+          </p>
+          <a class='btn btn-primary' ng-click='gameCreate()'>Create new game!</a>        
+        </tab>
+        <tab heading='History'>
+          <div ng-repeat='game in gamesCompleted' class='well well-small'>
+            <strong>{{game.name}}:</strong> {{game.playerWinner}} beat {{game.playerLoser}}
+          </div>
+        </tab>
+        <tab heading='Scoreboard'>
+          <div class='animate well well-small' ng-repeat='game in gamesAllCompleted'>
+            <strong>{{game.name}}:</strong> {{game.playerWinner}} beat {{game.playerLoser}}
+          </div>
+        </tab>        
+        <tab
+          ng-repeat='game in gamesActive'
+          heading='{{game.name}}'
+          active='game.active'
+        >
+          <tab-heading>{{game.name}}<strong ng-show='game.gameOver()' ng-click='gameClose(game)'>&nbsp;X</strong></tab-heading>
+          <div
+            ng-controller='gameCtrl'
+            ng-init='gameInit(game)'
+            class='container-fluid'
+          >
+            <div ng-show='gameStarted' class='span4'>
+              <div ng-show='!game.gameOver()'>Current player: <strong>{{game.playerCurrent}}</strong></div>
+              <div ng-show='game.gameOver()'><strong>Game over!</strong></div>
+              <div ng-repeat='row in board'>
+                <span 
+                  ng-repeat='col in row' class='animate cell {{getWinnerStatus(col)}}' ng-click='move(col)'>
+                  {{col.player}}</span>
+              </div>
+            </div>
+            <div class='span8'>
+              <div class='input-append'>
+                <input class='span8' ng-model='gameChatMessageInput.value' type='text'>
+                <button class='btn' type='button' ng-click='gameChatMessageSend()'>Send</button>
+              </div>          
+              <div class'animate well well-small' ng-repeat='message in gameChatMessages'>
+                <strong>{{message.uuid}}</strong>: {{message.message}}
+              </div>              
+            </div>
+          </div>
+        </div>      
+      </tabset>
+    </div>
+    <script src='http://cdn.pubnub.com/pubnub-3.2.min.js'></script>
+    <script src='lib/underscore/underscore.min.js'></script>
+    <script src='lib/jquery/jquery-1.10.2.min.js'></script>
+    <script src='lib/angular/angular.min.js'></script>
+    <script src='lib/angular/angular-resource.min.js'></script>
+    <script src='lib/angular/angular-animate.min.js'></script>
+    <script src='lib/mongolab/mongoLabResourceFactory.js'></script>    
+    <script src='lib/angular-bootstrap/js/ui-bootstrap-tpls-0.5.0.js'></script>
+    <script src='lib/learnlocity/learnlocity.identity.coffee' type='text/coffeescript'></script>
+    <script src='lib/learnlocity/learnlocity.editor.coffee' type='text/coffeescript'></script>
+    <script src='lib/learnlocity/learnlocity.api.coffee' type='text/coffeescript'></script> 
+    <script src='js/tic-chat-toe.js'></script>
+    <script src='js/ng-tic-chat-toe.js'></script>    
+    <script src='lib/coffee/coffee-script.min.js'></script>
+    <script type='text/coffeescript'>
+$ ->
+  angular.bootstrap document, ['tic-chat-toe', 'ngAnimate']
+    </script>    
+  </body>
+</html>
