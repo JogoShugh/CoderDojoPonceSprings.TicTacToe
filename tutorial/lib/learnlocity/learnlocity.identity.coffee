@@ -54,7 +54,7 @@
           user = results[0]
           $rootScope.userName = user.userName
           $rootScope.userLoggedIn = true
-          dialog.close true
+          modal.close true
         else
           $scope.loginFailed = true
       ), apiErrorHandle
@@ -77,7 +77,7 @@
           User.save user, ((newUser) ->
             $rootScope.userName = newUser.userName
             $rootScope.userLoggedIn = true
-            dialog.close true
+            modal.close true
           ), apiErrorHandle
       ), apiErrorHandle
 )()
