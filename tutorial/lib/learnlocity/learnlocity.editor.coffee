@@ -13,7 +13,9 @@
 		$scope.update = { whenTyping : true }
 
 		$scope.getEditorsClass = ->
-			return if $scope.displays.preview then 'span6' else 'span12'
+			#return if $scope.displays.preview then 'span6' else 'span12'
+			console.log 'verticalEditingPane'
+			return 'verticalEditingPane'
 
 		jsEditor = null
 		htmlEditor = null
