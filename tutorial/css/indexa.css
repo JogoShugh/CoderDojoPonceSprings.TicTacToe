@@ -6,6 +6,10 @@ html, body {
 	width: 100%;
 }
 
+#mainPanel {
+	padding: 0;
+}
+
 #slides {
 	display: none;
 }		
