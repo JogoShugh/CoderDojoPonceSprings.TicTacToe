@@ -8,7 +8,7 @@
 	    <style>
 body {
 	margin: 0;
-	padding: 0;
+	padding: 0 !important;
 }
 
 iframe {
@@ -20,10 +20,11 @@ iframe {
   border: 1px solid darkgray;
   background: black;
   color: white;
+  float: left;
 }
 
 .ace_wrapper {  
-  height: 150px;
+  height: 500px;
 }
 
 .ace_editor {
@@ -66,7 +67,7 @@ iframe {
 	      <button class='btn btn-primary' ng-click='showIdentifyUserDialog()' ng-show='!userLoggedIn'>Log In or Register</button>
 	    </p>     
 
-	    <div class='container-fluid'>
+	    <div class='container-fluid' id='mainPanel'>
 	    	<button class='btn btn-info btn-mini' ng-click='peersVisible = !peersVisible' ng-show='!peersVisible'>Show Peers</button>
 			<button class='btn btn-inverse btn-mini' ng-click='peersVisible = !peersVisible' ng-show='peersVisible'>Hide Peers</button>	    	
 	    	<br />
