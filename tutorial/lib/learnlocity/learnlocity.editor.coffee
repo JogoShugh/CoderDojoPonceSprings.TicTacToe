@@ -3,6 +3,7 @@
 
 	mod.controller 'editorController', ($scope, $timeout)->
 		$scope.displays =
+			step:true
 			html:true
 			css:true
 			js:true
@@ -10,17 +11,39 @@
 
 		$scope.update = { whenTyping : true, previewBelow: false }
 
+		getNumDisplaysVisible = ->
+			numTurnedOn = 0
+			for k,v of $scope.displays
+				if v == true then numTurnedOn++
+
+			if $scope.displays.preview and $scope.update.previewBelow 
+				numTurnedOn--
+		
+			numTurnedOn
+		
 		$scope.getEditorsClass = ->
-			if $scope.displays.preview and not $scope.update.previewBelow
-				return 'col-md-2'
-			else 
-				return 'col-md-3'
+			numTurnedOn = getNumDisplaysVisible()
+			sizesMap = 
+				'1':12
+				'2':6
+				'3':4
+				'4':3
+				'5':2
+			'col-md-' + sizesMap[numTurnedOn]
 
 		$scope.getPreviewClass = ->
+			numTurnedOn = getNumDisplaysVisible()
+			console.log 'on: ' + numTurnedOn
+			sizesMap =
+				'1':12
+				'2':6
+				'3':4
+				'4':3
+				'5':4
 			if not $scope.update.previewBelow 
-				return 'col-md-4'
+				'col-md-' + sizesMap[numTurnedOn]
 			else
-				return 'col-md-12'
+				'col-md-12'
 
 		jsEditor = null
 		htmlEditor = null
