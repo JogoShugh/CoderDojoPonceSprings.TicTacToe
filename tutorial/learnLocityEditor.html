@@ -10,30 +10,30 @@
           <button type='button' 
             class='btn btn-info'
             ng-model='displays.html'
-            btn-checkbox>HTML</button>
+            btn-checkbox><img src="http://www.w3.org/html/logo/downloads/HTML5_Badge_512.png" height="18" width="18" /> HTML</button>
           <button type='button' 
             class='btn btn-info'
             ng-model='displays.css'
-            btn-checkbox>CSS</button>
+            btn-checkbox><img src="http://blogs.msdn.com/cfs-filesystemfile.ashx/__key/communityserver-blogs-components-weblogfiles/00-00-01-38-13-metablogapi/2158.CSS3_2D00_Logo_5F00_6972ADFA.png" height="18" width="18" /> CSS</button>
           <button type='button'
             class='btn btn-info'
             ng-model='displays.js'
-            btn-checkbox>JS</button>
+            btn-checkbox><img src="http://i.stack.imgur.com/Mmww2.png" height="18" width="18" /> JS</button>
           <button type='button' 
             class='btn btn-success'
             ng-click='preview()'
             ng-show='!displays.preview'
-            >Show Preview <i class='glyphicon glyphicon-search'></i></button>
+            ><i class='glyphicon glyphicon-eye-open'></i> Show Preview</button>
           <button type='button' 
             class='btn btn-inverse'
             ng-click='previewHide()'
             ng-show='displays.preview'
-            >Hide Preview <i class='glyphicon glyphicon-remove-circle'></i></button>        
+            ><i class='glyphicon glyphicon-eye-close'></i> Hide Preview</button>        
           <button type='button' 
             class='btn btn-success'
             ng-click='preview()'
             ng-show='displays.preview'
-            >Update Preview <i class='glyphicon glyphicon-refresh'></i></button>
+            ><i class='glyphicon glyphicon-refresh'></i> Update Preview</button>
         </span>
         <span ng-show='displays.preview'>Update when typing? <input 
           type="checkbox"
@@ -52,7 +52,7 @@
       <div ng-bind-html='code.story'></div>
     </div>
     <div class='editor {{getEditorsClass()}}' ng-show='displays.html'>
-      <div><strong>HTML</strong> <i class='glyphicon glyphicon-edit'></i></div>
+      <div style='background: #F06428; color: black;'><strong>HTML</strong> <i class='glyphicon glyphicon-edit'></i></div>
       <div class='ace_wrapper'>
         <div style='margin-top: 0px' ui-ace="{
           theme: 'chrome',
@@ -64,7 +64,7 @@
       </div>
     </div>
     <div class='editor {{getEditorsClass()}}' ng-show='displays.css'>
-      <div><strong>CSS</strong> <i class='glyphicon glyphicon-edit'></i></div>
+      <div style='background: #3B9ADB; color: black;'><strong>CSS</strong> <i class='glyphicon glyphicon-edit'></i></div>
       <div class='ace_wrapper'>
         <div ui-ace="{
           theme: 'chrome',
@@ -76,7 +76,7 @@
       </div>
     </div>
     <div class='editor {{getEditorsClass()}}' ng-show='displays.js'>
-      <div><strong>JS</strong> <i class='glyphicon glyphicon-edit'></i></div>
+      <div style='background: #F0DB4F; color: black'><strong>JS</strong> <i class='glyphicon glyphicon-edit'></i></div>
       <div class='ace_wrapper'>    
         <div ui-ace="{
           theme: 'chrome',
