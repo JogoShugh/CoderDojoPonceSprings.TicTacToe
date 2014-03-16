@@ -3,6 +3,7 @@
 
 	mod.controller 'editorController', ($scope, $timeout)->
 		$scope.displays =
+			levels:true
 			step:true
 			html:true
 			css:true
