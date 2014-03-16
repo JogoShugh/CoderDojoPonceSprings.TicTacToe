@@ -2,8 +2,6 @@
 	mod = angular.module('learnlocity.editor', ['ui.ace', 'ui.bootstrap'])
 
 	mod.controller 'editorController', ($scope, $timeout)->
-		CHANGE_HEIGHT_DELTA = 50
-
 		$scope.displays =
 			html:true
 			css:true
@@ -34,17 +32,6 @@
 		editorContentChanged = ->
 			if $scope.displays.preview && $scope.update.whenTyping then $scope.preview()
 
-		changeHeight = (target, delta) ->
-			el = editors[target].container.parentElement
-			height = adjustedHeight(el.offsetHeight, delta)
-			el.style.height = height
-			editors[target].resize()
-	  
-		adjustedHeight = (height, delta) ->
-			return height + "px"  if height <= 100 and delta < 0
-			height = height + delta + "px"
-			return height
-
 		$scope.htmlLoaded = (editor) ->
 			htmlEditor = editor
 			editors["html"] = editor
@@ -58,23 +45,7 @@
 		$scope.jsLoaded = (editor) ->
 			jsEditor = editor
 			editors["js"] = editor
-			configureEditor editor	
-
-		$scope.shorter = (target) ->
-			changeHeight target, -CHANGE_HEIGHT_DELTA
-
-		$scope.longer = (target) ->
-			changeHeight target, CHANGE_HEIGHT_DELTA
-
-		$scope.previewShorter = ->
-			$('#' + $scope.code.id).each ->
-				height = adjustedHeight(@offsetHeight, -CHANGE_HEIGHT_DELTA)
-				@style.height = height
-
-		$scope.previewLonger = ->
-			$('#' + $scope.code.id).each ->
-				height = adjustedHeight(@offsetHeight, CHANGE_HEIGHT_DELTA)
-				@style.height = height
+			configureEditor editor
 
 		$scope.preview = ->
 			$scope.displays.preview = true
@@ -112,10 +83,5 @@
 				$timeout ->
 					if $scope.previewOnLoad
 						$scope.preview()
-						$timeout ->
-							$scope.previewLonger()
-							$scope.previewLonger()
-							$scope.previewLonger()
-						, 100
 				, 250
 )()
