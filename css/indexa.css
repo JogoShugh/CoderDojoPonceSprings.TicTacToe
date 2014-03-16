@@ -105,4 +105,11 @@ xmp {
 h1, h2, h3, h4, h5, h6 {
   font-weight: bold;
 }
+
+/* Tutorializer styles */
+
+.verticalEditingPane {
+	color: orange;
+	float: left;
+	background: red;
 }

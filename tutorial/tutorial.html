@@ -4,12 +4,11 @@
 		<title>CoderDojo Ponce Springs - Tic Tac Toe Tutorial</title>
 		<meta name='viewport' content='width=device-width, initial-scale=1.0'>
 	    <link rel='stylesheet' href='lib/bootstrap/css/bootstrap.min.css' />
-	    <!--<link rel='stylesheet' href='lib/angular-bootstrap/css/bootstrap-combined.min.css' />    -->
 	    <link href='css/indexa.css' rel='stylesheet' media='screen' />
 	    <style>
 body {
 	margin: 0;
-	padding: 0;
+	padding: 0 !important;
 }
 
 iframe {
@@ -21,10 +20,12 @@ iframe {
   border: 1px solid darkgray;
   background: black;
   color: white;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
 }
 
 .ace_wrapper {  
-  height: 150px;
+  height: 500px;
 }
 
 .ace_editor {
@@ -62,13 +63,15 @@ iframe {
 	    <script src="lib/ui-ace/ui-ace.js"></script>
 	</head>
 	<body class='container-fluid center' ng-cloak>
-	    <p ng-controller='identityController'>
-	      <span class='label label-success' ng-show='userLoggedIn'>Welcome, {{userName}}</span>
-	      <button class='btn btn-primary' ng-click='showIdentifyUserDialog()' ng-show='!userLoggedIn'>Log In or Register</button>
-	    </p>     
+	    <div>
+		    <span ng-controller='identityController'>
+		      <span class='label label-success' ng-show='userLoggedIn'>Welcome, {{userName}}</span>
+		      <button class='btn btn-primary' ng-click='showIdentifyUserDialog()' ng-show='!userLoggedIn'>Log In or Register</button>
+		    </span>
+	    	<button class='btn btn-info btn-mini' ng-click='peersVisible = !peersVisible' ng-show='!peersVisible'>Show Peers</button>	    
+	    </div> 
 
-	    <div class='container-fluid'>
-	    	<button class='btn btn-info btn-mini' ng-click='peersVisible = !peersVisible' ng-show='!peersVisible'>Show Peers</button>
+	    <div class='container-fluid' id='mainPanel'>
 			<button class='btn btn-inverse btn-mini' ng-click='peersVisible = !peersVisible' ng-show='peersVisible'>Hide Peers</button>	    	
 	    	<br />
 	    	<br />
@@ -180,7 +183,7 @@ learnlocity.controller('peersController', function($rootScope, $scope, $http) {
 	];
 });
 
-learnlocity.controller('tutorialController', function($rootScope, $scope, $http) {
+learnlocity.controller('tutorialController', function($rootScope, $scope, $http, $sce) {
 	$scope.getTutorialClass = function() {
 		if ($rootScope.peersVisible === undefined) return 'span7';
 		if ($rootScope.peersVisible) return 'span7';
@@ -207,13 +210,15 @@ learnlocity.controller('tutorialController', function($rootScope, $scope, $http)
 		var item = {
 			name: name,
 			id: id,
-			story: story,
+			storyCode: story,
 			code: {
 				html: html,
 				js: js,
 				css: css
 			}
 		};
+
+		item.story = $sce.trustAsHtml(item.storyCode);		
 		
 		$rootScope.peersCode.push(item);  	
 		if (id == '__YOURS__') {

@@ -19,70 +19,73 @@
             class='btn btn-success'
             ng-click='preview()'
             ng-show='!displays.preview'
-            >Show Preview <i class='icon-eye-open icon-white'></i></button>
+            >Show Preview <i class='glyphicon glyphicon-search'></i></button>
           <button type='button' 
             class='btn btn-inverse'
             ng-click='previewHide()'
             ng-show='displays.preview'
-            >Hide Preview <i class='icon-eye-open icon-white'></i></button>        
+            >Hide Preview <i class='glyphicon glyphicon-remove-circle'></i></button>        
           <button type='button' 
             class='btn btn-success'
             ng-click='preview()'
             ng-show='displays.preview'
-            >Update Preview <i class='icon-eye-open icon-white'></i></button>
+            >Update Preview <i class='glyphicon glyphicon-refresh'></i></button>
         </span>
         <span ng-show='displays.preview'>Update when typing? <input 
           type="checkbox"
           ng-model="update.whenTyping" />
         </span>
+        <span ng-show='displays.preview'>Show preview below? <input 
+            type="checkbox"
+            ng-model='update.previewBelow' />
+        </span>        
       </div>
     </div>
   </div>
-  <div class='row-fluid'>    
-    <div class='{{getEditorsClass()}}'>
-      <div class='editor' ng-bind-html-unsafe='code.story'></div>
-      <div class='editor' ng-show='displays.html'>
-        <div style='padding: 3px'><strong>HTML</strong> <i class='icon-pencil icon-white'></i>&nbsp;<button class='btn btn-mini' ng-click='shorter("html")'>shorter <i class='icon-arrow-up'></i> </button>&nbsp;<button class='btn btn-mini' ng-click='longer("html")'>longer <i class='icon-arrow-down'></i></button></div>
-        <div class='ace_wrapper'>
-          <div style='margin-top: 0px' ui-ace="{
-            theme: 'chrome',
-            useWrapMode: true,
-            showGutter: true,
-            mode: 'html',
-            onLoad: htmlLoaded
-          }" ng-model="code.code['html']"></div>
-        </div>
-      </div>
-      <div class='editor' ng-show='displays.css'>
-        <div style='padding: 3px'><strong>CSS</strong> <i class='icon-pencil icon-white'></i>&nbsp;<button class='btn btn-mini' ng-click='shorter("css")'>shorter <i class='icon-arrow-up'></i> </button>&nbsp;<button class='btn btn-mini' ng-click='longer("css")'>longer <i class='icon-arrow-down'></i></button></div>
-        <div class='ace_wrapper'>
-          <div ui-ace="{
-            theme: 'chrome',
-            useWrapMode: true,
-            showGutter: true,
-            mode: 'css',
-            onLoad: cssLoaded
-          }" ng-model="code.code['css']"></div>
-        </div>
-      </div>
-      <div class='editor' ng-show='displays.js'>
-        <div style='padding: 3px'><strong>JS</strong> <i class='icon-pencil icon-white'></i>&nbsp;<button class='btn btn-mini' ng-click='shorter("js")'>shorter <i class='icon-arrow-up'></i> </button>&nbsp;<button class='btn btn-mini' ng-click='longer("js")'>longer <i class='icon-arrow-down'></i></button></div>
-        <div class='ace_wrapper'>    
-          <div ui-ace="{
-            theme: 'chrome',
-            useWrapMode: true,
-            showGutter: true,
-            mode: 'javascript',
-            onLoad: jsLoaded
-          }" ng-model="code.code['js']"></div>
-        </div>
+  <div class='row-fluid'>
+    <div class='editor {{getEditorsClass()}}'>
+      <div style='padding: 3px'><strong>Step</strong> <i class='glyphicon glyphicon-tower'></i></div>      
+      <div ng-bind-html='code.story'></div>
+    </div>
+    <div class='editor {{getEditorsClass()}}' ng-show='displays.html'>
+      <div><strong>HTML</strong> <i class='glyphicon glyphicon-edit'></i></div>
+      <div class='ace_wrapper'>
+        <div style='margin-top: 0px' ui-ace="{
+          theme: 'chrome',
+          useWrapMode: true,
+          showGutter: true,
+          mode: 'html',
+          onLoad: htmlLoaded
+        }" ng-model="code.code['html']"></div>
       </div>
     </div>
-    <div class='span6'>
-      <div class='editor' ng-show='displays.preview'>
-        <div style='padding: 3px'><strong>Preview</strong> <i class='icon-eye-open icon-white'></i>&nbsp;<button class='btn btn-mini' ng-click='previewShorter()'>shorter <i class='icon-arrow-up'></i> </button>&nbsp;<button class='btn btn-mini' ng-click='previewLonger()'>longer <i class='icon-arrow-down'></i></button></div>
-        <iframe style='width: 100%;border: 2px double darkgray' id='{{code.id}}'></iframe>
-      </div>    
+    <div class='editor {{getEditorsClass()}}' ng-show='displays.css'>
+      <div><strong>CSS</strong> <i class='glyphicon glyphicon-edit'></i></div>
+      <div class='ace_wrapper'>
+        <div ui-ace="{
+          theme: 'chrome',
+          useWrapMode: true,
+          showGutter: true,
+          mode: 'css',
+          onLoad: cssLoaded
+        }" ng-model="code.code['css']"></div>
+      </div>
     </div>
+    <div class='editor {{getEditorsClass()}}' ng-show='displays.js'>
+      <div><strong>JS</strong> <i class='glyphicon glyphicon-edit'></i></div>
+      <div class='ace_wrapper'>    
+        <div ui-ace="{
+          theme: 'chrome',
+          useWrapMode: true,
+          showGutter: true,
+          mode: 'javascript',
+          onLoad: jsLoaded
+        }" ng-model="code.code['js']"></div>
+      </div>
+    </div>
+    <div class='editor {{getPreviewClass()}}' ng-show='displays.preview'>
+      <div><strong>Preview</strong> <i class='glyphicon glyphicon-search'></i></div>
+      <iframe style='width: 100%;border: 2px double darkgray' id='{{code.id}}'></iframe>
+    </div>    
   </div>
 </div>
