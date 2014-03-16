@@ -8,10 +8,19 @@
 			js:true
 			preview:false
 
-		$scope.update = { whenTyping : true }
+		$scope.update = { whenTyping : true, previewBelow: false }
 
 		$scope.getEditorsClass = ->
-			return if $scope.displays.preview then 'col-md-3' else 'col-md-4'
+			if $scope.displays.preview and not $scope.update.previewBelow
+				return 'col-md-2'
+			else 
+				return 'col-md-3'
+
+		$scope.getPreviewClass = ->
+			if not $scope.update.previewBelow 
+				return 'col-md-4'
+			else
+				return 'col-md-12'
 
 		jsEditor = null
 		htmlEditor = null

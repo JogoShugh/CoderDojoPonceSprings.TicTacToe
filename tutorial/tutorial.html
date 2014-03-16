@@ -20,6 +20,8 @@ iframe {
   border: 1px solid darkgray;
   background: black;
   color: white;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
 }
 
 .ace_wrapper {  
@@ -61,13 +63,15 @@ iframe {
 	    <script src="lib/ui-ace/ui-ace.js"></script>
 	</head>
 	<body class='container-fluid center' ng-cloak>
-	    <p ng-controller='identityController'>
-	      <span class='label label-success' ng-show='userLoggedIn'>Welcome, {{userName}}</span>
-	      <button class='btn btn-primary' ng-click='showIdentifyUserDialog()' ng-show='!userLoggedIn'>Log In or Register</button>
-	    </p>     
+	    <div>
+		    <span ng-controller='identityController'>
+		      <span class='label label-success' ng-show='userLoggedIn'>Welcome, {{userName}}</span>
+		      <button class='btn btn-primary' ng-click='showIdentifyUserDialog()' ng-show='!userLoggedIn'>Log In or Register</button>
+		    </span>
+	    	<button class='btn btn-info btn-mini' ng-click='peersVisible = !peersVisible' ng-show='!peersVisible'>Show Peers</button>	    
+	    </div> 
 
 	    <div class='container-fluid' id='mainPanel'>
-	    	<button class='btn btn-info btn-mini' ng-click='peersVisible = !peersVisible' ng-show='!peersVisible'>Show Peers</button>
 			<button class='btn btn-inverse btn-mini' ng-click='peersVisible = !peersVisible' ng-show='peersVisible'>Hide Peers</button>	    	
 	    	<br />
 	    	<br />
