@@ -53,6 +53,10 @@ iframe {
 .hide {
     display: none;
 }
+
+.navbar {
+	margin-bottom: 0 !important;
+}
     	</style>
 		<script src='lib/jquery/jquery-1.11.0.min.js'></script>	
 		<script src='lib/angular/angular.min.js'></script>
@@ -63,29 +67,44 @@ iframe {
 	    <script src="lib/ui-ace/ui-ace.js"></script>
 	</head>
 	<body class='container-fluid center' ng-cloak>
-	    <div>
-		    <span ng-controller='identityController'>
-		      <span class='label label-success' ng-show='userLoggedIn'>Welcome, {{userName}}</span>
-		      <button class='btn btn-primary' ng-click='showIdentifyUserDialog()' ng-show='!userLoggedIn'>Log In or Register</button>
-		    </span>
-	    	<button class='btn btn-info btn-mini' ng-click='peersVisible = !peersVisible' ng-show='!peersVisible'>Show Peers</button>	    
-	    </div> 
-
+		<nav class="navbar navbar-default" role="navigation" 
+			ng-controller='identityController'>
+		  <div class="container-fluid">
+		    <!-- Brand and toggle get grouped for better mobile display -->
+		    <div class="navbar-header">
+		      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+		        <span class="sr-only">Toggle navigation</span>
+		        <span class="icon-bar"></span>
+		        <span class="icon-bar"></span>
+		        <span class="icon-bar"></span>
+		      </button>
+		      <a class="navbar-brand" href="#"><i class='glyphicon glyphicon-signal'></i> Learnlocity</a>
+		    </div>
+		    <!-- Collect the nav links, forms, and other content for toggling -->
+		    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+		      <ul class="nav navbar-nav navbar-right">
+		        <li><a href="#" ng-show='!userLoggedIn' ng-click='showIdentifyUserDialog()' style='background: lime;'><strong>Log In or Register</strong></a></li>
+		        <li><a href="#" style='background: lightgreen' ng-show='userLoggedIn'>Welcome, {{userName}}</a></li>
+		      </ul>
+		    </div><!-- /.navbar-collapse -->
+		  </div><!-- /.container-fluid -->
+		</nav>
+		<!--
+	    	<button class='btn btn-info btn-mini' ng-click='peersVisible = !peersVisible' ng-show='!peersVisible'>Show Peers</button>
+		-->
 	    <div class='container-fluid' id='mainPanel'>
-			<button class='btn btn-inverse btn-mini' ng-click='peersVisible = !peersVisible' ng-show='peersVisible'>Hide Peers</button>	    	
-	    	<br />
-	    	<br />
+			<button class='btn btn-inverse btn-mini' ng-click='peersVisible = !peersVisible' ng-show='peersVisible'>Hide Peers</button>
 	    	<div class='row-fluid'>
 			    <tabset ng-controller='tutorialController' ng-cloak
 			    	class="{{getTutorialClass(peersVisible)}}">
-			      <tab heading="Code Editor">
+			      <tab heading="Level">
 			        <div ng-repeat='stepCode in stepsCode'>
 			          <div ng-init='code=stepCode'>
 			            <div ng-include="'learnLocityEditor.html'" ng-controller='editorController'></div>
 			          </div>
 			        </div>      	
 			      </tab>
-			      <tab heading="Peers' Code">
+			      <tab heading="Classmates">
 			        <div ng-repeat='code in peersCode | filter:notMine(code)'>
 			          {{code.name}} 
 			            <a class='btn btn-primary btn-small' ng-click='peerCodeSpy(code)'>Spy</a>
