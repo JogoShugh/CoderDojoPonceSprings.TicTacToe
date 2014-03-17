@@ -2,8 +2,6 @@
 	mod = angular.module('learnlocity.editor', ['ui.ace', 'ui.bootstrap'])
 
 	mod.controller 'editorController', ($scope, $timeout, $window)->
-		$scope.levelsVisible = true
-
 		$scope.displays =
 			step:true
 			html:true
@@ -63,7 +61,7 @@
 
 		updateEditorHeights = ->
 			baseLineOffsetTop = $('#step').offset().top
-			$('.editor, .ace_wrapper').each ->
+			$('.editor, .ace_wrapper, .preview').each ->
 				newHeight = $window.document.body.clientHeight - baseLineOffsetTop - 2
 				$(@).height(newHeight)
 			for key, editor of editors
@@ -116,7 +114,9 @@
 			html.append head
 			html.append body
 
-			$("#" + $scope.code.id).each ->
+			codeId = $scope.code.id
+
+			$("#" + codeId).each ->
 				doc = @contentWindow.document
 				doc.open()
 				doc.write "<html>" + html.html() + "</html>"

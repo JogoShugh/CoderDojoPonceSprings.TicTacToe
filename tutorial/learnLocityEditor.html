@@ -1,17 +1,5 @@
 <div class='container-fluid'>
-  <div class='row-fluid'>
-    <div ng-show='levelsVisible'>
-        <div style='padding: 3px'><strong>Levels</strong> <i class='glyphicon glyphicon-road'></i></div>      
-        <div>
-          1: Introducing the Web
-          <br />
-          2: blah blah 
-          <br />
-          3: blah blah
-          <br />
-          4: blah blah
-        </div>
-    </div>    
+  <div class='row-fluid'>    
     <div style='background: beige; padding: 3px;'>      
       <div>
         <span class='btn-group'>
@@ -101,7 +89,7 @@
     </div>
     <div class='editor {{getPreviewClass()}}' ng-show='displays.preview'>
       <div><strong>Preview</strong> <i class='glyphicon glyphicon-eye-open'></i></div>
-      <iframe style='width: 100%;border: 2px double darkgray' id='{{code.id}}'></iframe>
+      <iframe class='preview' style='width: 100%;border: 2px double darkgray' id='{{code.id}}'></iframe>
     </div>    
   </div>
 </div>
