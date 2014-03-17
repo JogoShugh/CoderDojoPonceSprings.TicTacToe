@@ -255,7 +255,8 @@ learnlocity.controller('tutorialController', function($rootScope, $scope, $http,
 
 	$rootScope.stepLoad = function(stepNumber) {
 		console.log(stepNumber);
-		$http.get('steps/step-' + stepNumber + '.html').success(createCodeFromXml);
+		$http.get('http://www.corsproxy.com/jogoshugh.github.io/CoderDojoPonceSprings.TicTacToe/tutorial/steps/step-' + stepNumber + '.html').success(createCodeFromXml);
+		//$http.get('steps/step-' + stepNumber + '.html').success(createCodeFromXml);
 	}
 
 	$rootScope.peers = [];
