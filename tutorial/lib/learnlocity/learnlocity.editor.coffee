@@ -1,9 +1,10 @@
 (->
 	mod = angular.module('learnlocity.editor', ['ui.ace', 'ui.bootstrap'])
 
-	mod.controller 'editorController', ($scope, $timeout)->
+	mod.controller 'editorController', ($scope, $timeout, $window)->
+		$scope.levelsVisible = true
+
 		$scope.displays =
-			levels:true
 			step:true
 			html:true
 			css:true
@@ -21,6 +22,7 @@
 				numTurnedOn--
 		
 			numTurnedOn
+
 		
 		$scope.getEditorsClass = ->
 			numTurnedOn = getNumDisplaysVisible()
@@ -30,7 +32,9 @@
 				'3':4
 				'4':3
 				'5':2
+				'6':2
 			'col-md-' + sizesMap[numTurnedOn]
+
 
 		$scope.getPreviewClass = ->
 			numTurnedOn = getNumDisplaysVisible()
@@ -41,6 +45,7 @@
 				'3':4
 				'4':3
 				'5':4
+				'6':2
 			if not $scope.update.previewBelow 
 				'col-md-' + sizesMap[numTurnedOn]
 			else
@@ -55,6 +60,16 @@
 			js: null
 
 		$scope.editorsToLoadCount = 3
+
+		updateEditorHeights = ->
+			baseLineOffsetTop = $('#step').offset().top
+			$('.editor, .ace_wrapper').each ->
+				newHeight = $window.document.body.clientHeight - baseLineOffsetTop - 2
+				$(@).height(newHeight)
+			for key, editor of editors
+				editor.resize()
+
+		angular.element($window).bind 'resize', updateEditorHeights
 
 		configureEditor = (editor) ->
 			editor.setFontSize("14px")
@@ -116,5 +131,6 @@
 				$timeout ->
 					if $scope.previewOnLoad
 						$scope.preview()
+					updateEditorHeights()
 				, 250
 )()
