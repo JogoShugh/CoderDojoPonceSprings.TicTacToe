@@ -61,8 +61,9 @@
 
 		updateEditorHeights = ->
 			baseLineOffsetTop = $('#step').offset().top
+			$('.editor').resizable()
 			$('.editor, .ace_wrapper, .preview').each ->
-				newHeight = $window.document.body.clientHeight - baseLineOffsetTop - 2
+				newHeight = $window.document.body.clientHeight - baseLineOffsetTop - 20
 				$(@).height(newHeight)
 			for key, editor of editors
 				editor.resize()

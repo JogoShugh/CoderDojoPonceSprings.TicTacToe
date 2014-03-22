@@ -4,7 +4,10 @@
 		<title>CoderDojo Ponce Springs - Tic Tac Toe Tutorial</title>
 		<meta name='viewport' content='width=device-width, initial-scale=1.0'>
 	    <link rel='stylesheet' href='lib/bootstrap/css/bootstrap.min.css' />
+	    <link rel='stylesheet' href='//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css' />
 	    <link href='css/indexa.css' rel='stylesheet' media='screen' />
+		<link href='css/snap.css' rel='stylesheet' />
+		<link href='css/angular-snap.css' rel='stylesheet' />
 	    <style>
 body {
 	margin: 0;
@@ -58,131 +61,154 @@ iframe {
 }
     	</style>
 		<script src='lib/jquery/jquery-1.11.0.min.js'></script>	
+		<script src='//code.jquery.com/ui/1.10.4/jquery-ui.js'></script>
 		<script src='lib/angular/angular.min.js'></script>
 		<script src='lib/angular/angular-resource.min.js'></script>
 	    <script src='lib/angular-bootstrap/js/ui-bootstrap-tpls-0.10.0.min.js'></script>
 	    <script src='lib/bootstrap/js/bootstrap.min.js'></script>
 	    <script src="lib/ace/ace.js" charset="utf-8"></script>
 	    <script src="lib/ui-ace/ui-ace.js"></script>
+	    <script src="lib/snap.js"></script>
+	    <script src="lib/angular-snap.js"></script>
 	</head>
 	<body class='container-fluid center' ng-cloak>
-		<nav class="navbar navbar-default" role="navigation" 
-			ng-controller='identityController'>
-		  <div class="container-fluid">
-		    <!-- Brand and toggle get grouped for better mobile display -->
-		    <div class="navbar-header">
-		      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-		        <span class="sr-only">Toggle navigation</span>
-		        <span class="icon-bar"></span>
-		        <span class="icon-bar"></span>
-		        <span class="icon-bar"></span>
-		      </button>
-		      <a class="navbar-brand" href="#"><i class='glyphicon glyphicon-signal'></i> Learnlocity</a>
-		    </div>
-		    <!-- Collect the nav links, forms, and other content for toggling -->
-		    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-		      <ul class="nav navbar-nav navbar-right">
-		        <li><a href="#" ng-show='!userLoggedIn' ng-click='showIdentifyUserDialog()' style='background: lime;'><strong>Log In or Register</strong></a></li>
-		        <li><a href="#" style='background: lightgreen' ng-show='userLoggedIn'>Welcome, {{userName}}</a></li>
-		      </ul>
-		    </div><!-- /.navbar-collapse -->
-		  </div><!-- /.container-fluid -->
-		</nav>
 		<!--
 	    	<button class='btn btn-info btn-mini' ng-click='peersVisible = !peersVisible' ng-show='!peersVisible'>Show Peers</button>
 		-->
-	    <div class='container-fluid' id='mainPanel'>
-			<button class='btn btn-inverse btn-mini' ng-click='peersVisible = !peersVisible' ng-show='peersVisible'>Hide Peers</button>
-	    	<div class='row-fluid'>	    		
-			    <tabset ng-controller='tutorialController' ng-cloak class="{{getTutorialClass(peersVisible)}}">
-			      <tab heading="Level">
-				    <div>
-				        <div style='padding: 3px'><strong>Levels</strong> <i class='glyphicon glyphicon-road'></i></div>      
-				        <div>
-				          	<button class='btn btn-primary btn-mini' ng-click='stepLoad("01")'>1: Introducing the Web</button><br />
-				          	<button class='btn btn-primary btn-mini' ng-click='stepLoad("02")'>2: Your first game</button><br />
+		<snap-drawer>
+			<div>
+			    <div style='padding: 3px'><strong>Levels</strong> <i class='glyphicon glyphicon-road'></i></div>
+				<accordion close-others="true">
+					<accordion-group is-open="true">
+						<accordion-heading>
+					        1: Introducing the Web <i class="pull-right glyphicon glyphicon-chevron-down"></i>
+					    </accordion-heading>
+					  	Learn the basics of what the web is all about and where it came from.
+						<button class='btn btn-success btn-mini' ng-click='stepLoad("01")'>Go</button>
+					</accordion-group>
+					<accordion-group>
+						<accordion-heading>
+					        2: Your first game <i class="pull-right glyphicon glyphicon-chevron-down"></i>
+					    </accordion-heading>
+					  	Build your first game with what you've already learned.
+					  	<button class='btn btn-success btn-mini' ng-click='stepLoad("02")'>Go</button>
+					</accordion-group>						
+				</accordion>
+			</div>			
+		</snap-drawer>
+		<div snap-content ng-controller='tutorialController'>
+			<nav class="navbar navbar-default" role="navigation" 
+				ng-controller='identityController'>
+			  <div class="container-fluid" ng-controller='identityController'>
+			    <!-- Brand and toggle get grouped for better mobile display -->
+			    <div class="navbar-header">
+			      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+			        <span class="sr-only">Toggle navigation</span>
+			        <span class="icon-bar"></span>
+			        <span class="icon-bar"></span>
+			        <span class="icon-bar"></span>
+			      </button>
+			      <a class="navbar-brand" href="#"><i class='glyphicon glyphicon-signal'></i> Learnlocity</a>
+			    </div>
+			    <!-- Collect the nav links, forms, and other content for toggling -->
+			    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+			      <ul class="nav navbar-nav navbar-right">
+			        <li><a href="#" ng-show='!userLoggedIn' ng-click='showIdentifyUserDialog()' style='background: lime;'><strong>Log In or Register</strong></a></li>
+			        <li><a href="#" style='background: lightgreen' ng-show='userLoggedIn'>Welcome, {{userName}}</a></li>
+			      </ul>
+			    </div><!-- /.navbar-collapse -->
+			  </div><!-- /.container-fluid -->
+			</nav>		
+		    <div class='container-fluid' id='mainPanel' style='background:lightgray'>
+				<button class='btn btn-inverse btn-mini' ng-click='peersVisible = !peersVisible' ng-show='peersVisible'>Hide Peers</button>
+		    	<div class='row-fluid'>
+				    <tabset ng-cloak class="{{getTutorialClass(peersVisible)}}">
+				      <tab heading="Active Level">
+				      	<div style="height: 500px">
+					        <div ng-repeat='stepCode in stepsCode'>
+					          <div ng-init='code=stepCode'>
+					            <div ng-include="'learnLocityEditor.html'" ng-controller='editorController'></div>
+					          </div>
+					        </div>
+				    	</div>
+				      </tab>
+				      
+				      <tab heading="Classmates">
+				        <div ng-repeat='code in peersCode | filter:notMine(code)'>
+				          {{code.name}} 
+				            <a class='btn btn-primary btn-small' ng-click='peerCodeSpy(code)'>Spy</a>
 				        </div>
-				    </div>
-			        <div ng-repeat='stepCode in stepsCode'>
-			          <div ng-init='code=stepCode'>
-			            <div ng-include="'learnLocityEditor.html'" ng-controller='editorController'></div>
-			          </div>
-			        </div>      	
-			      </tab>
-			      <tab heading="Classmates">
-			        <div ng-repeat='code in peersCode | filter:notMine(code)'>
-			          {{code.name}} 
-			            <a class='btn btn-primary btn-small' ng-click='peerCodeSpy(code)'>Spy</a>
-			        </div>
-			        <div ng-repeat='peerCode in peers'>
-			          <div ng-init='code=peerCode;previewOnLoad=true'>
-			            <div ng-include="'learnLocityEditor.html'" ng-controller='editorController'></div>
-			          </div>
-			        </div>
-			      </tab>
-			    </tabset>
-	    		<div class="span5" style='background: lightyellow;padding:4px' ng-controller='peersController' ng-show='peersVisible'>
-	    			<h4>Step Peers</h4>
-	    			<tabset>
-	    				<tab heading="At Step">
-			    			<div class='well well-small'>
-			    				<div ng-repeat='peer in peers' class='nav'>
-			    					{{peer.name}}	    					
-			    				</div>
-			    			</div>	    					
-	    				</tab>
-	    				<tab heading="Need Help">
-			    			<div class='well well-small'>
-			    				<div ng-repeat='peer in peers' class='nav'>
-			    					{{peer.name}}	    					
-			    				</div>
-			    			</div>
-	    				</tab>	    					    		    				
-	    				<tab heading="Did Step">
-			    			<div class='well well-small'>
-			    				<div ng-repeat='peer in peers' class='nav'>
-			    					{{peer.name}}	    					
-			    				</div>
-			    			</div>
-	    				</tab>
-	    				<tab heading="Gave Help">
-			    			<div class='well well-small'>
-			    				<div ng-repeat='peer in peers' class='nav'>
-			    					{{peer.name}}	    					
-			    				</div>
-			    			</div>
-	    				</tab>
-	    			</tabset>
-	    			<h4>All Peers</h4>
-	    			<tabset>
-						<tab heading="Online Now">
-			    			<div class='well well-small'>
-			    				<div ng-repeat='peer in peers' class='nav'>
-			    					{{peer.name}}	    					
-			    				</div>
-			    			</div>	    					
-	    				</tab>
-						<tab heading="Offline Now">
-			    			<div class='well well-small'>
-			    				<div ng-repeat='peer in peers' class='nav'>
-			    					{{peer.name}}	    					
-			    				</div>
-			    			</div>	    					
-	    				</tab>	    				
-						<tab heading="All">
-			    			<div class='well well-small'>
-			    				<div ng-repeat='peer in peers' class='nav'>
-			    					{{peer.name}}	    					
-			    				</div>
-			    			</div>	    					
-	    				</tab>	    					    				
-	    			</tabset>
-	    		</div>			    
-			</div>
-		</div>			  
+				        <div ng-repeat='peerCode in peers'>
+				          <div ng-init='code=peerCode;previewOnLoad=true'>
+				            <div ng-include="'learnLocityEditor.html'" ng-controller='editorController'></div>
+				          </div>
+				        </div>
+				      </tab>
+				  	  
+				    </tabset>
+		    		<div class="span5" style='background: lightyellow;padding:4px' ng-controller='peersController' ng-show='peersVisible'>
+		    			<h4>Step Peers</h4>
+		    			<tabset>
+		    				<tab heading="At Step">
+				    			<div class='well well-small'>
+				    				<div ng-repeat='peer in peers' class='nav'>
+				    					{{peer.name}}	    					
+				    				</div>
+				    			</div>	    					
+		    				</tab>
+		    				<tab heading="Need Help">
+				    			<div class='well well-small'>
+				    				<div ng-repeat='peer in peers' class='nav'>
+				    					{{peer.name}}	    					
+				    				</div>
+				    			</div>
+		    				</tab>	    					    		    				
+		    				<tab heading="Did Step">
+				    			<div class='well well-small'>
+				    				<div ng-repeat='peer in peers' class='nav'>
+				    					{{peer.name}}	    					
+				    				</div>
+				    			</div>
+		    				</tab>
+		    				<tab heading="Gave Help">
+				    			<div class='well well-small'>
+				    				<div ng-repeat='peer in peers' class='nav'>
+				    					{{peer.name}}	    					
+				    				</div>
+				    			</div>
+		    				</tab>
+		    			</tabset>
+		    			<h4>All Peers</h4>
+		    			<tabset>
+							<tab heading="Online Now">
+				    			<div class='well well-small'>
+				    				<div ng-repeat='peer in peers' class='nav'>
+				    					{{peer.name}}	    					
+				    				</div>
+				    			</div>	    					
+		    				</tab>
+							<tab heading="Offline Now">
+				    			<div class='well well-small'>
+				    				<div ng-repeat='peer in peers' class='nav'>
+				    					{{peer.name}}	    					
+				    				</div>
+				    			</div>	    					
+		    				</tab>	    				
+							<tab heading="All">
+				    			<div class='well well-small'>
+				    				<div ng-repeat='peer in peers' class='nav'>
+				    					{{peer.name}}	    					
+				    				</div>
+				    			</div>	    					
+		    				</tab>	    					    				
+		    			</tabset>
+		    		</div>			    
+				</div>
+			</div>	
+		</div>
 	</body>
 	<script>
-var learnlocity = angular.module('learnlocity',['learnlocity.identity', 'learnlocity.editor', 'ui.bootstrap']);
+var learnlocity = angular.module('learnlocity',['snap', 'learnlocity.identity', 'learnlocity.editor', 'ui.bootstrap']);
 learnlocity.run(function($rootScope) {
 	$rootScope.peersVisible = false;
 });
@@ -254,9 +280,9 @@ learnlocity.controller('tutorialController', function($rootScope, $scope, $http,
 	}
 
 	$rootScope.stepLoad = function(stepNumber) {
-		console.log(stepNumber);
-		$http.get('http://www.corsproxy.com/jogoshugh.github.io/CoderDojoPonceSprings.TicTacToe/tutorial/steps/step-' + stepNumber + '.html').success(createCodeFromXml);
-		//$http.get('steps/step-' + stepNumber + '.html').success(createCodeFromXml);
+		$rootScope.levelActive = true
+		//$http.get('http://www.corsproxy.com/jogoshugh.github.io/CoderDojoPonceSprings.TicTacToe/tutorial/steps/step-' + stepNumber + '.html').success(createCodeFromXml);
+		$http.get('steps/step-' + stepNumber + '.html').success(createCodeFromXml);
 	}
 
 	$rootScope.peers = [];
