@@ -80,29 +80,30 @@ iframe {
 				<ul class="nav nav-pills nav-stacked" ng-controller='identityController'>
 					<li ng-show='!userLoggedIn'><a class='btn btn-success' href="#" ng-click='showIdentifyUserDialog()'><strong>Log In or Register</strong></a></li>
 					<li ng-show='userLoggedIn'><a class='btn btn-success' style='background: darkblue' href="#"><strong>Welcome, {{userName}}!</strong></a></li>
-				</ul>				
-			    <div style='padding: 3px'><strong>All Challenges</strong> <i class='glyphicon glyphicon-road'></i></div>
-				<accordion close-others="true">
-					<accordion-group is-open="true">
-						<accordion-heading>
-					        1: Introducing the Web <i class="pull-right glyphicon glyphicon-chevron-down"></i>
-					    </accordion-heading>
-					  	Learn the basics of what the web is all about and where it came from.
-						<button class='btn btn-success btn-mini' ng-click='stepLoad("01")'>Go</button>
+				</ul>
+				<br />
+				<h4>Your Quest:</h4>
+				<accordion close-others="true">					
+					<accordion-group is-open='true'>
+						<accordion-heading>{{questInfo.title}} <i class="pull-right glyphicon glyphicon-chevron-down"></i></accordion-heading>
+						{{questInfo.description}}
 					</accordion-group>
-					<accordion-group>
+				</accordion>
+				<h4>Quest Missions:</h4>
+				<accordion close-others="true">														
+					<accordion-group is-open='false' ng-repeat='mission in missions'>
 						<accordion-heading>
-					        2: Your first game <i class="pull-right glyphicon glyphicon-chevron-down"></i>
+					        {{mission.title}}<i class="pull-right glyphicon glyphicon-chevron-down"></i>
 					    </accordion-heading>
-					  	Build your first game with what you've already learned.
-					  	<button class='btn btn-success btn-mini' ng-click='stepLoad("02")'>Go</button>
-					</accordion-group>						
+					  	{{mission.description}}
+						<button class='btn btn-success btn-mini' ng-click='stepLoad(mission.href)'>Go</button>
+					</accordion-group>
 				</accordion>
 			</div>			
 		</snap-drawer>
 		<div snap-content ng-controller='tutorialController'>
 			<nav class="navbar navbar-default" role="navigation">
-			  <a href="#" class="navbar-brand" style='background: lightblue;' snap-toggle='left'><strong>Menu</strong></a> <span class='navbar-brand'><i class='glyphicon glyphicon-signal'></i> <strong>Learnlocity</strong>: <em>accelerate your learning velocity!</em></span>
+			  <a href="#" class="navbar-brand" style='background: lightblue;' snap-toggle='left'><strong>Menu</strong></a> <span class='navbar-brand'><i class='glyphicon glyphicon-signal'></i> <strong>Learnlocity</strong>: <em>knowledge at high velocity!</em></span>
 			</nav>		
 		    <div class='container-fluid' id='mainPanel' style='background:lightgray'>
 				<button class='btn btn-inverse btn-mini' ng-click='peersVisible = !peersVisible' ng-show='peersVisible'>Hide Peers</button>
@@ -264,10 +265,32 @@ learnlocity.controller('tutorialController', function($rootScope, $scope, $http,
 		}
 	}
 
-	$rootScope.stepLoad = function(stepNumber) {
+	$rootScope.questLoad = function(questName) {
+		var rootUrl = "quests/" + questName + "/";
+		$http.get(rootUrl + "quest.html").success(function(data) {
+			var quest = new DOMParser().parseFromString(data, "text/html");
+			var questTitle = quest.querySelectorAll("section")[0].textContent;
+			var questDescription = quest.querySelectorAll("article")[0].textContent;
+			$rootScope.questInfo = { title: questTitle, description: questDescription };
+			var missionLinks = quest.querySelectorAll('nav>ul>li');			
+			var missions = [];
+			for(var i = 0; i < missionLinks.length; i++) {
+				var missionLink = missionLinks[i];
+				var href = missionLink.querySelectorAll('[href]')[0].attributes["href"].value;
+				missions.push({
+					title: missionLink.textContent,
+					description: missionLink.textContent,
+					href: rootUrl + href
+				});
+			}
+			$rootScope.missions = missions;
+		});
+	};
+
+	$rootScope.stepLoad = function(missionHref) {
 		$rootScope.levelActive = true
 		//$http.get('http://www.corsproxy.com/jogoshugh.github.io/CoderDojoPonceSprings.TicTacToe/tutorial/steps/step-' + stepNumber + '.html').success(createCodeFromXml);
-		$http.get('steps/step-' + stepNumber + '.html').success(createCodeFromXml);
+		$http.get(missionHref).success(createCodeFromXml);
 	}
 
 	$rootScope.peers = [];
@@ -276,7 +299,7 @@ learnlocity.controller('tutorialController', function($rootScope, $scope, $http,
 		$rootScope.peers.push(code);
 	};
 
-	$rootScope.stepLoad("01");
+	$rootScope.questLoad("neophyte/001-Rescure_TBL_from_the_WWW");
 });
   </script>
   <script type='text/coffeescript' src='lib/tutorializr/tutorializr.coffee'></script>
