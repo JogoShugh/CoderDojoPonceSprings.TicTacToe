@@ -117,15 +117,39 @@ iframe {
 			</div>			
 		</snap-drawer>
 		<div snap-content>
-			<nav ng-init='menuVisible=false' class="navbar navbar-default" role="navigation">
-			  <a href="#" class="navbar-brand" style='background: lightblue;' ng-click='menuVisible=!menuVisible' snap-toggle='left'><i class='glyphicon glyphicon-arrow-left' ng-show='menuVisible'></i><span ng-show='menuVisible'>&nbsp;</span><strong>Menu</strong>&nbsp;<i class='glyphicon glyphicon-arrow-right' ng-show='!menuVisible'></i></a><span class='navbar-brand'><i class='glyphicon glyphicon-signal'></i> <strong>Learnlocity</strong>: <em>knowledge at high velocity!</em></span>
+			<nav class="navbar navbar-default" role="navigation">
+			  <a href="#" class="navbar-brand" style='background: lightblue;' snap-toggle='left'><span ng-show='menuVisible'>&nbsp;</span><strong>Menu</strong>&nbsp;<i class='glyphicon glyphicon-transfer'></i></a><span class='navbar-brand'><i class='glyphicon glyphicon-signal'></i> <strong>Learnlocity</strong>: <em>build your brain velocity!</em></span>
 			</nav>		
 		    <div class='container-fluid fill' id='mainPanel' style='background:white'>
 		    	<div class='row-fluid'>
+					<div class="jumbotron" ng-show='homeVisible'>
+						<h1>Welcome to Learnlocity!</h1>
+						<p>Get started building your brain's learning velocity with your peers.</p>
+						<h2>Available Quests:</h2>
+						<div class='container-fluid'>
+							<div class="row-fluid">
+							  	<div class="col-sm-6 col-md-4">
+							    	<div class="thumbnail">
+							      		<div class="caption" style='text-align:center' ng-init='briefingVisible=false'>
+											<h3>Rescue Sir Tim Berners-Lee from the WWW!
+											</h3>
+											<img src="img/tbl-rescue.png" alt="Rescue Sir Tim Berners-Lee from the WWW!" />
+											<p style='margin-top:5px'>
+									      		<a href='#' role='button' class='btn btn-success' ng-click='stepLoad("quests/neophyte/001-Rescure_TBL_from_the_WWW/missions/001-TBL_is_lost_in_the_WWW/mission.html")'>Start Quest Missions</a><strong>&nbsp;or&nbsp;</strong><a class='btn btn-primary' href='#' role='button' ng-click='briefingVisible=true'>See Quest Briefing</a>
+								      		</p>
+								      		<p style='text-align:left;' class='well well-small' ng-show='briefingVisible'>
+												Sir Tim Berners-Lee (TBL) invented the World Wide Web in 1988. Robotic time bandits from the future have traveled back to 1987 and ripped TBL from the space-time continuum and sent him back to another WWW, the Wild Wild West of 1887. Go on a quest to save TBL from a terrible fate and ensure the creation of the web and the future!
+											</p>    
+							      		</div>
+							    	</div>
+							  	</div>
+							</div>
+						</div>
+					</div>
 			        <div ng-repeat='stepCode in stepsCode'>
-			          <div ng-init='code=stepCode'>
-			            <div ng-include="'learnLocityEditor.html'" ng-controller='editorController'></div>
-			          </div>
+			        	<div ng-init='code=stepCode'>
+			            	<div ng-include="'learnLocityEditor.html'" ng-controller='editorController'></div>
+			          	</div>
 			        </div>
 				</div>
 			</div>	
@@ -138,6 +162,7 @@ learnlocity.run(function($rootScope) {
 });
 
 learnlocity.controller('tutorialController', function($rootScope, $scope, $http, $sce) {
+	$scope.homeVisible = true;
 	$scope.questMissionsComplete = 0;
 	$scope.questMissionsTotal = 6;
 	$scope.questPercentComplete = function() {
@@ -214,8 +239,7 @@ learnlocity.controller('tutorialController', function($rootScope, $scope, $http,
 	};
 
 	$rootScope.stepLoad = function(missionHref) {
-		$rootScope.levelActive = true
-		//$http.get('http://www.corsproxy.com/jogoshugh.github.io/CoderDojoPonceSprings.TicTacToe/tutorial/steps/step-' + stepNumber + '.html').success(createCodeFromXml);
+		$scope.homeVisible = false;
 		$http.get(missionHref).success(createCodeFromXml);
 	}
 
