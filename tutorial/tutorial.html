@@ -75,14 +75,17 @@ iframe {
 	    <script src="lib/ui-ace/ui-ace.js"></script>
 	    <script src="lib/snap.js"></script>
 	    <script src="lib/angular-snap.js"></script>
+	    <script src="lib/github/github.js"></script>
 	</head>
 	<body class='container-fluid center' ng-cloak ng-controller='tutorialController'>
 		<snap-drawer>
 			<div class='container-fluid center fill' style='background: palegreen'>
 				<ul class="nav nav-pills nav-stacked" ng-controller='identityController'>
+					<li><a class='btn btn-primary' ng-click='logInWithGitHub()'>Log In with GitHub</a></li>
 					<li ng-show='!userLoggedIn'><a class='btn btn-success' href="#" ng-click='showIdentifyUserDialog()'><strong>Log In or Register</strong>&nbsp;<i class='glyphicon glyphicon-user'></i></a></li>
-					<li ng-show='userLoggedIn'><a class='btn btn-success' style='background: darkblue' href="#"><strong>Welcome, {{userName}}!</strong></a></li>
-				</ul>				
+					<li ng-show='userLoggedIn'><a class='btn btn-success' style='background: darkblue' href="#"><strong>Welcome, {{userName}}!</strong></a></li>					
+				</ul>
+				<img ng-src="{{avatar_url.src}}" />
 				<h3 style='text-align:center'><i class='glyphicon glyphicon-flag'></i>&nbsp;Your Quest:</h3>
 				<div class='alert alert-warning' ng-if='stepsCode.length == 0'>You haven't selected a quest yet. Pick one from the right first!</div>
 				<div class='panel panel-primary' ng-if='stepsCode.length > 0'>
@@ -168,13 +171,11 @@ learnlocity.run(function($rootScope) {
 });
 
 learnlocity.controller('tutorialController', function($rootScope, $scope, $http, $sce) {
-
 	$scope.homeVisible = true;
 	$scope.questMissionsComplete = 0;
 	$scope.questMissionsTotal = 0;
 	$scope.questPercentComplete = function() {
 		var pc = Math.floor(100 * ($scope.questMissionsComplete / $scope.questMissionsTotal));
-		console.log(pc);
 		return pc;
 	};
 
@@ -232,7 +233,6 @@ learnlocity.controller('tutorialController', function($rootScope, $scope, $http,
 	$rootScope.questList = function() {
 		$rootScope.quests = [];
 		$http.get("quests/index.html").success(function(data) {
-			console.log(data);
 			var questListDoc = new DOMParser().parseFromString(data, "text/html");
 			var questLinks = questListDoc.querySelectorAll('nav>ul>li>a');			
 			for(var i = 0; i < questLinks.length; i++) {
@@ -241,7 +241,6 @@ learnlocity.controller('tutorialController', function($rootScope, $scope, $http,
 				$http.get('quests/' + href).success(function(data) {
 					var quest = new DOMParser().parseFromString(data, "text/html");
 					var questRootLink = quest.querySelectorAll('link')[0].attributes["href"].value;					
-					console.log(questRootLink);
 					var questImgLink = 'quests/' + questRootLink + '/' + quest.querySelectorAll('img')[0].attributes["src"].value;
 					var questTitle = quest.querySelectorAll("section")[0].textContent;
 					var questDescription = quest.querySelectorAll("article")[0].textContent;
@@ -280,6 +279,25 @@ learnlocity.controller('tutorialController', function($rootScope, $scope, $http,
 		$scope.homeVisible = false;
 		$http.get(missionHref).success(createCodeFromXml);
 	}
+
+	$rootScope.avatar_url = {src:''};
+
+	$scope.handleGitHubLoginSuccess = function(code) {
+		$.getJSON('http://localhost:9999/authenticate/'+code, function(data) {
+			var gh = new Github({
+			token: data.token,
+				auth: "oauth" 						
+			});
+			var user = gh.getUser();
+			user.show('', function(err, user) { 
+				$scope.$apply(function() {
+					$rootScope.avatar_url.src = user.avatar_url + "s=24";
+				});
+			});
+		});
+	};
+
+	window.handleGitHubLoginSuccess = $scope.handleGitHubLoginSuccess;
 
 	$rootScope.questList();
 });

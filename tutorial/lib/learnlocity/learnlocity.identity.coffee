@@ -39,6 +39,9 @@
     $scope.close = (result) ->
       modal.close result
 
+    $scope.logInWithGitHub = ->
+      window.open "auth.html","Log In with GitHub","width=800,height=800"
+      
     $scope.logIn = ->
       clearErrors()
       User.query

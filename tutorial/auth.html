@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Log In with GitHub</title>
+		<script>
+			function getParameterByName(name) {
+			    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+			    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+			        results = regex.exec(location.search);
+			    return results == null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+			}
+			var code = getParameterByName("code");
+
+			if (code == "") {
+            	window.location.href = "https://github.com/login/oauth/authorize?client_id=30e4e6a967f592886b8f";
+            } else {
+		      if (window.opener) {
+		      	window.opener.handleGitHubLoginSuccess(code);
+		      }
+		      window.close();
+            }
+        </script>		
+		</script>
+	</head>
+</html>
