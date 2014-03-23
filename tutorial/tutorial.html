@@ -71,7 +71,7 @@ iframe {
 	    <script src="lib/snap.js"></script>
 	    <script src="lib/angular-snap.js"></script>
 	</head>
-	<body class='container-fluid center' ng-cloak>
+	<body class='container-fluid center' ng-cloak ng-controller='tutorialController'>
 		<!--
 	    	<button class='btn btn-info btn-mini' ng-click='peersVisible = !peersVisible' ng-show='!peersVisible'>Show Peers</button>
 		-->
@@ -81,27 +81,37 @@ iframe {
 					<li ng-show='!userLoggedIn'><a class='btn btn-success' href="#" ng-click='showIdentifyUserDialog()'><strong>Log In or Register</strong></a></li>
 					<li ng-show='userLoggedIn'><a class='btn btn-success' style='background: darkblue' href="#"><strong>Welcome, {{userName}}!</strong></a></li>
 				</ul>
-				<br />
-				<h4>Your Quest:</h4>
-				<accordion close-others="true">					
-					<accordion-group is-open='true'>
-						<accordion-heading>{{questInfo.title}} <i class="pull-right glyphicon glyphicon-chevron-down"></i></accordion-heading>
-						{{questInfo.description}}
-					</accordion-group>
-				</accordion>
-				<h4>Quest Missions:</h4>
-				<accordion close-others="true">														
-					<accordion-group is-open='false' ng-repeat='mission in missions'>
-						<accordion-heading>
-					        {{mission.title}}<i class="pull-right glyphicon glyphicon-chevron-down"></i>
-					    </accordion-heading>
-					  	{{mission.description}}
-						<button class='btn btn-success btn-mini' ng-click='stepLoad(mission.href)'>Go</button>
-					</accordion-group>
-				</accordion>
+				<h3 style='text-align:center'>Your Quest:</h3>
+				<div class='panel panel-primary'>
+					<div class='panel-heading'><h4>{{questInfo.title}}</h4></div>
+					<div class='panel-body'>
+						<div style='text-align:center'><small><strong>{{questMissionsComplete}} of {{questMissionsTotal}} Missions completed</strong></small></div>
+						<progressbar animate="false" value="questPercentComplete()" type="success" style="text-align:center"><b style='padding-left:3px;padding-right:3px;'>{{questPercentComplete()}}%</b></progressbar>						
+						<tabset>
+							<tab heading="Brief">
+								<div style='padding-top: 5px'>{{questInfo.description}}
+								</div>
+							</tab>
+							<tab heading="Missions">
+								<div style='padding-top:5px'>
+									<accordion close-others="true">	
+										<accordion-group is-open='false' ng-repeat='mission in missions'>
+											<accordion-heading>
+										        <i class="pull-right glyphicon glyphicon-chevron-right"></i> {{mission.title}}
+										    </accordion-heading>
+										  	{{mission.description}}
+										  	<br />
+											<button class='btn btn-success btn-mini' ng-click='stepLoad(mission.href)'>Load Mission</button>
+										</accordion-group>
+									</accordion>
+								</div>
+							</tab>
+						</tabset>
+					</div>
+				</div>
 			</div>			
 		</snap-drawer>
-		<div snap-content ng-controller='tutorialController'>
+		<div snap-content>
 			<nav class="navbar navbar-default" role="navigation">
 			  <a href="#" class="navbar-brand" style='background: lightblue;' snap-toggle='left'><strong>Menu</strong></a> <span class='navbar-brand'><i class='glyphicon glyphicon-signal'></i> <strong>Learnlocity</strong>: <em>knowledge at high velocity!</em></span>
 			</nav>		
@@ -220,6 +230,14 @@ learnlocity.controller('peersController', function($rootScope, $scope, $http) {
 });
 
 learnlocity.controller('tutorialController', function($rootScope, $scope, $http, $sce) {
+	$scope.questMissionsComplete = 0;
+	$scope.questMissionsTotal = 6;
+	$scope.questPercentComplete = function() {
+		var pc = Math.floor(100 * ($scope.questMissionsComplete / $scope.questMissionsTotal));
+		console.log(pc);
+		return pc;
+	};
+
 	$scope.getTutorialClass = function() {
 		if ($rootScope.peersVisible === undefined) return 'span7';
 		if ($rootScope.peersVisible) return 'span7';
