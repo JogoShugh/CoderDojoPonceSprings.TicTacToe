@@ -77,24 +77,22 @@ iframe {
 	    <script src="lib/angular-snap.js"></script>
 	</head>
 	<body class='container-fluid center' ng-cloak ng-controller='tutorialController'>
-		<!--
-	    	<button class='btn btn-info btn-mini' ng-click='peersVisible = !peersVisible' ng-show='!peersVisible'>Show Peers</button>
-		-->
 		<snap-drawer>
 			<div class='container-fluid center fill' style='background: palegreen'>
 				<ul class="nav nav-pills nav-stacked" ng-controller='identityController'>
 					<li ng-show='!userLoggedIn'><a class='btn btn-success' href="#" ng-click='showIdentifyUserDialog()'><strong>Log In or Register</strong>&nbsp;<i class='glyphicon glyphicon-user'></i></a></li>
 					<li ng-show='userLoggedIn'><a class='btn btn-success' style='background: darkblue' href="#"><strong>Welcome, {{userName}}!</strong></a></li>
-				</ul>
+				</ul>				
 				<h3 style='text-align:center'><i class='glyphicon glyphicon-flag'></i>&nbsp;Your Quest:</h3>
-				<div class='panel panel-primary'>
-					<div class='panel-heading'><h4>{{questInfo.title}}</h4></div>
-					<div class='panel-body'>
+				<div class='alert alert-warning' ng-if='stepsCode.length == 0'>You haven't selected a quest yet. Pick one from the right first!</div>
+				<div class='panel panel-primary' ng-if='stepsCode.length > 0'>
+					<div class='panel-heading'><h4>{{quest.title}}</h4></div>
+					<div class='panel-body'>						
 						<div style='text-align:center'><small><strong>{{questMissionsComplete}} of {{questMissionsTotal}} Missions completed</strong></small></div>
 						<progressbar animate="false" value="questPercentComplete()" type="success" style="text-align:center"><b style='padding-left:3px;padding-right:3px;'>{{questPercentComplete()}}%</b></progressbar>						
 						<tabset>
 							<tab heading="Brief">
-								<div style='padding-top: 5px'>{{questInfo.description}}
+								<div style='padding-top: 5px'>{{quest.description}}
 								</div>
 							</tab>
 							<tab heading="Missions">
@@ -116,7 +114,7 @@ iframe {
 				</div>
 			</div>			
 		</snap-drawer>
-		<div snap-content>
+		<div snap-content snap-options="{disable:left}">
 			<nav class="navbar navbar-default" role="navigation">
 			  <a href="#" class="navbar-brand" style='background: lightblue;' snap-toggle='left'><span ng-show='menuVisible'>&nbsp;</span><strong>Menu</strong>&nbsp;<i class='glyphicon glyphicon-transfer'></i></a><span class='navbar-brand'><i class='glyphicon glyphicon-signal'></i> <strong>Learnlocity</strong>: <em>build your brain velocity!</em></span>
 			</nav>		
@@ -124,21 +122,26 @@ iframe {
 		    	<div class='row-fluid'>
 					<div class="jumbotron" ng-show='homeVisible'>
 						<h1>Welcome to Learnlocity!</h1>
-						<p>Get started building your brain's learning velocity with your peers.</p>
+						<p>Take a quest with your friends to build your brain's learning velocity!</p>
 						<h2>Available Quests:</h2>
 						<div class='container-fluid'>
 							<div class="row-fluid">
-							  	<div class="col-sm-6 col-md-4">
+							  	<div class="col-sm-6 col-md-4" ng-repeat='quest in quests'>
 							    	<div class="thumbnail">
 							      		<div class="caption" style='text-align:center' ng-init='briefingVisible=false'>
-											<h3>Rescue Sir Tim Berners-Lee from the WWW!
-											</h3>
-											<img src="img/tbl-rescue.png" alt="Rescue Sir Tim Berners-Lee from the WWW!" />
+											<h3>{{quest.title}}</h3>
+											<img src="{{quest.img}}" alt="{{quest.title}}" />
 											<p style='margin-top:5px'>
-									      		<a href='#' role='button' class='btn btn-success' ng-click='stepLoad("quests/neophyte/001-Rescure_TBL_from_the_WWW/missions/001-TBL_is_lost_in_the_WWW/mission.html")'>Start Quest Missions</a><strong>&nbsp;or&nbsp;</strong><a class='btn btn-primary' href='#' role='button' ng-click='briefingVisible=true'>See Quest Briefing</a>
+									      		<a href='#' role='button' class='btn btn-success' ng-click='questLoad(quest.href)'>
+									      			<i class='glyphicon glyphicon-flag'></i>&nbsp;Start Quest Missions</a><strong>&nbsp;or&nbsp;</strong><a class='btn btn-primary' href='#' role='button' ng-click='briefingVisible=!briefingVisible' ng-show='!briefingVisible'>
+									      		<i class='glyphicon glyphicon-eye-open'></i>&nbsp;See Quest Briefing</a>
+												<a class='btn btn-primary' href='#' role='button' ng-click='briefingVisible=!briefingVisible' ng-show='briefingVisible'>
+									      		<i class='glyphicon glyphicon-eye-close'></i>&nbsp;Hide Quest Briefing</a>									      		
 								      		</p>
 								      		<p style='text-align:left;' class='well well-small' ng-show='briefingVisible'>
-												Sir Tim Berners-Lee (TBL) invented the World Wide Web in 1988. Robotic time bandits from the future have traveled back to 1987 and ripped TBL from the space-time continuum and sent him back to another WWW, the Wild Wild West of 1887. Go on a quest to save TBL from a terrible fate and ensure the creation of the web and the future!
+								      			{{quest.description}}
+								      			<br />
+												<a href='#' role='button' class='btn btn-success' ng-click='questLoad(quest.href)'>Let's Go!</a>
 											</p>    
 							      		</div>
 							    	</div>
@@ -162,9 +165,10 @@ learnlocity.run(function($rootScope) {
 });
 
 learnlocity.controller('tutorialController', function($rootScope, $scope, $http, $sce) {
+
 	$scope.homeVisible = true;
 	$scope.questMissionsComplete = 0;
-	$scope.questMissionsTotal = 6;
+	$scope.questMissionsTotal = 0;
 	$scope.questPercentComplete = function() {
 		var pc = Math.floor(100 * ($scope.questMissionsComplete / $scope.questMissionsTotal));
 		console.log(pc);
@@ -186,6 +190,8 @@ learnlocity.controller('tutorialController', function($rootScope, $scope, $http,
 		$rootScope.peersCode = [];
 	  	$rootScope.stepsCode = [];
   	}
+
+  	initializeCode();
 
   	function createCodeFromXml(data) {
   		initializeCode();
@@ -216,15 +222,41 @@ learnlocity.controller('tutorialController', function($rootScope, $scope, $http,
 		}
 	}
 
+	var questsByName = {};
+
+	$rootScope.questList = function() {
+		$rootScope.quests = [];
+		$http.get("quests/index.html").success(function(data) {
+			console.log(data);
+			var questListDoc = new DOMParser().parseFromString(data, "text/html");
+			var questLinks = questListDoc.querySelectorAll('nav>ul>li>a');			
+			for(var i = 0; i < questLinks.length; i++) {
+				var link = questLinks[i];
+				var href = link.attributes['href'].value;
+				$http.get('quests/' + href).success(function(data) {
+					var quest = new DOMParser().parseFromString(data, "text/html");
+					var questRootLink = quest.querySelectorAll('link')[0].attributes["href"].value;					
+					console.log(questRootLink);
+					var questImgLink = 'quests/' + questRootLink + '/' + quest.querySelectorAll('img')[0].attributes["src"].value;
+					var questTitle = quest.querySelectorAll("section")[0].textContent;
+					var questDescription = quest.querySelectorAll("article")[0].textContent;
+					var questInfo = { href: questRootLink, title: questTitle, description: questDescription, img: questImgLink };
+					$rootScope.quests.push(questInfo);
+					questsByName[questRootLink] = questInfo;
+				});
+			}
+		});
+	};
+
 	$rootScope.questLoad = function(questName) {
+		$rootScope.quest = questsByName[questName];
 		var rootUrl = "quests/" + questName + "/";
 		$http.get(rootUrl + "quest.html").success(function(data) {
 			var quest = new DOMParser().parseFromString(data, "text/html");
-			var questTitle = quest.querySelectorAll("section")[0].textContent;
-			var questDescription = quest.querySelectorAll("article")[0].textContent;
-			$rootScope.questInfo = { title: questTitle, description: questDescription };
 			var missionLinks = quest.querySelectorAll('nav>ul>li');			
 			var missions = [];
+			$scope.questMissionsComplete = 0;
+			$scope.questMissionsTotal = missionLinks.length;
 			for(var i = 0; i < missionLinks.length; i++) {
 				var missionLink = missionLinks[i];
 				var href = missionLink.querySelectorAll('[href]')[0].attributes["href"].value;
@@ -235,6 +267,7 @@ learnlocity.controller('tutorialController', function($rootScope, $scope, $http,
 				});
 			}
 			$rootScope.missions = missions;
+			$rootScope.stepLoad(missions[0].href);
 		});
 	};
 
@@ -243,7 +276,7 @@ learnlocity.controller('tutorialController', function($rootScope, $scope, $http,
 		$http.get(missionHref).success(createCodeFromXml);
 	}
 
-	$rootScope.questLoad("neophyte/001-Rescure_TBL_from_the_WWW");
+	$rootScope.questList();
 });
   </script>
   <script type='text/coffeescript' src='lib/tutorializr/tutorializr.coffee'></script>
