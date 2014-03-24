@@ -52,8 +52,8 @@
       <div ng-bind-html='code.story'></div>
     </div>
     <div class='editor {{getEditorsClass()}}' ng-show='displays.html'>
-      <div style='background: #F06428; color: black;'><strong>HTML</strong> <i class='glyphicon glyphicon-edit'></i></div>
-      <div class='ace_wrapper'>
+      <div style='background: #F06428; color: black;'><strong>HTML</strong> <i class='glyphicon glyphicon-edit'></i> <button class='btn btn-primary' ng-click='save("html")'>Save</button></div>
+      <div class='ace_wrapper'>        
         <div style='margin-top: 0px' ui-ace="{
           theme: 'chrome',
           useWrapMode: true,
@@ -64,7 +64,7 @@
       </div>
     </div>
     <div class='editor {{getEditorsClass()}}' ng-show='displays.css'>
-      <div style='background: #3B9ADB; color: black;'><strong>CSS</strong> <i class='glyphicon glyphicon-edit'></i></div>
+      <div style='background: #3B9ADB; color: black;'><strong>CSS</strong> <i class='glyphicon glyphicon-edit'></i> <button class='btn btn-primary' ng-click='save("css")'>Save</button></div>
       <div class='ace_wrapper'>
         <div ui-ace="{
           theme: 'chrome',
@@ -76,7 +76,7 @@
       </div>
     </div>
     <div class='editor {{getEditorsClass()}}' ng-show='displays.js'>
-      <div style='background: #F0DB4F; color: black'><strong>JS</strong> <i class='glyphicon glyphicon-edit'></i></div>
+      <div style='background: #F0DB4F; color: black'><strong>JS</strong> <i class='glyphicon glyphicon-edit'></i> <button class='btn btn-primary' ng-click='save("js")'>Save</button></div>
       <div class='ace_wrapper'>    
         <div ui-ace="{
           theme: 'chrome',
