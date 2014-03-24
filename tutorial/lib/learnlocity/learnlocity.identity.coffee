@@ -39,8 +39,22 @@
     $scope.close = (result) ->
       modal.close result
 
-    $scope.logInWithGitHub = ->
-      window.open "auth.html","Log In with GitHub","width=800,height=800"
+    $scope.signInWithGitHub = ->
+      # Thanks, plunkr
+      width = 1000
+      height = 650
+
+      screenHeight = screen.height
+      left = Math.round((screen.width / 2) - (width / 2))
+      top = 0
+      if (screenHeight > height)
+          top = Math.round((screenHeight / 2) - (height / 2))
+      
+      @loginWindow = window.open "auth.html", "Sign in with Github", """
+        left=#{left},top=#{top},width=#{width},height=#{height},personalbar=0,toolbar=0,scrollbars=1,resizable=1
+      """
+
+      if @loginWindow then @loginWindow.focus()
       
     $scope.logIn = ->
       clearErrors()

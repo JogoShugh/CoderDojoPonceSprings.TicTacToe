@@ -5,6 +5,7 @@
 		<meta name='viewport' content='width=device-width, initial-scale=1.0'>
 	    <link rel='stylesheet' href='lib/bootstrap/css/bootstrap.min.css' />
 	    <link rel='stylesheet' href='//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css' />
+	    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
 	    <link href='css/indexa.css' rel='stylesheet' media='screen' />
 		<link href='css/snap.css' rel='stylesheet' />
 		<link href='css/angular-snap.css' rel='stylesheet' />
@@ -81,11 +82,11 @@ iframe {
 		<snap-drawer>
 			<div class='container-fluid center fill' style='background: palegreen'>
 				<ul class="nav nav-pills nav-stacked" ng-controller='identityController'>
-					<li><a class='btn btn-primary' ng-click='logInWithGitHub()'>Log In with GitHub</a></li>
-					<li ng-show='!userLoggedIn'><a class='btn btn-success' href="#" ng-click='showIdentifyUserDialog()'><strong>Log In or Register</strong>&nbsp;<i class='glyphicon glyphicon-user'></i></a></li>
-					<li ng-show='userLoggedIn'><a class='btn btn-success' style='background: darkblue' href="#"><strong>Welcome, {{userName}}!</strong></a></li>					
-				</ul>
-				<img ng-src="{{avatar_url.src}}" />
+					<li ng-show='!userLoggedIn'><a class='btn btn-primary' ng-click='signInWithGitHub()'><i class="fa fa-github-alt"></i> Sign In with GitHub</a></li>
+					<!--
+					<li ng-show='!userLoggedIn'><a class='btn btn-success' href="#" ng-click='showIdentifyUserDialog()'><strong>Log In or Register</strong>&nbsp;<i class='glyphicon glyphicon-user'></i></a></li> -->
+					<li ng-show='userLoggedIn'><a class='btn btn-success' style='background: darkblue' href="#"><img ng-src="{{avatar_url.src}}" />&nbsp;<strong>Welcome, {{userName}}!</strong></a></li>					
+				</ul>				
 				<h3 style='text-align:center'><i class='glyphicon glyphicon-flag'></i>&nbsp;Your Quest:</h3>
 				<div class='alert alert-warning' ng-if='stepsCode.length == 0'>You haven't selected a quest yet. Pick one from the right first!</div>
 				<div class='panel panel-primary' ng-if='stepsCode.length > 0'>
@@ -171,6 +172,7 @@ learnlocity.run(function($rootScope) {
 });
 
 learnlocity.controller('tutorialController', function($rootScope, $scope, $http, $sce) {
+	$scope.userLoggedIn = false;
 	$scope.homeVisible = true;
 	$scope.questMissionsComplete = 0;
 	$scope.questMissionsTotal = 0;
@@ -291,6 +293,9 @@ learnlocity.controller('tutorialController', function($rootScope, $scope, $http,
 			var user = gh.getUser();
 			user.show('', function(err, user) { 
 				$scope.$apply(function() {
+					$scope.userLoggedIn = true;
+					console.log(user);
+					$scope.userName = user.login;
 					$rootScope.avatar_url.src = user.avatar_url + "s=24";
 				});
 			});
