@@ -36,7 +36,6 @@
 
 		$scope.getPreviewClass = ->
 			numTurnedOn = getNumDisplaysVisible()
-			console.log 'on: ' + numTurnedOn
 			sizesMap =
 				'1':12
 				'2':6
@@ -134,12 +133,44 @@
 						$scope.preview()
 					updateEditorHeights()
 				, 250
+				$scope.load()
 
-		$scope.save = (editorName) ->
-			userName = $rootScope.gitHubUserName;
+		$scope.save = ->
+			userName = $rootScope.gitHubUserName
+			repo = $rootScope.github.getRepo(userName, 'SaveTBL')
+
+			content = htmlEditor.getSession().getValue()
+			repo.write 'master', 'index.html', content, 'Commit from Learnlocity!', (err) ->
+				if err 
+					console.log 'Error creating file in GitHub:' + err 
+				else
+					content = cssEditor.getSession().getValue()
+					repo.write 'master', 'index.css', content, 'Commit from Learnlocity!', (err) ->
+						if err 
+							console.log 'Error creating file in GitHub:' + err 
+						else
+							content = jsEditor.getSession().getValue()					
+							repo.write 'master', 'index.js', content, 'Commit from Learnlocity!', (err) ->
+							if err 
+								console.log 'Error creating file in GitHub:' + err 
+
+		$scope.load = (userName) ->	
+			map = 
+				'JogoShugh' : 'JoshGough'
+				'JoshGough' : 'JogoShugh'
+			if userName
+				userName = map[$rootScope.gitHubUserName]
+			else
+				userName = $rootScope.gitHubUserName
+
 			repo = $rootScope.github.getRepo(userName, 'SaveTBL');
-			editor = editors[editorName];
-			content = editor.getSession().getValue();
-			repo.write 'master', 'index.' + editorName, content, 'Commit from Learnlocity!', (err) ->
-				console.log 'Error creating file in GitHub:' + err
+			for editorName, editor of editors
+				do (editorName, editor) ->
+					repo.read 'master', 'index.' + editorName, (err, data) ->
+						editor.getSession().setValue(data) if not err
+						if err then console.log 'Error reading data from GitHub: ' + err
+		
+		# TODO remove hack
+		$rootScope.load = $scope.load
+
 )()

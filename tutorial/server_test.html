@@ -1,0 +1,9 @@
+<script src="http://localhost:8090/socket.io/socket.io.js"></script>
+<script>
+  var socket = io.connect('http://localhost:8090');
+  socket.on('msg', function (msg) {
+    console.log('Here is the message from the sever:');
+    console.log(msg);
+  });
+</script>
+<button onclick='socket.emit("msg", {"type":"mission.join"})'>Join Mission</button>

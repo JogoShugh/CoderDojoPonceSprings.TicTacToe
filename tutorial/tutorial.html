@@ -70,13 +70,15 @@ iframe {
 		<script src='//code.jquery.com/ui/1.10.4/jquery-ui.js'></script>
 		<script src='lib/angular/angular.min.js'></script>
 		<script src='lib/angular/angular-resource.min.js'></script>
-	    <script src='lib/angular-bootstrap/js/ui-bootstrap-tpls-0.10.0.min.js'></script>
-	    <script src='lib/bootstrap/js/bootstrap.min.js'></script>
-	    <script src="lib/ace/ace.js" charset="utf-8"></script>
-	    <script src="lib/ui-ace/ui-ace.js"></script>
-	    <script src="lib/snap.js"></script>
-	    <script src="lib/angular-snap.js"></script>
-	    <script src="lib/github/github.js"></script>
+		<script src='lib/angular-bootstrap/js/ui-bootstrap-tpls-0.10.0.min.js'></script>
+		<script src='lib/bootstrap/js/bootstrap.min.js'></script>
+		<script src="lib/ace/ace.js" charset="utf-8"></script>
+		<script src="lib/ui-ace/ui-ace.js"></script>
+		<script src="lib/snap.js"></script>
+		<script src="lib/angular-snap.js"></script>
+		<script src="lib/underscore/underscore.min.js"></script>
+		<script src="lib/github/github.js"></script>
+		<script src="http://localhost:8090/socket.io/socket.io.js"></script>
 	</head>
 	<body class='container-fluid center' ng-cloak ng-controller='tutorialController'>
 		<snap-drawer>
@@ -85,7 +87,7 @@ iframe {
 					<li ng-show='!userLoggedIn'><a class='btn btn-primary' ng-click='signInWithGitHub()'><i class="fa fa-github-alt"></i> Sign In with GitHub</a></li>
 					<!--
 					<li ng-show='!userLoggedIn'><a class='btn btn-success' href="#" ng-click='showIdentifyUserDialog()'><strong>Log In or Register</strong>&nbsp;<i class='glyphicon glyphicon-user'></i></a></li> -->
-					<li ng-show='userLoggedIn'><a class='btn btn-success' style='background: darkblue' href="#"><img ng-src="{{avatar_url.src}}" />&nbsp;<strong>Welcome, {{userName}}!</strong></a></li>					
+					<li ng-show='userLoggedIn'><a class='btn btn-success' style='background: darkblue' href="#"><img ng-src="{{avatar_url.src}}" height='18' width='18' />&nbsp;<strong>Welcome, {{userName}}!</strong></a></li>					
 				</ul>				
 				<h3 style='text-align:center'><i class='glyphicon glyphicon-flag'></i>&nbsp;Your Quest:</h3>
 				<div class='alert alert-warning' ng-if='stepsCode.length == 0'>You haven't selected a quest yet. Pick one from the right first!</div>
@@ -156,7 +158,23 @@ iframe {
 					<div ng-show='!homeVisible'>
 						<div ng-repeat='stepCode in stepsCode'>
 							<div ng-init='code=stepCode'>
-								<div><strong>Current Mission:</strong> {{mission.title}}</div>
+								<div style='margin-bottom:4px; font-size:125%;'>
+									<strong>Current Mission:</strong>&nbsp;{{mission.title}}&nbsp;
+									<span style='padding:3px;'>
+										<strong>Mission Team:</strong>&nbsp;
+										<div class='btn-group' ng-repeat='peer in mission.peers'>
+											<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+												<!-- TODO: remove dumb hard coded avatar -->
+												<img ng-src='{{peer.avatar_url}}' src='https://avatars.githubusercontent.com/u/7043781?s=18' alt='{{peer.userName}}' width='18' height='18' />&nbsp;<span class="caret"></span>
+											</button>
+											<ul class="dropdown-menu" role="menu">
+												<li><a href="#" ng-click='load(peer.userName)'><i class='glyphicon glyphicon-search'></i>&nbsp;Code Spyglass</a></li>												
+												<li class="divider"></li>
+												<li><a href="#"><i class="fa fa-thumbs-o-up"></i>&nbsp;Give Props</a></li>
+											</ul>
+										</div>
+									</span>
+								</div>
 								<div ng-include="'learnLocityEditor.html'" ng-controller='editorController'></div>
 							</div>
 						</div>
@@ -199,7 +217,7 @@ learnlocity.controller('tutorialController', function($rootScope, $scope, $http,
 
   	initializeCode();
 
-  	function createCodeFromXml(data) {
+  	function createCodeFromXml(missionHref, data) {
   		initializeCode();
 		var xml = new DOMParser().parseFromString(data, "application/xml");
 		var name = xml.getElementsByTagName('title')[0].textContent;
@@ -220,7 +238,10 @@ learnlocity.controller('tutorialController', function($rootScope, $scope, $http,
 			}
 		};
 
-		$scope.mission = { title: name };
+		var mission = $scope.missionsByHref[missionHref];
+		mission.title = name;
+
+		$scope.mission = mission;
 
 		item.story = $sce.trustAsHtml(item.storyCode);		
 		
@@ -254,6 +275,8 @@ learnlocity.controller('tutorialController', function($rootScope, $scope, $http,
 		});
 	};
 
+	$rootScope.missionsByHref = {};
+
 	$rootScope.questLoad = function(questName) {
 		$rootScope.quest = questsByName[questName];
 		var rootUrl = "quests/" + questName + "/";
@@ -266,11 +289,16 @@ learnlocity.controller('tutorialController', function($rootScope, $scope, $http,
 			for(var i = 0; i < missionLinks.length; i++) {
 				var missionLink = missionLinks[i];
 				var href = missionLink.querySelectorAll('[href]')[0].attributes["href"].value;
-				missions.push({
+				var mission = {
 					title: missionLink.textContent,
 					description: missionLink.textContent,
-					href: rootUrl + href
-				});
+					href: rootUrl + href,
+					peers:[]
+				};				
+				missions.push(mission);
+				console.log('Adding mission:');
+				console.log(mission.href);
+				$rootScope.missionsByHref[mission.href] = mission;
 			}
 			$rootScope.missions = missions;
 			$rootScope.stepLoad(missions[0].href);
@@ -279,7 +307,16 @@ learnlocity.controller('tutorialController', function($rootScope, $scope, $http,
 
 	$rootScope.stepLoad = function(missionHref) {
 		$scope.homeVisible = false;
-		$http.get(missionHref).success(createCodeFromXml);
+		$http.get(missionHref).success(function(data) {
+			createCodeFromXml(missionHref, data);
+		});
+		// TODO move to better place
+		$scope.socket.emit("msg", {
+			"type":"mission.join", 
+			"userName":$rootScope.gitHubUserName,
+			"avatar_url":$rootScope.avatar_url.src,
+			"mission":missionHref
+		});		
 	}
 
 	$rootScope.avatar_url = {src:''};
@@ -298,7 +335,7 @@ learnlocity.controller('tutorialController', function($rootScope, $scope, $http,
 					$scope.userLoggedIn = true;
 					$scope.userName = user.login;
 					$rootScope.gitHubUserName = user.login;
-					$rootScope.avatar_url.src = user.avatar_url + "s=24";
+					$rootScope.avatar_url.src = user.avatar_url + "s=18";
 				});
 				var repo = gh.getRepo(user.login, 'SaveTBL');
 				repo.createRepo({name:'SaveTBL', auto_init:true}, function(err, data) {
@@ -311,6 +348,21 @@ learnlocity.controller('tutorialController', function($rootScope, $scope, $http,
 	};
 
 	window.handleGitHubLoginSuccess = $scope.handleGitHubLoginSuccess;
+
+	// Set up socket to listen for mission.join and mission.leave events
+
+	$scope.socket = io.connect('http://localhost:8090');
+	$scope.socket.on('msg', function (msg) {
+		if (msg.type == 'mission.join') {			
+			var mission = $scope.missionsByHref[msg.mission];
+			$scope.$apply(function() {
+				if (mission) mission.peers.push(msg);
+			});
+		} else if (msg.type == 'mission.leave') {
+			console.log(msg.userName);
+			console.log(msg.avatar_url);
+		}
+	});
 
 	$rootScope.questList();
 });
