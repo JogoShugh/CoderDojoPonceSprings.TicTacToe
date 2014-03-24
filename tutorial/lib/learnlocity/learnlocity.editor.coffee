@@ -1,7 +1,7 @@
 (->
 	mod = angular.module('learnlocity.editor', ['ui.ace', 'ui.bootstrap'])
 
-	mod.controller 'editorController', ($scope, $timeout, $window)->
+	mod.controller 'editorController', ($scope, $timeout, $window, $rootScope)->
 		$scope.displays =
 			step:true
 			html:true
@@ -134,4 +134,12 @@
 						$scope.preview()
 					updateEditorHeights()
 				, 250
+
+		$scope.save = (editorName) ->
+			userName = $rootScope.gitHubUserName;
+			repo = $rootScope.github.getRepo(userName, 'SaveTBL');
+			editor = editors[editorName];
+			content = editor.getSession().getValue();
+			repo.write 'master', 'index.' + editorName, content, 'Commit from Learnlocity!', (err) ->
+				console.log 'Error creating file in GitHub:' + err
 )()
