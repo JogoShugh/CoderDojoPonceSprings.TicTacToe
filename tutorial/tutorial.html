@@ -286,17 +286,25 @@ learnlocity.controller('tutorialController', function($rootScope, $scope, $http,
 
 	$scope.handleGitHubLoginSuccess = function(code) {
 		$.getJSON('http://localhost:9999/authenticate/'+code, function(data) {
+			$rootScope.token = data.token;
 			var gh = new Github({
-			token: data.token,
-				auth: "oauth" 						
+			token: $rootScope.token,
+				auth: 'oauth'
 			});
+			$rootScope.github = gh;
 			var user = gh.getUser();
 			user.show('', function(err, user) { 
 				$scope.$apply(function() {
 					$scope.userLoggedIn = true;
-					console.log(user);
 					$scope.userName = user.login;
+					$rootScope.gitHubUserName = user.login;
 					$rootScope.avatar_url.src = user.avatar_url + "s=24";
+				});
+				var repo = gh.getRepo(user.login, 'SaveTBL');
+				repo.createRepo({name:'SaveTBL', auto_init:true}, function(err, data) {
+					if (err) {
+						console.log('Could not create the repo named SaveTBL: ' + err);
+					}
 				});
 			});
 		});
