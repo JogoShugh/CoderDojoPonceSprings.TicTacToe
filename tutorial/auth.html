@@ -15,7 +15,7 @@
 			var code = getParameterByName("code");
 
 			if (code == "") {
-            	window.location.href = "https://github.com/login/oauth/authorize?client_id=30e4e6a967f592886b8f";
+            	window.location.href = "https://github.com/login/oauth/authorize?client_id=30e4e6a967f592886b8f&scope=user,repo,delete_repo";
             } else {
 		      if (window.opener) {
 		      	window.opener.handleGitHubLoginSuccess(code);
