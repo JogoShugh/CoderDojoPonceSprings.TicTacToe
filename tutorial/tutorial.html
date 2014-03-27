@@ -219,53 +219,6 @@ learnlocity.controller('tutorialController', function($rootScope, $scope, $http,
 
   	initializeCode();
 
-  	function createCodeFromXml(missionHref, data, missionJoin) {
-  		initializeCode();
-		var xml = new DOMParser().parseFromString(data, "application/xml");
-		var name = xml.getElementsByTagName('title')[0].textContent;
-		var id = xml.getElementsByTagName('id')[0].textContent;
-		var story = xml.getElementsByTagName('section')[0].textContent;
-		var html = xml.getElementsByTagName('section')[1].textContent;		
-		var js = xml.getElementsByTagName('script')[0].textContent;
-		var css = xml.getElementsByTagName('style')[0].textContent;
-
-		var item = {
-			name: name,
-			id: id,
-			storyCode: story,
-			code: {
-				html: html,
-				js: js,
-				css: css
-			}
-		};
-
-		var mission = $scope.missionsByHref[missionHref];
-		mission.title = name;
-
-		$scope.mission = mission;
-
-		// Listen for users online
-		if (angular.isDefined($scope.missionUpdate)) {
-			$interval.cancel($scope.missionUpdate);
-		}
-
-		function missionUpdate() {
-			missionJoin();
-			$scope.socket.emit("queryMissionUsersNow", missionHref);
-		}
-		missionUpdate();		
-
-		$scope.missionUpdate = $interval(missionUpdate, MISSIONUPDATE_INTERVAL);
-
-		item.story = $sce.trustAsHtml(item.storyCode);		
-		
-		$rootScope.peersCode.push(item);  	
-		if (id == '__YOURS__') {
-			$rootScope.stepsCode.push(item);
-		}
-	}
-
 	var questsByName = {};
 
 	$rootScope.questList = function() {
@@ -323,6 +276,19 @@ learnlocity.controller('tutorialController', function($rootScope, $scope, $http,
 	$rootScope.stepLoad = function(missionHref) {
 		$scope.homeVisible = false;
 
+		function missionLeave(missionLeaving) {
+			$scope.socket.emit("msg", {
+				"type":"mission.leave",
+				"userName":$rootScope.gitHubUserName,
+				"mission":missionLeaving,
+				"missionEntering":missionHref
+			});
+		}		
+
+		if (angular.isDefined($scope.mission)) {
+			missionLeave($scope.mission.href);
+		}
+
 		function missionJoin() {
 			$scope.socket.emit("msg", {
 				"type":"mission.join", 
@@ -331,8 +297,82 @@ learnlocity.controller('tutorialController', function($rootScope, $scope, $http,
 				"mission":missionHref
 			});
 		}
+
 		$http.get(missionHref).success(function(data) {
-			createCodeFromXml(missionHref, data, missionJoin);
+			initializeCode();
+			var xml = new DOMParser().parseFromString(data, "application/xml");
+			var name = xml.getElementsByTagName('title')[0].textContent;
+			var id = xml.getElementsByTagName('id')[0].textContent;
+			var story = xml.getElementsByTagName('section')[0].textContent;
+			var html = xml.getElementsByTagName('section')[1].textContent;		
+			var js = xml.getElementsByTagName('script')[0].textContent;
+			var css = xml.getElementsByTagName('style')[0].textContent;
+
+			var item = {
+				name: name,
+				id: id,
+				storyCode: story,
+				code: {
+					html: html,
+					js: js,
+					css: css
+				}
+			};
+
+			var mission = $scope.missionsByHref[missionHref];
+			mission.title = name;
+
+			$scope.mission = mission;
+
+			// Listen for users online
+			if (angular.isDefined($scope.missionUpdate)) {
+				$interval.cancel($scope.missionUpdate);
+			}
+
+			function missionUpdate() {
+				missionJoin(); // Inform server that we are still here
+				$scope.socket.emit("queryMissionUsersNow", missionHref, function(missionUsersNow) {
+					var mission = $scope.missionsByHref[missionUsersNow.mission];
+					if (mission) {
+						if (missionUsersNow.items.length > 0) {
+							$scope.$apply(function() {
+								for(var i = 0; i < missionUsersNow.items.length; i++) {
+									var currentPeers = _.pluck(mission.peers, 'userName');
+									var item = missionUsersNow.items[i];
+									if (!_.contains(currentPeers, item.userName)) {
+										mission.peers.push(item);
+									}
+								}
+								var currentPeers = _.pluck(mission.peers, 'userName');
+								var latestPeers = _.pluck(missionUsersNow.items, 'userName');
+								var toRemove = _.difference(currentPeers, latestPeers);
+								for(var j = 0; j < toRemove.length; j++) {
+									var peerToRemove = toRemove[j];
+									for (var k = 0; k < mission.peers.length; k++) {
+										var peer = mission.peers[k];
+										if (peer.userName == peerToRemove) {
+											mission.peers.splice(k, 1);
+										}
+									}
+								}
+							});
+						} else {
+							$scope.$apply(function() {
+								mission.peers.length = 0;
+							});
+						}
+					}
+				});
+			}
+			missionUpdate();
+			$scope.missionUpdate = $interval(missionUpdate, MISSIONUPDATE_INTERVAL);
+
+			item.story = $sce.trustAsHtml(item.storyCode);		
+			
+			$rootScope.peersCode.push(item);  	
+			if (id == '__YOURS__') {
+				$rootScope.stepsCode.push(item);
+			}
 		});	
 	}
 
@@ -368,39 +408,6 @@ learnlocity.controller('tutorialController', function($rootScope, $scope, $http,
 
 	// Set up socket to listen for mission.join and mission.leave events
 	$scope.socket = io.connect('http://localhost:8090');
-
-	$scope.socket.on('queryMissionUsersNowResponse', function (missionUsersNow) {
-		var mission = $scope.missionsByHref[missionUsersNow.mission];
-		if (mission) {
-			if (missionUsersNow.items.length > 0) {
-				$scope.$apply(function() {
-					for(var i = 0; i < missionUsersNow.items.length; i++) {
-						var currentPeers = _.pluck(mission.peers, 'userName');
-						var item = missionUsersNow.items[i];
-						if (!_.contains(currentPeers, item.userName)) {
-							mission.peers.push(item);
-						}
-					}
-					var currentPeers = _.pluck(mission.peers, 'userName');
-					var latestPeers = _.pluck(missionUsersNow.items, 'userName');
-					var toRemove = _.difference(currentPeers, latestPeers);
-					for(var j = 0; j < toRemove.length; j++) {
-						var peerToRemove = toRemove[j];
-						for (var k = 0; k < mission.peers.length; k++) {
-							var peer = mission.peers[k];
-							if (peer.userName == peerToRemove) {
-								mission.peers.splice(k, 1);
-							}
-						}
-					}
-				});
-			} else {
-				$scope.$apply(function() {
-					mission.peers.length = 0;
-				});
-			}
-		}
-	});
 
 	/*
 		if (msg.type == 'mission.join') {

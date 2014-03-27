@@ -1,4 +1,5 @@
 var mongo = require('mongodb').MongoClient;
+var _ = require('underscore');
 
 var msgs = null;
 
@@ -22,7 +23,7 @@ mongo.connect("mongodb://localhost:27017/learnlocity", function(err, db) {
 				}
 			});
 		});
-		socket.on('query', function(query) {
+		socket.on('query', function(query, callback) {
 			console.log('query is:');
 			console.log(query);
 			 msgs.find(query).toArray(function(err, items) {
@@ -30,34 +31,49 @@ mongo.connect("mongodb://localhost:27017/learnlocity", function(err, db) {
 			 		console.log('Error:');
 			 		console.log(err);
 			 	} else {
-			 		socket.emit('queryResult', items);
+			 		callback(items);
 			 	}
 			 });
 		});
-		socket.on('queryMissionUsersNow', function(mission) {
+		socket.on('queryMissionUsersNow', function(mission, callback) {
 			console.log('queryMissionUsersNow is:');
 			console.log(mission);
 
 			var now = new Date();
 			var since = new Date(now - 1*60*1000);
 
+			// TODO: better to aggregate or reduce in mongo than in underscore
 			var query = {
-				mission: mission,
-				timestamp:{	$gte:since}
+				$or: [
+					{
+						mission: mission,
+						type: 'mission.join',
+						timestamp:{	$gte:since}
+					},
+					{
+						mission: mission,
+						type: 'mission.leave',
+						timestamp:{	$gte:since}
+					}
+				]
 			};
 
-			msgs.find(query).toArray(function(err, items) {
+			msgs.find(query).sort({timestamp:-1}).toArray(function(err, items) {
 			 	if (err) {
 			 		console.log('Error:');
 			 		console.log(err);
 			 	} else {
-			 		console.log('queryMissionUsersNowResponse:');
-			 		console.log(items);
+			 		var userGroups = _.groupBy(items, function(item) { return item.userName; });
+			 		var mostRecents = _.map(userGroups, function(item) { return item[0] });
+			 		var joins = _.chain(mostRecents).where({type:'mission.join'}).pluck('userName').value();
+			 		var leaves = _.chain(mostRecents).where({type:'mission.leave'}).pluck('userName').value();
+			 		var keeps = _.difference(joins, leaves);
+					var missionUsersNow = _.filter(mostRecents, function(item) { return _.contains(keeps, item.userName) } );
 			 		var response = {
 			 			mission: mission,
-			 			items: items
+			 			items: missionUsersNow
 			 		};
-			 		socket.emit('queryMissionUsersNowResponse', response);
+			 		callback(response);
 			 	}
 			 });
 		});		
