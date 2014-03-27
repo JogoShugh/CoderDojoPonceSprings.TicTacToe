@@ -5,5 +5,16 @@
     console.log('Here is the message from the sever:');
     console.log(msg);
   });
+  socket.on('queryResult', function(queryResult) {
+  	console.log('queryResult:');
+  	console.log(queryResult);
+  });
 </script>
 <button onclick='socket.emit("msg", {"type":"mission.join"})'>Join Mission</button>
+<br />
+<textarea id='query'></textarea>
+<button onclick='socket.emit("query", JSON.parse(document.getElementById("query").value))'>Send Arbitrary Query</button>
+<br />
+<textarea id='queryMissionUsersNow'></textarea>
+<button onclick='socket.emit("queryMissionUsersNow", document.getElementById("queryMissionUsersNow").value)'>Show Who's Online</button>
+
